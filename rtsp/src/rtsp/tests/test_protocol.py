@@ -8,13 +8,7 @@ from rtsp.protocol import Protocol
 from rtsp import directives
 
 
-class TestMessage(unittest.TestCase):
-    '''
-    ['OPTIONS rtsp://localhost:10554/hello_world.avi RTSP/1.0\r\n',
-     'CSeq: 2\r\n',
-     'User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)\r\n',
-     '\r\n']
-    '''
+class TestProtocol(unittest.TestCase):
 
     def setUp(self):
         self.protocol_handler = Protocol()
@@ -23,10 +17,20 @@ class TestMessage(unittest.TestCase):
         pass
 
     def testOptions(self):
-#         request = \
-#             [directives.OPTIONS]
-        self.assertEqual("RTSP/1.0",
-                         self.protocol_handler.handle_request("OPTIONS"))
+        request = \
+            '\r\n'.join(
+                 ['OPTIONS rtsp://localhost:10554/hello_world.avi RTSP/1.0',
+                 'CSeq: 2',
+                 ''])
+        self.assertEqual("RTSP/1.0 200 OK\r\n" +
+                         "CSeq: 2\r\n" +
+                         "Public: %s %s %s %s %s" %
+                            (directives.DESCRIBE,
+                             directives.SETUP,
+                             directives.TEARDOWN,
+                             directives.PLAY,
+                             directives.PAUSE),
+                         self.protocol_handler.handle_request(request))
 
 
 if __name__ == "__main__":

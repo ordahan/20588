@@ -9,12 +9,6 @@ from rtsp import directives
 
 
 class TestMessage(unittest.TestCase):
-    '''
-    ['OPTIONS rtsp://localhost:10554/hello_world.avi RTSP/1.0\r\n',
-     'CSeq: 2\r\n',
-     'User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)\r\n',
-     '\r\n']
-    '''
 
     def setUp(self):
         self.request = RequestMessage()
@@ -25,22 +19,27 @@ class TestMessage(unittest.TestCase):
 
         self.assertEqual(directives.OPTIONS, request_generated.directive)
         self.assertEqual(13, request_generated.sequence)
-        self.assertEqual(['OPTIONS', 'CSeq: 13'],
-                         request_generated.to_lines())
+        self.assertEqual('OPTIONS\n\rCSeq: 13',
+                         str(request_generated))
 
     def testOptions(self):
         '''
         Tests the parsing of the options message
         '''
         # Basic valid message
-        message_lines = \
-            ['OPTIONS rtsp://localhost:10554/hello_world.avi RTSP/1.0\r\n',
-             'CSeq: 2\r\n',
-             'User-Agent: ' + \
-                'LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)\r\n',
-             '\r\n']
+        message = \
+            ''.join(
+                    ['OPTIONS' + \
+                        'rtsp://localhost:10554/hello_world.avi RTSP/1.0\r\n',
 
-        self.request.parse(message_lines)
+                     'CSeq: 2\r\n',
+
+                     'User-Agent: LibVLC/2.0.8 ' + \
+                        '(LIVE555 Streaming Media v2011.12.23)\r\n',
+
+                     '\r\n'])
+
+        self.request.parse(message)
 
         self.assertEqual(2, self.request.sequence)
         self.assertEqual(directives.OPTIONS, self.request.directive)

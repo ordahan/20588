@@ -11,6 +11,8 @@ class Message(object):
     An RTSP message parser / container
     '''
 
+    SEQUENCE_FIELD = 'CSeq: '
+
     def __init__(self, sequence):
         '''
         Creates a new message with the given sequence number
@@ -30,17 +32,19 @@ class RequestMessage(Message):
 
         Message.__init__(self, self.sequence)
 
-    def parse(self, message_lines):
+    def parse(self, message):
         '''
-        Parses the given lines into a request message.
+        Parses the given request into its different fields
         '''
 
         # Extract the directive
-        self.directive = re.match('([A-Z]+)', message_lines[0]).group(1)
+        self.directive = re.match('([A-Z]+)', message).group(1)
 
         # Extract the sequence number
-        self.sequence = int(re.match('CSeq\: (\d+)',
-                                     message_lines[1]).group(1))
+        self.sequence = int(re.search(self.SEQUENCE_FIELD +
+                                      '(\d+)',
+                                      message).group(1))
 
-    def to_lines(self):
-        return [self.directive, 'CSeq: ' + str(self.sequence)]
+    def __str__(self):
+        return '\n\r'.join([self.directive,
+                            self.SEQUENCE_FIELD + str(self.sequence)])

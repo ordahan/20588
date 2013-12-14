@@ -17,17 +17,16 @@ class Protocol(object):
         '''
         pass
 
-    def handle_request(self, request_lines):
+    def handle_request(self, request):
         '''
         Handles the given message.
         Returns the message to send back to the client (in
-        the same format as the request_lines given)
+        the same format as the request given)
 
-        request_lines - List of lines that comprise the request
+        request - String representing the request to handle
         '''
-#         request_message = RequestMessage(sequence=sequence, request_lines)
-#
-#         if (request_message.directive_name == Directive.OPTIONS):
-#             return ResponseMessage(request_message.sequence,)
+        # Create a request from the given string
+        request_message = RequestMessage()
+        request_message.parse(request)
 
         pass

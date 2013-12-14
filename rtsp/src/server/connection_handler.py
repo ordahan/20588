@@ -29,10 +29,10 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
         This method is called by the server 'behind-the-scenes'
         each time a new packet arrives on the connection.
         '''
-        request = self.rfile.readlines()
+        request = ''.join(self.rfile.readlines())
 
         print request
 
         response = self.rtsp_protocol_handler.handle_request(request)
 
-        self.wfile.write(''.join(response))
+        self.wfile.write(response)

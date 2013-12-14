@@ -4,7 +4,7 @@ Created on Dec 14, 2013
 @author: ord
 '''
 import SocketServer
-import rtsp.session
+import rtsp.protocol
 
 
 class ConnectionHandler(SocketServer.StreamRequestHandler):
@@ -15,19 +15,24 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
     '''
     def setup(self):
         '''
-        Creates a new RTSP session handler and saves it
-        for future requests
+        This method is called by the server 'behind-the-scenes'
+        when a new connection is established.
+
+        Initializes the objects we need in order to handle the
+        connection.
         '''
-        self.rtsp_session_handler = rtsp.session.Session()
+        self.rtsp_protocol_handler = rtsp.protocol.Protocol()
         SocketServer.StreamRequestHandler.setup(self)
 
     def handle(self):
         '''
-        Reads the request received and calls the given session handler
-        giving the request as argument
+        This method is called by the server 'behind-the-scenes'
+        each time a new packet arrives on the connection.
         '''
         request = self.rfile.readlines()
 
-        response = self.rtsp_session_handler.handle_msg(request)
+        print request
+
+        response = self.rtsp_protocol_handler.handle_request(request)
 
         self.wfile.write(''.join(response))

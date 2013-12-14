@@ -3,7 +3,8 @@ Created on Dec 14, 2013
 
 @author: ord
 '''
-from rtsp.message import RequestMessage
+from rtsp.message import RequestMessage, ResponseMessage, OptionsResponseMessage
+from rtsp import directives, results
 
 
 class Protocol(object):
@@ -27,6 +28,12 @@ class Protocol(object):
         '''
         # Create a request from the given string
         request_message = RequestMessage()
-        request_message.parse(request)
+        if (request_message.parse(request) == False):
+            print("Error parsing message: %s" % request)
+            # TODO: Return an error response
+            return ""
 
-        pass
+        if (request_message.directive == directives.OPTIONS):
+            return str(\
+                    OptionsResponseMessage(sequence=request_message.sequence,
+                                           result=results.OK))

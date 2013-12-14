@@ -3,7 +3,7 @@ Created on Dec 14, 2013
 
 @author: ord
 '''
-from rtsp import directives
+import re
 
 
 class Message(object):
@@ -23,13 +23,24 @@ class RequestMessage(Message):
     An RTSP Request message
     '''
 
-    def __init__(self, message_lines):
+    def __init__(self, directive=None, sequence=0):
+
+        self.directive = directive
+        self.sequence = sequence
+
+        Message.__init__(self, self.sequence)
+
+    def parse(self, message_lines):
         '''
         Parses the given lines into a request message.
         '''
 
-        self.directive = None
-        sequence = 0
+        # Extract the directive
+        self.directive = re.match('([A-Z]+)', message_lines[0]).group(1)
 
-        Message.__init__(self, sequence)
-        pass
+        # Extract the sequence number
+        self.sequence = int(re.match('CSeq\: (\d+)',
+                                     message_lines[1]).group(1))
+
+    def to_lines(self):
+        return [self.directive, 'CSeq: ' + str(self.sequence)]

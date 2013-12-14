@@ -5,6 +5,7 @@ Created on Dec 14, 2013
 '''
 import unittest
 from rtsp.protocol import Protocol
+from rtsp import directives
 
 
 class TestMessage(unittest.TestCase):
@@ -22,6 +23,8 @@ class TestMessage(unittest.TestCase):
         pass
 
     def testOptions(self):
+#         request = \
+#             [directives.OPTIONS]
         self.assertEqual("RTSP/1.0",
                          self.protocol_handler.handle_request("OPTIONS"))
 

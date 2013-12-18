@@ -5,6 +5,7 @@ Created on Dec 14, 2013
 '''
 import SocketServer
 import rtsp.protocol
+import time
 
 
 class ConnectionHandler(SocketServer.StreamRequestHandler):
@@ -29,7 +30,14 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
         This method is called by the server 'behind-the-scenes'
         each time a new packet arrives on the connection.
         '''
-        request = ''.join(self.rfile.readlines())
+
+        import cProfile
+
+        pr = cProfile.Profile()
+        pr.enable()
+
+        # request = ''.join(self.rfile.)
+        request = self.request.recv(1024)
 
         print request
 
@@ -38,3 +46,7 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
         print response
 
         self.wfile.write(response)
+
+        pr.disable()
+
+        pr.print_stats()

@@ -4,8 +4,8 @@ Created on Dec 14, 2013
 @author: ord
 '''
 import unittest
-from rtsp.message import RequestMessage
-from rtsp import directives
+from rtsp.message import RequestMessage, OptionsResponseMessage
+from rtsp import directives, results
 
 
 class TestMessage(unittest.TestCase):
@@ -45,6 +45,17 @@ class TestMessage(unittest.TestCase):
         self.assertEqual(directives.OPTIONS, self.request.directive)
 
         # TODO: More validity tests for parsing
+
+    def testOptionsResponse(self):
+        response = \
+            '\r\n'.join(["RTSP/1.0 200 OK",
+                         "CSeq: 2",
+                         "Public: DESCRIBE,SETUP,TEARDOWN" +
+                            ",PLAY,PAUSE,GET_PARAMETER",
+                         '\r\n'])
+        self.assertEqual(response,
+                         str(OptionsResponseMessage(sequence=2,
+                                                    result=results.OK)))
 
 
 if __name__ == "__main__":

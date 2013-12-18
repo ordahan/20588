@@ -5,6 +5,7 @@ Created on Dec 14, 2013
 '''
 import re
 from rtsp import results, directives
+import rtsp
 
 
 class Message(object):
@@ -71,18 +72,20 @@ class ResponseMessage(Message):
                                           results.strings[self.result]),
                         self.SEQUENCE_FIELD + str(self.sequence)]
         message.extend(self.payload)
-        return '\r\n'.join(message)
+        return (rtsp.protocol.NEWLINE).join(message)
 
 
 class OptionsResponseMessage(ResponseMessage):
 
     def __init__(self, sequence, result):
-        payload = ["Public: %s %s %s %s %s" %
+        payload = ["Public: %s,%s,%s,%s,%s,%s" %
                             (directives.DESCRIBE,
                              directives.SETUP,
                              directives.TEARDOWN,
                              directives.PLAY,
-                             directives.PAUSE)]
+                             directives.PAUSE,
+                             directives.GET_PARAMETER),
+                   rtsp.protocol.NEWLINE]
         ResponseMessage.__init__(self, sequence=sequence,
                                  result=result,
                                  payload=payload)

@@ -35,4 +35,6 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
 
         response = self.rtsp_protocol_handler.handle_request(request)
 
+        print response
+
         self.wfile.write(response)

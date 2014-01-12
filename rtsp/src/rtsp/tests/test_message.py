@@ -4,8 +4,12 @@ Created on Dec 14, 2013
 @author: ord
 '''
 import unittest
-from rtsp.message import RequestMessage, OptionsResponseMessage
-from rtsp import directives, results
+from rtsp.message import RequestMessage, OptionsResponseMessage, \
+    DescribeResponseMessage
+from rtsp import directives
+from rtsp import result_codes
+from difflib import context_diff
+import rtsp
 
 
 class TestMessage(unittest.TestCase):
@@ -24,7 +28,7 @@ class TestMessage(unittest.TestCase):
 
 class TestOptions(TestMessage):
 
-    def testNominalParse(self):
+    def testParse(self):
         '''
         Tests the parsing of the options message
         '''
@@ -49,7 +53,7 @@ class TestOptions(TestMessage):
         # TODO: More validity tests for parsing
         # 1) Options without URI - atm failing
 
-    def testNominalResponse(self):
+    def testResponse(self):
         response = \
             '\r\n'.join(["RTSP/1.0 200 OK",
                          "CSeq: 2",
@@ -58,11 +62,11 @@ class TestOptions(TestMessage):
                          '\r\n'])
         self.assertEqual(response,
                          str(OptionsResponseMessage(sequence=2,
-                                                    result=results.OK)))
+                                                    result=result_codes.OK)))
 
 class TestDescribe(TestMessage):
 
-    def testDescribe(self):
+    def testParse(self):
         '''
         Tests the parsing of the describe message
         '''
@@ -79,6 +83,73 @@ class TestDescribe(TestMessage):
         self.assertEqual(3, self.request.sequence)
         self.assertEqual(directives.DESCRIBE, self.request.directive)
 
+    def testResponse(self):
+
+        date = 'Sun, 12 Jan 2014 13:04:23 GMT'
+        uri = 'rtsp://127.0.0.1:18554/homeland.avi'
+        length = 717
+        sdp_o_param = 15455528565056244265
+
+        expected_response = \
+            '\r\n'.join([
+                       'RTSP/1.0 200 OK',
+                       'CSeq: 3',
+                       'Server: VLC/2.0.8',
+                       'Date: %s' % date,
+                       'Content-Type: application/sdp',
+                       'Content-Base: %s' % uri,
+                       'Content-Length: %d' % length,
+                       'Cache-Control: no-cache',
+                       '',
+                       'v=0',
+                       'o=- {time} {time} IN IP4 desktop'.format(time=sdp_o_param),
+                       's=Unnamed',
+                       'i=N/A',
+                       'c=IN IP4 0.0.0.0',
+                       't=0 0',
+                       'a=tool:vlc 2.0.8',
+                       'a=recvonly',
+                       'a=type:broadcast',
+                       'a=charset:UTF-8',
+                       'a=control:%s' % uri,
+                       'm=video 0 RTP/AVP 96',
+                       'b=RR:0',
+                       'a=rtpmap:96 H264/90000',
+                       'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
+                       'a=control:%s/trackID=0' % uri,
+                       'm=audio 0 RTP/AVP 96',
+                       'b=RR:0',
+                       'a=rtpmap:96 mpeg4-generic/48000/2',
+                       'a=fmtp:96 streamtype=5; profile-level-id=15; mode=AAC-hbr; config=1190; SizeLength=13; IndexLength=3; IndexDeltaLength=3; Profile=1;',
+                       'a=control:%s/trackID=1' % uri,
+                        '\r\n'])
+
+        actual_response = str(DescribeResponseMessage(sequence=3,
+                                                      result=result_codes.OK,
+                                                      date=date,
+                                                      uri=uri,
+                                                      length=length,
+                                                      sdp_o_param=sdp_o_param))
+
+        self.assertEqualMessages(expected_response, actual_response)
+
+
+    def assertEqualMessages(self, expected_message, actual_message):
+
+        expected_message_lines = expected_message.split(rtsp.message.Message.NEWLINE)
+        actual_message_lines = actual_message.split(rtsp.message.Message.NEWLINE)
+
+        delta = context_diff(expected_message_lines,
+                             actual_message_lines,
+                             fromfile='expected',
+                             tofile='actual',
+                             lineterm=rtsp.message.Message.NEWLINE)
+
+        try:
+            starting_line = delta.next()
+            raise AssertionError('\n' + starting_line + rtsp.message.Message.NEWLINE.join(delta))
+        except StopIteration:
+            pass
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'TestMessage.testOptions']

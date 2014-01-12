@@ -4,7 +4,8 @@ Created on Dec 14, 2013
 @author: ord
 '''
 from rtsp.message import RequestMessage, OptionsResponseMessage
-from rtsp import directives, results
+from rtsp import directives
+from rtsp import result_codes
 
 
 class Protocol(object):
@@ -35,7 +36,7 @@ class Protocol(object):
 
         if (request_message.directive == directives.OPTIONS):
             options_response = OptionsResponseMessage(sequence=request_message.sequence,
-                                                      result=results.OK)
+                                                      result=result_codes.OK)
             return str(options_response)
         elif (request_message.directive == directives.DESCRIBE):
             print "DESCRIBE? YOU WANT ME TO DESCRIBE? ME? SURELY YOU MUST BE JOKING."

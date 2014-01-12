@@ -36,6 +36,8 @@ class Protocol(object):
             return ""
 
         if (request_message.directive == directives.OPTIONS):
-            return str(\
-                    OptionsResponseMessage(sequence=request_message.sequence,
-                                           result=results.OK))
+            options_response = OptionsResponseMessage(sequence=request_message.sequence,
+                                                      result=results.OK)
+            return str(options_response)
+        elif (request_message.directive == directives.DESCRIBE):
+            print "DESCRIBE? YOU WANT ME TO DESCRIBE? ME? SURELY YOU MUST BE JOKING."

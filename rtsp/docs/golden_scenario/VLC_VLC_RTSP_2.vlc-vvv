@@ -1,0 +1,421 @@
+VLC media player 2.0.8 Twoflower (revision 2.0.8a-0-g68cf50b)
+[0x8a29908] main libvlc debug: VLC media player - 2.0.8 Twoflower
+[0x8a29908] main libvlc debug: Copyright © 1996-2013 VLC authors and VideoLAN
+[0x8a29908] main libvlc debug: revision 2.0.8a-0-g68cf50b
+[0x8a29908] main libvlc debug: configured with ./configure  '--enable-static' '--build=i686-linux-gnu' 'CFLAGS=-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security -Werror=format-security' 'CPPFLAGS=-D_FORTIFY_SOURCE=2' 'CXXFLAGS=-g -O2 -fstack-protector --param=ssp-buffer-size=4 -Wformat -Wformat-security -Werror=format-security' 'LDFLAGS=-Wl,-Bsymbolic-functions -Wl,-z,relro' '--config-cache' '--disable-maintainer-mode' '--disable-silent-rules' '--disable-update-check' '--enable-fast-install' '--prefix=/usr' '--docdir=/usr/share/doc/vlc-nox' '--sysconfdir=/etc' '--with-binary-version=0ubuntu0.12.04.1' '--enable-a52' '--enable-aa' '--enable-bluray' '--enable-bonjour' '--enable-caca' '--enable-dbus' '--enable-dca' '--enable-dirac' '--enable-directfb' '--enable-dvbpsi' '--enable-dvdnav' '--enable-faad' '--enable-flac' '--enable-fluidsynth' '--enable-freetype' '--enable-fribidi' '--enable-gnutls' '--enable-jack' '--enable-kate' '--enable-libass' '--enable-libmpeg2' '--enable-libproxy' '--enable-libxml2' '--enable-lirc' '--enable-live555' '--enable-mad' '--enable-mkv' '--enable-mod' '--enable-mpc' '--enable-mtp' '--enable-mux_ogg' '--enable-ncurses' '--enable-notify' '--enable-ogg' '--enable-oss' '--enable-pulse' '--enable-qt4' '--enable-realrtsp' '--enable-samplerate' '--enable-schroedinger' '--enable-sdl' '--enable-shout' '--enable-skins2' '--enable-smb' '--enable-speex' '--enable-svg' '--enable-taglib' '--enable-theora' '--enable-twolame' '--enable-upnp' '--enable-vcd' '--enable-vcdx' '--enable-vorbis' '--enable-x264' '--enable-zvbi' '--with-kde-solid=/usr/share/kde4/apps/solid/actions/' '--disable-dxva2' '--disable-gnomevfs' '--disable-goom' '--disable-portaudio' '--disable-projectm' '--disable-sqlite' '--disable-telx' '--enable-alsa' '--enable-atmo' '--enable-dc1394' '--enable-dv' '--enable-fbosd' '--enable-libva' '--enable-linsys' '--enable-omxil' '--enable-pvr' '--enable-udev' '--enable-v4l2' '--enable-crystalhd' '--enable-mmx' '--enable-sse' '--disable-neon' '--disable-altivec' 'build_alias=i686-linux-gnu'
+[0x8a29908] main libvlc debug: searching plug-in modules
+[0x8a29908] main libvlc debug: loading plugins cache file /usr/lib/vlc/plugins/plugins.dat
+[0x8a29908] main libvlc debug: recursively browsing `/usr/lib/vlc/plugins'
+[0x8a29908] main libvlc debug: saving plugins cache /usr/lib/vlc/plugins/plugins.dat
+[0x8a29908] main libvlc debug: plug-ins loaded: 420 modules
+[0x8a29908] main libvlc debug: opening config file (/home/ord/.config/vlc/vlcrc)
+[0x8a29908] main libvlc debug: translation test: code is "C"
+[0x8a29908] main libvlc debug: CPU has capabilities MMX MMXEXT SSE SSE2 SSE3 SSSE3 SSE4.1 FPU 
+[0x8a29908] main libvlc debug: looking for memcpy module: 4 candidates
+[0x8a29908] main libvlc debug: using memcpy module "memcpymmxext"
+[0x8abd288] main input debug: Creating an input for 'Media Library'
+[0x8abd288] main input debug: Input is a meta file: disabling unneeded options
+[0x8abd288] main input debug: using timeshift granularity of 50 MiB, in path '/tmp'
+[0x8abd288] main input debug: `file/xspf-open:///home/ord/.local/share/vlc/ml.xspf' gives access `file' demux `xspf-open' path `/home/ord/.local/share/vlc/ml.xspf'
+[0x8abd288] main input debug: creating demux: access='file' demux='xspf-open' location='/home/ord/.local/share/vlc/ml.xspf' file='/home/ord/.local/share/vlc/ml.xspf'
+[0x8abec60] main demux debug: looking for access_demux module: 3 candidates
+[0x8abec60] main demux debug: no access_demux module matching "file" could be loaded
+[0x8abec60] main demux debug: TIMER module_need() : 0.601 ms - Total 0.601 ms / 1 intvls (Avg 0.601 ms)
+[0x8abd288] main input debug: creating access 'file' location='/home/ord/.local/share/vlc/ml.xspf', path='/home/ord/.local/share/vlc/ml.xspf'
+[0x8a3d6a8] main access debug: looking for access module: 2 candidates
+[0x8a3d6a8] filesystem access debug: opening file `/home/ord/.local/share/vlc/ml.xspf'
+[0x8a3d6a8] main access debug: using access module "filesystem"
+[0x8a3d6a8] main access debug: TIMER module_need() : 0.270 ms - Total 0.270 ms / 1 intvls (Avg 0.270 ms)
+[0x8ba7b58] main stream debug: Using stream method for AStream*
+[0x8ba7b58] main stream debug: starting pre-buffering
+[0x8ba7b58] main stream debug: received first data after 0 ms
+[0x8ba7b58] main stream debug: pre-buffering done 296 bytes in 0s - 8759 KiB/s
+[0x8a3daf8] main stream debug: looking for stream_filter module: 7 candidates
+[0x8a3daf8] main stream debug: no stream_filter module matching "any" could be loaded
+[0x8a3daf8] main stream debug: TIMER module_need() : 0.653 ms - Total 0.653 ms / 1 intvls (Avg 0.653 ms)
+[0x8a3daf8] main stream debug: looking for stream_filter module: 1 candidate
+[0x8a3daf8] main stream debug: using stream_filter module "stream_filter_record"
+[0x8a3daf8] main stream debug: TIMER module_need() : 0.142 ms - Total 0.142 ms / 1 intvls (Avg 0.142 ms)
+[0x8abd288] main input debug: creating demux: access='file' demux='xspf-open' location='/home/ord/.local/share/vlc/ml.xspf' file='/home/ord/.local/share/vlc/ml.xspf'
+[0x8a4ad40] main demux debug: looking for demux module: 1 candidate
+[0x8a4ad40] playlist demux debug: using XSPF playlist reader
+[0x8a4ad40] main demux debug: using demux module "playlist"
+[0x8a4ad40] main demux debug: TIMER module_need() : 0.223 ms - Total 0.223 ms / 1 intvls (Avg 0.223 ms)
+[0x8ab1af0] main demux meta debug: looking for meta reader module: 2 candidates
+[0x8ab1af0] lua demux meta debug: Trying Lua scripts in /home/ord/.local/share/vlc/lua/meta/reader
+[0x8ab1af0] lua demux meta debug: Trying Lua scripts in /usr/lib/vlc/lua/meta/reader
+[0x8ab1af0] lua demux meta debug: Trying Lua playlist script /usr/lib/vlc/lua/meta/reader/filename.luac
+[0x8ab1af0] lua demux meta debug: Trying Lua scripts in /usr/share/vlc/lua/meta/reader
+[0x8ab1af0] main demux meta debug: no meta reader module matching "any" could be loaded
+[0x8ab1af0] main demux meta debug: TIMER module_need() : 1.416 ms - Total 1.416 ms / 1 intvls (Avg 1.416 ms)
+[0x8abd288] main input debug: `file/xspf-open:///home/ord/.local/share/vlc/ml.xspf' successfully opened
+[0x8ac30e0] main xml reader debug: looking for xml reader module: 1 candidate
+[0x8ac30e0] main xml reader debug: using xml reader module "xml"
+[0x8ac30e0] main xml reader debug: TIMER module_need() : 0.468 ms - Total 0.468 ms / 1 intvls (Avg 0.468 ms)
+[0x8a4ad40] playlist demux debug: parsed 0 tracks successfully
+[0x8abd288] main input debug: EOF reached
+[0x8a4ad40] main demux debug: removing module "playlist"
+[0x8a3daf8] main stream debug: removing module "stream_filter_record"
+[0x8a3d6a8] main access debug: removing module "filesystem"
+[0x8abd288] main input debug: TIMER input launching for 'Media Library' : 4.141 ms - Total 4.141 ms / 1 intvls (Avg 4.141 ms)
+[0x8a3daf8] main interface debug: looking for interface module: 1 candidate
+[0x8a3daf8] main interface debug: using interface module "hotkeys"
+[0x8a3daf8] main interface debug: TIMER module_need() : 0.163 ms - Total 0.163 ms / 1 intvls (Avg 0.163 ms)
+[0x8ba7b58] main interface debug: looking for interface module: 1 candidate
+[0x8ba6450] main playlist debug: playlist threads correctly activated
+[0x8ba7b58] main interface debug: using interface module "inhibit"
+[0x8ba7b58] main interface debug: TIMER module_need() : 4.420 ms - Total 4.420 ms / 1 intvls (Avg 4.420 ms)
+[0x8ba6450] main playlist debug: adding item `rtsp://localhost:18554/homeland.avi' ( rtsp://localhost:18554/homeland.avi )
+[0x8ba6450] main playlist debug: meta ok for (null), need to fetch art
+[0x8abdd88] main interface debug: looking for interface module: 1 candidate
+[0xb53005e8] main demux meta debug: looking for meta fetcher module: 1 candidate
+[0xb53005e8] lua demux meta debug: Trying Lua scripts in /home/ord/.local/share/vlc/lua/meta/fetcher
+[0xb53005e8] lua demux meta debug: Trying Lua scripts in /usr/lib/vlc/lua/meta/fetcher
+[0xb53005e8] lua demux meta debug: Trying Lua playlist script /usr/lib/vlc/lua/meta/fetcher/tvrage.luac
+[0xb53005e8] main demux meta debug: using meta fetcher module "lua"
+[0xb53005e8] main demux meta debug: TIMER module_need() : 0.548 ms - Total 0.548 ms / 1 intvls (Avg 0.548 ms)
+[0xb53005e8] main demux meta debug: removing module "lua"
+[0x8ba6450] main playlist debug: searching art for rtsp://localhost:18554/homeland.avi
+[0xb5303350] main art finder debug: looking for art finder module: 2 candidates
+[0xb5303350] lua art finder debug: Trying Lua scripts in /home/ord/.local/share/vlc/lua/meta/art
+[0xb5303350] lua art finder debug: Trying Lua scripts in /usr/lib/vlc/lua/meta/art
+[0xb5303350] lua art finder debug: Trying Lua playlist script /usr/lib/vlc/lua/meta/art/00_musicbrainz.luac
+[0xb5303350] lua art finder debug: Trying Lua playlist script /usr/lib/vlc/lua/meta/art/01_googleimage.luac
+[0xb5303350] lua art finder debug: Trying Lua playlist script /usr/lib/vlc/lua/meta/art/02_frenchtv.luac
+[0xb5303350] lua art finder debug: Trying Lua playlist script /usr/lib/vlc/lua/meta/art/03_lastfm.luac
+[0x8abdd88] main interface debug: using interface module "globalhotkeys"
+[0x8abdd88] main interface debug: TIMER module_need() : 2.523 ms - Total 2.523 ms / 1 intvls (Avg 2.523 ms)
+[0x8ba5168] main interface debug: looking for interface module: 1 candidate
+[0x8ba5168] dummy interface: using the dummy interface module...
+[0x8ba5168] main interface debug: using interface module "dummy"
+[0x8ba5168] main interface debug: TIMER module_need() : 0.260 ms - Total 0.260 ms / 1 intvls (Avg 0.260 ms)
+[0xb5303350] lua art finder debug: Trying Lua scripts in /usr/share/vlc/lua/meta/art
+[0xb5303350] main art finder debug: no art finder module matching "any" could be loaded
+[0xb5303350] main art finder debug: TIMER module_need() : 2.124 ms - Total 2.124 ms / 1 intvls (Avg 2.124 ms)
+[0x8ba6450] main playlist debug: art not found for rtsp://localhost:18554/homeland.avi
+[0x8ba6450] main playlist debug: rebuilding array of current - root Playlist
+[0x8ba6450] main playlist debug: rebuild done - 1 items, index -1
+[0x8ba6450] main playlist debug: processing request item: null, node: Playlist, skip: 0
+[0x8ba6450] main playlist debug: starting playback of the new playlist item
+[0x8ba6450] main playlist debug: resyncing on rtsp://localhost:18554/homeland.avi
+[0x8ba6450] main playlist debug: rtsp://localhost:18554/homeland.avi is at 0
+[0x8ba6450] main playlist debug: creating new input thread
+[0xb5300b98] main input debug: Creating an input for 'rtsp://localhost:18554/homeland.avi'
+[0xb5300b98] main input debug: using timeshift granularity of 50 MiB, in path '/tmp'
+[0xb5300b98] main input debug: `rtsp://localhost:18554/homeland.avi' gives access `rtsp' demux `' path `localhost:18554/homeland.avi'
+[0xb5300b98] main input debug: creating demux: access='rtsp' demux='' location='localhost:18554/homeland.avi' file='(null)'
+[0xb5100970] main demux debug: looking for access_demux module: 1 candidate
+[0xb5100970] live555 demux debug: version 2011.12.23
+Opening connection to 127.0.0.1, port 18554...
+...remote connection opened
+Sending request: OPTIONS rtsp://localhost:18554/homeland.avi RTSP/1.0
+CSeq: 2
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+
+
+Received 124 new bytes of response data.
+Received a complete OPTIONS response:
+RTSP/1.0 200 OK
+Server: VLC/2.0.8
+Content-Length: 0
+Cseq: 2
+Public: DESCRIBE,SETUP,TEARDOWN,PLAY,PAUSE,GET_PARAMETER
+
+
+Sending request: DESCRIBE rtsp://localhost:18554/homeland.avi RTSP/1.0
+CSeq: 3
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+Accept: application/sdp
+
+
+Received 212 new bytes of response data.
+Have received 212 total bytes of a DESCRIBE RTSP response; awaiting 717 bytes more.
+Received 717 new bytes of response data.
+Received a complete DESCRIBE response:
+RTSP/1.0 200 OK
+Server: VLC/2.0.8
+Date: Sun, 12 Jan 2014 14:19:31 GMT
+Content-Type: application/sdp
+Content-Base: rtsp://127.0.0.1:18554/homeland.avi
+Content-Length: 717
+Cache-Control: no-cache
+Cseq: 3
+
+v=0
+o=- 15455547925654064887 15455547925654064887 IN IP4 desktop
+s=Unnamed
+i=N/A
+c=IN IP4 0.0.0.0
+t=0 0
+a=tool:vlc 2.0.8
+a=recvonly
+a=type:broadcast
+a=charset:UTF-8
+a=control:rtsp://127.0.0.1:18554/homeland.avi
+m=video 0 RTP/AVP 96
+b=RR:0
+a=rtpmap:96 H264/90000
+a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;
+a=control:rtsp://127.0.0.1:18554/homeland.avi/trackID=0
+m=audio 0 RTP/AVP 96
+b=RR:0
+a=rtpmap:96 mpeg4-generic/48000/2
+a=fmtp:96 streamtype=5; profile-level-id=15; mode=AAC-hbr; config=1190; SizeLength=13; IndexLength=3; IndexDeltaLength=3; Profile=1;
+a=control:rtsp://127.0.0.1:18554/homeland.avi/trackID=1
+
+[0xb5100970] live555 demux debug: RTP subsession 'video/H264'
+Sending request: SETUP rtsp://127.0.0.1:18554/homeland.avi/trackID=0 RTSP/1.0
+CSeq: 4
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+Transport: RTP/AVP;unicast;client_port=35670-35671
+
+
+Received 270 new bytes of response data.
+Received a complete SETUP response:
+RTSP/1.0 200 OK
+Server: VLC/2.0.8
+Date: Sun, 12 Jan 2014 14:19:31 GMT
+Transport: RTP/AVP/UDP;unicast;client_port=35670-35671;server_port=47836-47837;ssrc=D4450000;mode=play
+Session: b1f68580ffb776b1;timeout=60
+Content-Length: 0
+Cache-Control: no-cache
+Cseq: 4
+
+
+[0xb5300b98] main input debug: selecting program id=0
+[0xb5100970] live555 demux debug: RTP subsession 'audio/MPEG4-GENERIC'
+Sending request: SETUP rtsp://127.0.0.1:18554/homeland.avi/trackID=1 RTSP/1.0
+CSeq: 5
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+Transport: RTP/AVP;unicast;client_port=40428-40429
+Session: b1f68580ffb776b1
+
+
+Received 270 new bytes of response data.
+Received a complete SETUP response:
+RTSP/1.0 200 OK
+Server: VLC/2.0.8
+Date: Sun, 12 Jan 2014 14:19:31 GMT
+Transport: RTP/AVP/UDP;unicast;client_port=40428-40429;server_port=55879-55880;ssrc=7F2D3BB6;mode=play
+Session: b1f68580ffb776b1;timeout=60
+Content-Length: 0
+Cache-Control: no-cache
+Cseq: 5
+
+
+[0xb5100970] live555 demux debug: setup start: 0.000000 stop:0.000000
+Sending request: PLAY rtsp://127.0.0.1:18554/homeland.avi RTSP/1.0
+CSeq: 6
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+Session: b1f68580ffb776b1
+Range: npt=0.000-
+
+
+Received 359 new bytes of response data.
+Received a complete PLAY response:
+RTSP/1.0 200 OK
+Server: VLC/2.0.8
+Date: Sun, 12 Jan 2014 14:19:31 GMT
+RTP-Info: url=rtsp://127.0.0.1:18554/homeland.avi/trackID=0;seq=12747;rtptime=2594169527, url=rtsp://127.0.0.1:18554/homeland.avi/trackID=1;seq=17731;rtptime=1669888234
+Range: npt=86.228890-
+Session: b1f68580ffb776b1;timeout=60
+Content-Length: 0
+Cache-Control: no-cache
+Cseq: 6
+
+
+[0xb5100970] live555 demux debug: We have a timeout of 60 seconds
+[0xb5100970] live555 demux debug: spawned timeout thread
+[0xb5100970] live555 demux debug: play start: 86.228890 stop:0.000000
+[0xb5100970] main demux debug: using access_demux module "live555"
+[0xb5100970] main demux debug: TIMER module_need() : 201.255 ms - Total 201.255 ms / 1 intvls (Avg 201.255 ms)
+[0xb51011f0] main decoder debug: looking for decoder module: 30 candidates
+[0xb51011f0] avcodec decoder debug: libavcodec initialized (interface 0x352300)
+[0xb51011f0] avcodec decoder debug: trying to use direct rendering
+[0xb51011f0] avcodec decoder debug: allowing 3 thread(s) for decoding
+[0xb51011f0] avcodec decoder debug: ffmpeg codec (H264 - MPEG-4 AVC (part 10)) started
+[0xb51011f0] avcodec decoder debug: using frame thread mode with 3 threads
+[0xb51011f0] main decoder debug: using decoder module "avcodec"
+[0xb51011f0] main decoder debug: TIMER module_need() : 14.439 ms - Total 14.439 ms / 1 intvls (Avg 14.439 ms)
+[0xb510c900] main packetizer debug: looking for packetizer module: 21 candidates
+[0xb510c900] packetizer_h264 packetizer debug: found NAL_SPS (sps_id=0)
+[0xb510c900] packetizer_h264 packetizer debug: found NAL_PPS (pps_id=0 sps_id=0)
+[0xb510c900] main packetizer debug: using packetizer module "packetizer_h264"
+[0xb510c900] main packetizer debug: TIMER module_need() : 0.819 ms - Total 0.819 ms / 1 intvls (Avg 0.819 ms)
+[0xb513e370] main decoder debug: looking for decoder module: 30 candidates
+[0xb513e370] main decoder debug: using decoder module "faad"
+[0xb513e370] main decoder debug: TIMER module_need() : 0.346 ms - Total 0.346 ms / 1 intvls (Avg 0.346 ms)
+[0xb5141c38] main demux meta debug: looking for meta reader module: 2 candidates
+[0xb5141c38] lua demux meta debug: Trying Lua scripts in /home/ord/.local/share/vlc/lua/meta/reader
+[0xb5141c38] lua demux meta debug: Trying Lua scripts in /usr/lib/vlc/lua/meta/reader
+[0xb5141c38] lua demux meta debug: Trying Lua playlist script /usr/lib/vlc/lua/meta/reader/filename.luac
+[0xb5141c38] lua demux meta debug: Trying Lua scripts in /usr/share/vlc/lua/meta/reader
+[0xb5141c38] main demux meta debug: no meta reader module matching "any" could be loaded
+[0xb5141c38] main demux meta debug: TIMER module_need() : 0.970 ms - Total 0.970 ms / 1 intvls (Avg 0.970 ms)
+[0xb5300b98] main input debug: `rtsp://localhost:18554/homeland.avi' successfully opened
+Sending request: GET_PARAMETER rtsp://127.0.0.1:18554/homeland.avi RTSP/1.0
+CSeq: 7
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+Session: b1f68580ffb776b1
+
+
+[0xb5300b98] main input debug: Buffering 0%
+[0xb5300b98] main input debug: Buffering 2%
+[0xb5300b98] main input debug: Buffering 2%
+[0xb513e370] faad decoder warning: decoded zero sample
+[0x8ba6450] main playlist debug: creating audio output
+[0x8ba9988] main audio output debug: looking for audio output module: 3 candidates
+[0x8ba9988] pulse audio output debug: using stereo channel map
+[0x8ba9988] pulse audio output debug: using library version 1.1.0
+[0x8ba9988] pulse audio output debug:  (compiled with version 1.1.0, protocol 26)
+[0x8ba9988] pulse audio output debug: connected locally to unix:/home/ord/.pulse/02f4df51d6cd5d9b1065663900000004-runtime/native as client #59
+[0x8ba9988] pulse audio output debug: using protocol 26, server protocol 26
+[0xb5300b98] main input debug: Buffering 4%
+Received 166 new bytes of response data.
+Received a complete GET_PARAMETER response:
+RTSP/1.0 200 OK
+Server: VLC/2.0.8
+Date: Sun, 12 Jan 2014 14:19:31 GMT
+Session: b1f68580ffb776b1;timeout=60
+Content-Length: 0
+Cache-Control: no-cache
+Cseq: 7
+
+
+[0xb5300b98] main input debug: Buffering 20%
+[0xb5300b98] main input debug: Buffering 20%
+[0x8ba9988] pulse audio output debug: using buffer metrics: maxlength=4194304, tlength=15360, prebuf=0, minreq=5120
+[0x8ba9988] pulse audio output debug: connected to sink 0: alsa_output.pci-0000_00_1b.0.analog-stereo
+[0x8ba9988] main audio output debug: using audio output module "pulse"
+[0x8ba9988] main audio output debug: TIMER module_need() : 31.585 ms - Total 31.585 ms / 1 intvls (Avg 31.585 ms)
+[0x8ba9988] main audio output debug: output 'f32l' 48000 Hz Stereo frame=1 samples/8 bytes
+[0x8ba9988] main audio output debug: mixer 'f32l' 48000 Hz Stereo frame=1 samples/8 bytes
+[0x8ba9988] main audio output debug: filter(s) 'f32l'->'f32l' 48000 Hz->48000 Hz Stereo->Stereo
+[0x8ba9988] main audio output debug: conversion pipeline completed
+[0x8ab92d8] main mixer debug: looking for audio mixer module: 2 candidates
+[0x8ab92d8] main mixer debug: using audio mixer module "float32_mixer"
+[0x8ab92d8] main mixer debug: TIMER module_need() : 0.368 ms - Total 0.368 ms / 1 intvls (Avg 0.368 ms)
+[0x8ba9988] main audio output debug: input 'f32l' 48000 Hz Stereo frame=1 samples/8 bytes
+[0x8ab9370] main audio filter debug: looking for audio filter module: 1 candidate
+[0x8ab9370] scaletempo audio filter debug: format: 48000 rate, 2 nch, 4 bps, fl32
+[0x8ab9370] scaletempo audio filter debug: params: 30 stride, 0.200 overlap, 14 search
+[0x8ab9370] scaletempo audio filter debug: 1.000 scale, 1440.000 stride_in, 1440 stride_out, 1152 standing, 288 overlap, 672 search, 2400 queue, fl32 mode
+[0x8ab9370] main audio filter debug: using audio filter module "scaletempo"
+[0x8ab9370] main audio filter debug: TIMER module_need() : 0.340 ms - Total 0.340 ms / 1 intvls (Avg 0.340 ms)
+[0x8ba9988] main audio output debug: filter(s) 'f32l'->'f32l' 48000 Hz->48000 Hz Stereo->Stereo
+[0x8ba9988] main audio output debug: conversion pipeline completed
+[0x8ba9988] main audio output debug: filter(s) 'f32l'->'f32l' 48000 Hz->48000 Hz Stereo->Stereo
+[0x8ba9988] main audio output debug: conversion pipeline completed
+[0x8ba9988] main audio output debug: filter(s) 'f32l'->'f32l' 52800 Hz->48000 Hz Stereo->Stereo
+[0x8ab9a10] main audio filter debug: looking for audio filter module: 13 candidates
+[0x8ab9a10] main audio filter debug: using audio filter module "samplerate"
+[0x8ba9988] pulse audio output debug: nothing to play
+[0x8ba9988] pulse audio output debug: listing sink alsa_output.pci-0000_00_1b.0.analog-stereo (0): Built-in Audio Analog Stereo
+[0x8ba9988] pulse audio output debug: base volume: 65536
+[0x8ab9a10] main audio filter debug: TIMER module_need() : 1.148 ms - Total 1.148 ms / 1 intvls (Avg 1.148 ms)
+[0x8ba9988] main audio output debug: conversion pipeline completed
+[0xb513e370] main decoder debug: End of audio preroll
+[0x8ba9988] pulse audio output debug: nothing to play
+[0x8ba9988] pulse audio output debug: nothing to play
+[0x8ba9988] pulse audio output debug: nothing to play
+[0xb5300b98] main input debug: Buffering 20%
+[0x8ba9988] pulse audio output debug: nothing to play
+[0xb5300b98] main input debug: Buffering 20%
+[0xb5300b98] main input debug: Buffering 20%
+[0xb5300b98] main input debug: Buffering 20%
+[0x8ba9988] pulse audio output debug: nothing to play
+[0xb5300b98] main input debug: Buffering 20%
+[0xb5300b98] main input debug: Buffering 20%
+[0xb5300b98] main input debug: Buffering 20%
+[0xb5300b98] main input debug: Buffering 37%
+[0xb5300b98] main input debug: Buffering 37%
+[0xb5300b98] main input debug: Buffering 37%
+[0x8ba9988] pulse audio output debug: nothing to play
+[0xb5300b98] main input debug: Buffering 37%
+[0xb5300b98] main input debug: Buffering 37%
+[0xb5300b98] main input debug: Buffering 37%
+[0xb5300b98] main input debug: Buffering 37%
+[0xb5300b98] main input debug: Buffering 37%
+[0xb5300b98] main input debug: Buffering 37%
+[0xb5300b98] main input debug: Buffering 37%
+[0xb5300b98] main input debug: Buffering 37%
+[0xb5300b98] main input debug: Buffering 37%
+[0xb5300b98] main input debug: Buffering 50%
+[0xb5300b98] main input debug: Buffering 50%
+[0x8ba9988] pulse audio output debug: nothing to play
+[0xb5300b98] main input debug: Buffering 50%
+[0xb5300b98] main input debug: Buffering 50%
+[0xb5300b98] main input debug: Buffering 50%
+[0xb5300b98] main input debug: Buffering 50%
+[0xb5300b98] main input debug: Buffering 50%
+[0xb5300b98] main input debug: Buffering 50%
+[0xb5300b98] main input debug: Buffering 50%
+[0xb5300b98] main input debug: Buffering 62%
+[0xb5300b98] main input debug: Buffering 62%
+[0xb5300b98] main input debug: Buffering 62%
+[0xb5300b98] main input debug: Buffering 62%
+[0xb5300b98] main input debug: Buffering 62%
+[0xb5300b98] main input debug: Buffering 62%
+[0xb5300b98] main input debug: Buffering 62%
+[0xb5300b98] main input debug: Buffering 62%
+[0xb5300b98] main input debug: Buffering 62%
+[0xb5300b98] main input debug: Buffering 79%
+[0xb5300b98] main input debug: Buffering 79%
+[0xb5300b98] main input debug: Buffering 79%
+[0xb5300b98] main input debug: Buffering 79%
+[0xb5300b98] main input debug: Buffering 79%
+[0xb5300b98] main input debug: Buffering 79%
+[0xb5300b98] main input debug: Buffering 79%
+[0x8ba9988] pulse audio output debug: nothing to play
+[0xb5300b98] main input debug: Buffering 79%
+^C[0x8a29908] main libvlc debug: deactivating the playlist
+[0x8ba6450] main playlist debug: deactivating the playlist
+[0x8ba6450] main playlist debug: incoming request - stopping current input
+[0x8ba6450] main playlist debug: dying input
+[0xb5300b98] main input debug: control: stopping input
+[0x8ba6450] main playlist debug: dying input
+[0xb51011f0] main decoder debug: removing module "avcodec"
+[0xb51011f0] avcodec decoder debug: ffmpeg codec (H264 - MPEG-4 AVC (part 10)) stopped
+[0xb51011f0] main decoder debug: killing decoder fourcc `h264', 0 PES in FIFO
+[0xb510c900] main packetizer debug: removing module "packetizer_h264"
+[0xb513e370] main decoder warning: received buffer in the future
+[0xb513e370] main decoder warning: received buffer in the future
+[0xb513e370] main decoder warning: received buffer in the future
+[0xb513e370] main decoder warning: received buffer in the future
+[0xb513e370] main decoder warning: received buffer in the future
+[0xb513e370] main decoder debug: removing module "faad"
+[0xb513e370] main decoder debug: killing decoder fourcc `mp4a', 29 PES in FIFO
+[0x8ab9370] main audio filter debug: removing module "scaletempo"
+[0x8ab9a10] main audio filter debug: removing module "samplerate"
+[0x8ba9988] main audio output debug: removing module "pulse"
+[0x8ab92d8] main mixer debug: removing module "float32_mixer"
+[0x8ba6450] main playlist debug: releasing audio output
+[0xb5100970] main demux debug: removing module "live555"
+Sending request: TEARDOWN rtsp://127.0.0.1:18554/homeland.avi RTSP/1.0
+CSeq: 8
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+Session: b1f68580ffb776b1
+
+
+[0xb5300b98] main input debug: Program doesn't contain anymore ES
+[0x8ba6450] main playlist debug: dead input
+[0x8ac5148] main playlist export debug: saving Media Library to file /home/ord/.local/share/vlc/ml.xspf
+[0x8ac5148] main playlist export debug: looking for playlist export module: 1 candidate
+[0x8ac5148] main playlist export debug: using playlist export module "export"
+[0x8ac5148] main playlist export debug: TIMER module_need() : 0.395 ms - Total 0.395 ms / 1 intvls (Avg 0.395 ms)
+[0x8ac5148] main playlist export debug: removing module "export"
+[0x8ba6450] main playlist debug: playlist correctly deactivated
+[0x8a29908] main libvlc debug: removing all services discovery tasks
+[0x8a29908] main libvlc debug: removing all interfaces
+[0x8a29908] main libvlc debug: exiting
+[0x8ba5168] main interface debug: removing module "dummy"
+[0x8abdd88] main interface debug: removing module "globalhotkeys"
+[0x8ba7b58] main interface debug: removing module "inhibit"
+[0xb5300b98] main input debug: TIMER input launching for 'rtsp://localhost:18554/homeland.avi' : 218.610 ms - Total 218.610 ms / 1 intvls (Avg 218.610 ms)
+[0x8a3daf8] main interface debug: removing module "hotkeys"
+[0x8ba6450] main playlist debug: destroying
+[0x8a29908] main libvlc debug: TIMER ML Load : Total 4.963 ms / 1 intvls (Avg 4.963 ms)
+[0x8a29908] main libvlc debug: TIMER Items array build : Total 0.061 ms / 1 intvls (Avg 0.061 ms)
+[0x8a29908] main libvlc debug: TIMER ML Dump : Total 0.744 ms / 1 intvls (Avg 0.744 ms)
+[0x8a29908] main libvlc debug: removing stats
+[0x8a29908] main libvlc debug: removing module "memcpymmxext"

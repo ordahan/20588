@@ -5,6 +5,7 @@ Created on Dec 14, 2013
 '''
 import SocketServer
 import rtsp.protocol
+import time
 
 class ConnectionHandler(SocketServer.StreamRequestHandler):
     '''
@@ -26,24 +27,41 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
     def handle(self):
         '''
         This method is called by the server 'behind-the-scenes'
-        each time a new packet arrives on the connection.
+        For each new connection.
         '''
 
-        import cProfile
+        __profile__ = False
 
-        pr = cProfile.Profile()
-        pr.enable()
+        while (True):
+            if (__profile__):
+                import cProfile
 
-        request = self.request.recv(2 ** 16 - 1)
+                pr = cProfile.Profile()
+                pr.enable()
 
-        print request
+            request = self.request.recv(4096)
+            if (request == ''):
+                time.sleep(0.1)
+                continue
+    #         self.timeout = 0.2
+    #         self.rbufsize = 0
+    #         request = ''.join(self.rfile.readlines())
 
-        response = self.rtsp_protocol_handler.handle_request(request)
+            print "Got:"
+            print "--------------------------------------------"
+            print request
+            print "--------------------------------------------"
 
-        print response
+            response = self.rtsp_protocol_handler.handle_request(request)
 
-        self.wfile.write(response)
+            print "Sent:"
+            print "--------------------------------------------"
+            print response
+            print "--------------------------------------------"
 
-        pr.disable()
 
-#         pr.print_stats()
+            self.wfile.write(response)
+
+            if (__profile__):
+                pr.disable()
+                pr.print_stats()

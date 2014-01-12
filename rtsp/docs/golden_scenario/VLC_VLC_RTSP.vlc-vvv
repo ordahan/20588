@@ -1,3 +1,7 @@
+SERVER: 
+vlc -vvv --intf dummy /opt/storage/torrents/Homeland.S03E01.HDTV.x264-ASAP.mp4 :sout=#rtp{sdp=rtsp://:18554/homeland.avi} :sout-all :sout-keep
+
+CLIENT:
 vlc -vvv rtsp://localhost:18554/homeland.avi --intf dummy
 
 Opening connection to 127.0.0.1, port 18554...

@@ -68,7 +68,7 @@ class TestDescribe(TestMessage):
         '''
         # Basic valid message
         message = \
-            '\r\n'.join(['Sending request: DESCRIBE rtsp://localhost:8554/homeland.avi RTSP/1.0',
+            '\r\n'.join(['DESCRIBE rtsp://localhost:8554/homeland.avi RTSP/1.0',
                          'CSeq: 3',
                          'User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)',
                          'Accept: application/sdp',
@@ -76,8 +76,8 @@ class TestDescribe(TestMessage):
 
         self.request.parse(message)
 
-        self.assertEqual(2, self.request.sequence)
-        self.assertEqual(directives.OPTIONS, self.request.directive)
+        self.assertEqual(3, self.request.sequence)
+        self.assertEqual(directives.DESCRIBE, self.request.directive)
 
 
 if __name__ == "__main__":

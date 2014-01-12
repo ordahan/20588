@@ -30,10 +30,10 @@ class Protocol(object):
         elif (request_message.directive == directives.DESCRIBE):
             response = DescribeResponseMessage(sequence=request_message.sequence,
                                                result=result_codes.OK,
-                                               date='',
+                                               date='Sun, 12 Jan 2014 13:04:23 GMT',
                                                uri='rtsp://localhost:8554/homeland.avi',
                                                length=717,  # TODO: Use the data from the file opened
-                                               sdp_o_param='')
+                                               sdp_o_param=15455528565056244265)
         else:
             response = ResponseMessage()
 

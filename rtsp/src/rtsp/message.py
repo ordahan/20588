@@ -39,14 +39,30 @@ class RequestMessage(Message):
         '''
         Parses the given request into its different fields
         '''
+        try:
 
-        # Extract the directive
-        self.directive = re.match('([A-Z]+)', message).group(1)
+            # Extract the directive
+            try:
+                self.directive = re.match('([A-Z]+)', message).group(1)
+            except AttributeError as e:
+                print "Failed to parse directive"
+                raise e
 
-        # Extract the sequence number
-        self.sequence = int(re.search(self.SEQUENCE_FIELD +
-                                      '(\d+)',
-                                      message).group(1))
+            # Extract the sequence number
+            try:
+                self.sequence = int(re.search(self.SEQUENCE_FIELD +
+                                              '(\d+)',
+                                              message).group(1))
+            except AttributeError as e:
+                print "Failed to parse sequence"
+                raise e
+
+            return True
+
+        except BaseException as parse_error:
+            print "Parse error: ", parse_error
+            print "Originated from: '%s'" % message
+            return False
 
     def __str__(self):
         return '\n\r'.join([self.directive,

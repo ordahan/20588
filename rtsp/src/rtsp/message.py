@@ -92,6 +92,30 @@ class ResponseMessage(Message):
 
         return (self.NEWLINE).join(message)
 
+    def get_deterministic_payload(self):
+        pass
+
+    def compare_deterministics(self, other_message):
+        '''
+        True - match
+        False - don't match
+        '''
+        my_deter_payload = self.get_deterministic_payload()
+        other_deter_payload = other_message.get_deterministic_payload()
+
+        if (len(my_deter_payload) != len (other_deter_payload)):
+            raise ValueError(len(my_deter_payload) + '!=' + len(other_deter_payload))
+
+        line_changes = []
+        for line_number in range(len(my_deter_payload)):
+            if (my_deter_payload[line_number] !=
+                other_deter_payload[line_number]):
+                line_changes.append((my_deter_payload[line_number], other_deter_payload[line_number]))
+
+        if (len(line_changes) > 0):
+            raise ValueError('\n' + '\n'.join([str(change) for change in line_changes]))
+
+        return True
 
 class OptionsResponseMessage(ResponseMessage):
 
@@ -128,7 +152,7 @@ class DescribeResponseMessage(ResponseMessage):
                    'o=- {time} {time} IN IP4 desktop'.format(time=sdp_o_param),
                    's=Unnamed',
                    'i=N/A',
-                   'c=IN IP4 0.0.0.0',
+                   'c=IN IP4 0.0.0.0',  # TODO: Make the IP configurable as well
                    't=0 0',
                    'a=tool:vlc 2.0.8',
                    'a=recvonly',
@@ -150,3 +174,10 @@ class DescribeResponseMessage(ResponseMessage):
         ResponseMessage.__init__(self, sequence=sequence,
                                  result=result,
                                  payload=payload)
+
+    def get_deterministic_payload(self):
+        deter_payload = [payload_line
+                         for payload_line in self.payload
+                         if (not payload_line.startswith('Date') and
+                             not payload_line.startswith('o=-'))]
+        return deter_payload

@@ -15,23 +15,45 @@ class TestProtocol(unittest.TestCase):
 
     def setUp(self):
         self.protocol_handler = Protocol()
-        self.sequence = 17
+        self.sequence = 1
 
     def tearDown(self):
         pass
 
 
-    def exec_options_phase(self):
-        request = RequestMessage(directive=directives.OPTIONS, sequence=self.sequence)
+    def options(self):
+
+        request = RequestMessage(directive=directives.OPTIONS,
+                                 sequence=self.sequence)
         expected_response = str(OptionsResponseMessage(self.sequence,
-                                                       result_codes.OK))
+                                                       result=result_codes.OK))
+
         self.assertEqual(expected_response, self.protocol_handler.handle_request(str(request)))
 
-    def exec_describe_phase(self):
-        request = RequestMessage(directive=directives.DESCRIBE, sequence=self.sequence)
-        expected_response = str(DescribeResponseMessage(self.sequence,
-                                                        result_codes.OK))
-        self.assertEqual(expected_response, self.protocol_handler.handle_request(str(request)))
+    def describe(self):
+
+        request = RequestMessage(directive=directives.DESCRIBE,
+                                 sequence=self.sequence)
+
+        expected_response = DescribeResponseMessage(self.sequence,
+                                                    result=result_codes.OK,
+                                                    date='',
+                                                    uri='a',
+                                                    length=0,
+                                                    sdp_o_param='')
+
+        actual_response = self.protocol_handler.generate_response_for_request(request)
+
+        self.assertResponsesEquals(expected_response, actual_response)
+
+    def assertResponsesEquals(self, expected_response, actual_response):
+        try:
+            expected_response.compare_deterministics(actual_response)
+        except ValueError as e:
+            raise AssertionError(str(e))
+
+    def exec_phase(self, phase_function_return_val):
+        self.sequence += 1
 
 class TestProtocolBuildingBlocks(TestProtocol):
     '''
@@ -42,10 +64,10 @@ class TestProtocolBuildingBlocks(TestProtocol):
     '''
 
     def testOptions(self):
-        self.exec_options_phase()
+        self.exec_phase(self.options())
 
-    def testParse(self):
-        self.exec_describe_phase()
+    def testDescribe(self):
+        self.exec_phase(self.describe())
 
 
 class TestNominalScenario(TestProtocol):
@@ -54,8 +76,8 @@ class TestNominalScenario(TestProtocol):
     '''
 
     def testHappyFlow(self):
-        self.exec_options_phase()
-        self.exec_describe_phase()
+        self.exec_phase(self.options())
+        self.exec_phase(self.describe())
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'TestMessage.testOptions']

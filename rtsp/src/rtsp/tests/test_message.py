@@ -17,7 +17,24 @@ class TestMessage(unittest.TestCase):
     def setUp(self):
         self.request = RequestMessage()
 
-    def testConstructor(self):
+    def assertMessagesEqual(self, expected_message, actual_message):
+
+        expected_message_lines = expected_message.split(rtsp.message.Message.NEWLINE)
+        actual_message_lines = actual_message.split(rtsp.message.Message.NEWLINE)
+
+        delta = context_diff(expected_message_lines,
+                             actual_message_lines,
+                             fromfile='expected',
+                             tofile='actual',
+                             lineterm=rtsp.message.Message.NEWLINE)
+
+        try:
+            starting_line = delta.next()
+            raise AssertionError('\n' + starting_line + rtsp.message.Message.NEWLINE.join(delta))
+        except StopIteration:
+            pass
+
+    def testInit(self):
 
         request_generated = RequestMessage(directives.OPTIONS, 13)
 
@@ -54,15 +71,17 @@ class TestOptions(TestMessage):
         # 1) Options without URI - atm failing
 
     def testResponse(self):
-        response = \
+        expected_response = \
             '\r\n'.join(["RTSP/1.0 200 OK",
                          "CSeq: 2",
                          "Public: DESCRIBE,SETUP,TEARDOWN" +
                             ",PLAY,PAUSE,GET_PARAMETER",
                          '\r\n'])
-        self.assertEqual(response,
-                         str(OptionsResponseMessage(sequence=2,
-                                                    result=result_codes.OK)))
+
+        actual_response = str(OptionsResponseMessage(sequence=2,
+                result=result_codes.OK))
+
+        self.assertMessagesEqual(expected_response, actual_response)
 
 class TestDescribe(TestMessage):
 
@@ -131,25 +150,7 @@ class TestDescribe(TestMessage):
                                                       length=length,
                                                       sdp_o_param=sdp_o_param))
 
-        self.assertEqualMessages(expected_response, actual_response)
-
-
-    def assertEqualMessages(self, expected_message, actual_message):
-
-        expected_message_lines = expected_message.split(rtsp.message.Message.NEWLINE)
-        actual_message_lines = actual_message.split(rtsp.message.Message.NEWLINE)
-
-        delta = context_diff(expected_message_lines,
-                             actual_message_lines,
-                             fromfile='expected',
-                             tofile='actual',
-                             lineterm=rtsp.message.Message.NEWLINE)
-
-        try:
-            starting_line = delta.next()
-            raise AssertionError('\n' + starting_line + rtsp.message.Message.NEWLINE.join(delta))
-        except StopIteration:
-            pass
+        self.assertMessagesEqual(expected_response, actual_response)
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'TestMessage.testOptions']

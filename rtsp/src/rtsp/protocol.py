@@ -31,8 +31,8 @@ class Protocol(object):
             response = DescribeResponseMessage(sequence=request_message.sequence,
                                                result=result_codes.OK,
                                                date='',
-                                               uri='',
-                                               length=0,
+                                               uri='rtsp://localhost:8554/homeland.avi',
+                                               length=717,  # TODO: Use the data from the file opened
                                                sdp_o_param='')
         else:
             response = ResponseMessage()

@@ -48,6 +48,8 @@ class RequestMessage(Message):
                 print "Failed to parse directive"
                 raise e
 
+            # TODO: Extract the url in question
+
             # Extract the sequence number
             try:
                 self.sequence = int(re.search(self.SEQUENCE_FIELD +

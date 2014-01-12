@@ -20,7 +20,6 @@ class TestProtocol(unittest.TestCase):
     def tearDown(self):
         pass
 
-
     def options(self):
 
         request = RequestMessage(directive=directives.OPTIONS,
@@ -37,10 +36,10 @@ class TestProtocol(unittest.TestCase):
 
         expected_response = DescribeResponseMessage(self.sequence,
                                                     result=result_codes.OK,
-                                                    date='',
-                                                    uri='a',
-                                                    length=0,
-                                                    sdp_o_param='')
+                                                    date='Hi Ho I dont know',
+                                                    uri='rtsp://localhost:8554/homeland.avi',  # FIXME: Save this from the previous phase
+                                                    length=717,  # FIXME: Get this from somewhere else
+                                                    sdp_o_param=1234)
 
         actual_response = self.protocol_handler.generate_response_for_request(request)
 
@@ -52,7 +51,7 @@ class TestProtocol(unittest.TestCase):
         except ValueError as e:
             raise AssertionError(str(e))
 
-    def exec_phase(self, phase_function_return_val):
+    def exec_protocol_stage(self, phase_function_return_val):
         self.sequence += 1
 
 class TestProtocolBuildingBlocks(TestProtocol):
@@ -64,10 +63,10 @@ class TestProtocolBuildingBlocks(TestProtocol):
     '''
 
     def testOptions(self):
-        self.exec_phase(self.options())
+        self.exec_protocol_stage(self.options())
 
     def testDescribe(self):
-        self.exec_phase(self.describe())
+        self.exec_protocol_stage(self.describe())
 
 
 class TestNominalScenario(TestProtocol):
@@ -76,8 +75,8 @@ class TestNominalScenario(TestProtocol):
     '''
 
     def testHappyFlow(self):
-        self.exec_phase(self.options())
-        self.exec_phase(self.describe())
+        self.exec_protocol_stage(self.options())
+        self.exec_protocol_stage(self.describe())
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'TestMessage.testOptions']

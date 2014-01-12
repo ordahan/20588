@@ -1,0 +1,438 @@
+vlc -vvv rtsp://localhost:18554/homeland.avi --intf dummy
+
+Opening connection to 127.0.0.1, port 18554...
+...remote connection opened
+Sending request: OPTIONS rtsp://localhost:18554/homeland.avi RTSP/1.0
+CSeq: 2
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+
+
+Received 124 new bytes of response data.
+Received a complete OPTIONS response:
+RTSP/1.0 200 OK
+Server: VLC/2.0.8
+Content-Length: 0
+Cseq: 2
+Public: DESCRIBE,SETUP,TEARDOWN,PLAY,PAUSE,GET_PARAMETER
+
+
+Sending request: DESCRIBE rtsp://localhost:18554/homeland.avi RTSP/1.0
+CSeq: 3
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+Accept: application/sdp
+
+
+Received 212 new bytes of response data.
+Have received 212 total bytes of a DESCRIBE RTSP response; awaiting 717 bytes more.
+Received 717 new bytes of response data.
+Received a complete DESCRIBE response:
+RTSP/1.0 200 OK
+Server: VLC/2.0.8
+Date: Sun, 12 Jan 2014 13:04:23 GMT
+Content-Type: application/sdp
+Content-Base: rtsp://127.0.0.1:18554/homeland.avi
+Content-Length: 717
+Cache-Control: no-cache
+Cseq: 3
+
+v=0
+o=- 15455528565056244265 15455528565056244265 IN IP4 desktop
+s=Unnamed
+i=N/A
+c=IN IP4 0.0.0.0
+t=0 0
+a=tool:vlc 2.0.8
+a=recvonly
+a=type:broadcast
+a=charset:UTF-8
+a=control:rtsp://127.0.0.1:18554/homeland.avi
+m=video 0 RTP/AVP 96
+b=RR:0
+a=rtpmap:96 H264/90000
+a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;
+a=control:rtsp://127.0.0.1:18554/homeland.avi/trackID=0
+m=audio 0 RTP/AVP 96
+b=RR:0
+a=rtpmap:96 mpeg4-generic/48000/2
+a=fmtp:96 streamtype=5; profile-level-id=15; mode=AAC-hbr; config=1190; SizeLength=13; IndexLength=3; IndexDeltaLength=3; Profile=1;
+a=control:rtsp://127.0.0.1:18554/homeland.avi/trackID=1
+
+[0xb5100d68] live555 demux debug: RTP subsession 'video/H264'
+Sending request: SETUP rtsp://127.0.0.1:18554/homeland.avi/trackID=0 RTSP/1.0
+CSeq: 4
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+Transport: RTP/AVP;unicast;client_port=52656-52657
+
+
+Received 270 new bytes of response data.
+Received a complete SETUP response:
+RTSP/1.0 200 OK
+Server: VLC/2.0.8
+Date: Sun, 12 Jan 2014 13:04:23 GMT
+Transport: RTP/AVP/UDP;unicast;client_port=52656-52657;server_port=57315-57316;ssrc=66C5C1E3;mode=play
+Session: 18d000fccc6ddd5a;timeout=60
+Content-Length: 0
+Cache-Control: no-cache
+Cseq: 4
+
+
+[0xb5300700] main input debug: selecting program id=0
+[0xb5100d68] live555 demux debug: RTP subsession 'audio/MPEG4-GENERIC'
+Sending request: SETUP rtsp://127.0.0.1:18554/homeland.avi/trackID=1 RTSP/1.0
+CSeq: 5
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+Transport: RTP/AVP;unicast;client_port=57334-57335
+Session: 18d000fccc6ddd5a
+
+
+Received 270 new bytes of response data.
+Received a complete SETUP response:
+RTSP/1.0 200 OK
+Server: VLC/2.0.8
+Date: Sun, 12 Jan 2014 13:04:23 GMT
+Transport: RTP/AVP/UDP;unicast;client_port=57334-57335;server_port=48861-48862;ssrc=0D1F6168;mode=play
+Session: 18d000fccc6ddd5a;timeout=60
+Content-Length: 0
+Cache-Control: no-cache
+Cseq: 5
+
+
+[0xb5100d68] live555 demux debug: setup start: 0.000000 stop:0.000000
+Sending request: PLAY rtsp://127.0.0.1:18554/homeland.avi RTSP/1.0
+CSeq: 6
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+Session: 18d000fccc6ddd5a
+Range: npt=0.000-
+
+
+Received 360 new bytes of response data.
+Received a complete PLAY response:
+RTSP/1.0 200 OK
+Server: VLC/2.0.8
+Date: Sun, 12 Jan 2014 13:04:23 GMT
+RTP-Info: url=rtsp://127.0.0.1:18554/homeland.avi/trackID=0;seq=33427;rtptime=2188479415, url=rtsp://127.0.0.1:18554/homeland.avi/trackID=1;seq=60298;rtptime=1453520174
+Range: npt=142.314603-
+Session: 18d000fccc6ddd5a;timeout=60
+Content-Length: 0
+Cache-Control: no-cache
+Cseq: 6
+
+
+[0xb5100d68] live555 demux debug: We have a timeout of 60 seconds
+[0xb5100d68] live555 demux debug: spawned timeout thread
+[0xb5100d68] live555 demux debug: play start: 142.314603 stop:0.000000
+[0xb5100d68] main demux debug: using access_demux module "live555"
+[0xb5100d68] main demux debug: TIMER module_need() : 202.322 ms - Total 202.322 ms / 1 intvls (Avg 202.322 ms)
+[0xb51015a0] main decoder debug: looking for decoder module: 30 candidates
+[0xb51015a0] avcodec decoder debug: libavcodec initialized (interface 0x352300)
+[0xb51015a0] avcodec decoder debug: trying to use direct rendering
+[0xb51015a0] avcodec decoder debug: allowing 3 thread(s) for decoding
+[0xb51015a0] avcodec decoder debug: ffmpeg codec (H264 - MPEG-4 AVC (part 10)) started
+[0xb51015a0] avcodec decoder debug: using frame thread mode with 3 threads
+[0xb51015a0] main decoder debug: using decoder module "avcodec"
+[0xb51015a0] main decoder debug: TIMER module_need() : 17.954 ms - Total 17.954 ms / 1 intvls (Avg 17.954 ms)
+[0xb512cf68] main packetizer debug: looking for packetizer module: 21 candidates
+[0xb512cf68] packetizer_h264 packetizer debug: found NAL_SPS (sps_id=0)
+[0xb512cf68] packetizer_h264 packetizer debug: found NAL_PPS (pps_id=0 sps_id=0)
+[0xb512cf68] main packetizer debug: using packetizer module "packetizer_h264"
+[0xb512cf68] main packetizer debug: TIMER module_need() : 0.820 ms - Total 0.820 ms / 1 intvls (Avg 0.820 ms)
+[0xb513e700] main decoder debug: looking for decoder module: 30 candidates
+[0xb513e700] main decoder debug: using decoder module "faad"
+[0xb513e700] main decoder debug: TIMER module_need() : 0.398 ms - Total 0.398 ms / 1 intvls (Avg 0.398 ms)
+[0xb5141fc0] main demux meta debug: looking for meta reader module: 2 candidates
+[0xb5141fc0] lua demux meta debug: Trying Lua scripts in /home/ord/.local/share/vlc/lua/meta/reader
+[0xb5141fc0] lua demux meta debug: Trying Lua scripts in /usr/lib/vlc/lua/meta/reader
+[0xb5141fc0] lua demux meta debug: Trying Lua playlist script /usr/lib/vlc/lua/meta/reader/filename.luac
+[0xb5141fc0] lua demux meta debug: Trying Lua scripts in /usr/share/vlc/lua/meta/reader
+[0xb5141fc0] main demux meta debug: no meta reader module matching "any" could be loaded
+[0xb5141fc0] main demux meta debug: TIMER module_need() : 0.968 ms - Total 0.968 ms / 1 intvls (Avg 0.968 ms)
+[0xb5300700] main input debug: `rtsp://localhost:18554/homeland.avi' successfully opened
+Sending request: GET_PARAMETER rtsp://127.0.0.1:18554/homeland.avi RTSP/1.0
+CSeq: 7
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+Session: 18d000fccc6ddd5a
+
+
+[0xb5300700] main input debug: Buffering 0%
+[0xb5300700] main input debug: Buffering 0%
+[0xb5300700] main input debug: Buffering 2%
+[0xb5300700] main input debug: Buffering 2%
+[0xb5300700] main input debug: Buffering 2%
+[0xb513e700] faad decoder warning: decoded zero sample
+[0x880f450] main playlist debug: creating audio output
+[0x8812918] main audio output debug: looking for audio output module: 3 candidates
+[0x8812918] pulse audio output debug: using stereo channel map
+[0x8812918] pulse audio output debug: using library version 1.1.0
+[0x8812918] pulse audio output debug:  (compiled with version 1.1.0, protocol 26)
+[0xb5300700] main input debug: Buffering 4%
+[0x8812918] pulse audio output debug: connected locally to unix:/home/ord/.pulse/02f4df51d6cd5d9b1065663900000004-runtime/native as client #58
+[0x8812918] pulse audio output debug: using protocol 26, server protocol 26
+[0x8812918] pulse audio output debug: using buffer metrics: maxlength=4194304, tlength=15360, prebuf=0, minreq=5120
+[0x8812918] pulse audio output debug: connected to sink 0: alsa_output.pci-0000_00_1b.0.analog-stereo
+[0x8812918] main audio output debug: using audio output module "pulse"
+[0x8812918] main audio output debug: TIMER module_need() : 5.047 ms - Total 5.047 ms / 1 intvls (Avg 5.047 ms)
+[0x8812918] main audio output debug: output 'f32l' 48000 Hz Stereo frame=1 samples/8 bytes
+[0x8812918] main audio output debug: mixer 'f32l' 48000 Hz Stereo frame=1 samples/8 bytes
+[0x8812918] main audio output debug: filter(s) 'f32l'->'f32l' 48000 Hz->48000 Hz Stereo->Stereo
+[0x8812918] main audio output debug: conversion pipeline completed
+[0x87222d8] main mixer debug: looking for audio mixer module: 2 candidates
+[0x8812918] pulse audio output debug: nothing to play
+[0x8812918] pulse audio output debug: listing sink alsa_output.pci-0000_00_1b.0.analog-stereo (0): Built-in Audio Analog Stereo
+[0x8812918] pulse audio output debug: base volume: 65536
+[0x87222d8] main mixer debug: using audio mixer module "float32_mixer"
+[0x87222d8] main mixer debug: TIMER module_need() : 0.368 ms - Total 0.368 ms / 1 intvls (Avg 0.368 ms)
+[0x8812918] main audio output debug: input 'f32l' 48000 Hz Stereo frame=1 samples/8 bytes
+[0x8722370] main audio filter debug: looking for audio filter module: 1 candidate
+[0x8722370] scaletempo audio filter debug: format: 48000 rate, 2 nch, 4 bps, fl32
+[0x8722370] scaletempo audio filter debug: params: 30 stride, 0.200 overlap, 14 search
+[0x8722370] scaletempo audio filter debug: 1.000 scale, 1440.000 stride_in, 1440 stride_out, 1152 standing, 288 overlap, 672 search, 2400 queue, fl32 mode
+[0x8722370] main audio filter debug: using audio filter module "scaletempo"
+[0x8722370] main audio filter debug: TIMER module_need() : 0.273 ms - Total 0.273 ms / 1 intvls (Avg 0.273 ms)
+[0x8812918] main audio output debug: filter(s) 'f32l'->'f32l' 48000 Hz->48000 Hz Stereo->Stereo
+[0x8812918] main audio output debug: conversion pipeline completed
+[0x8812918] main audio output debug: filter(s) 'f32l'->'f32l' 48000 Hz->48000 Hz Stereo->Stereo
+[0x8812918] main audio output debug: conversion pipeline completed
+[0x8812918] main audio output debug: filter(s) 'f32l'->'f32l' 52800 Hz->48000 Hz Stereo->Stereo
+[0x8722a08] main audio filter debug: looking for audio filter module: 13 candidates
+[0x8722a08] main audio filter debug: using audio filter module "samplerate"
+[0x8722a08] main audio filter debug: TIMER module_need() : 0.824 ms - Total 0.824 ms / 1 intvls (Avg 0.824 ms)
+[0x8812918] main audio output debug: conversion pipeline completed
+[0xb513e700] main decoder debug: End of audio preroll
+[0x8812918] pulse audio output debug: nothing to play
+[0x8812918] pulse audio output debug: nothing to play
+[0x8812918] pulse audio output debug: nothing to play
+Received 166 new bytes of response data.
+Received a complete GET_PARAMETER response:
+RTSP/1.0 200 OK
+Server: VLC/2.0.8
+Date: Sun, 12 Jan 2014 13:04:23 GMT
+Session: 18d000fccc6ddd5a;timeout=60
+Content-Length: 0
+Cache-Control: no-cache
+Cseq: 7
+
+
+[0xb5300700] main input debug: Buffering 6%
+[0xb5300700] main input debug: Buffering 16%
+[0x8812918] pulse audio output debug: nothing to play
+[0xb5300700] main input debug: Buffering 16%
+[0xb5300700] main input debug: Buffering 16%
+[0xb5300700] main input debug: Buffering 16%
+[0xb4b04628] main spu text debug: looking for text renderer module: 2 candidates
+[0xb4b04628] freetype spu text debug: Building font databases.
+[0xb4b04628] freetype spu text debug: Took 1 microseconds
+[0x8812918] pulse audio output debug: nothing to play
+[0xb4b04628] freetype spu text debug: Using Serif Bold as font from file /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf
+[0xb5300700] main input debug: Buffering 16%
+[0xb4b04628] freetype spu text debug: using fontsize: 2
+[0xb4b04628] main spu text debug: using text renderer module "freetype"
+[0xb4b04628] main spu text debug: TIMER module_need() : 13.627 ms - Total 13.627 ms / 1 intvls (Avg 13.627 ms)
+[0xb4b04fe8] main scale debug: looking for video filter2 module: 18 candidates
+[0xb4b04fe8] swscale scale debug: 32x32 chroma: YUVA -> 16x16 chroma: RGBA with scaling using Bicubic (good quality)
+[0xb4b04fe8] main scale debug: using video filter2 module "swscale"
+[0xb4b04fe8] main scale debug: TIMER module_need() : 1.860 ms - Total 1.860 ms / 1 intvls (Avg 1.860 ms)
+[0xb4b28008] main scale debug: looking for video filter2 module: 18 candidates
+[0xb4b28008] yuvp scale debug: YUVP to YUVA converter
+[0xb4b28008] main scale debug: using video filter2 module "yuvp"
+[0xb4b28008] main scale debug: TIMER module_need() : 1.512 ms - Total 1.512 ms / 1 intvls (Avg 1.512 ms)
+[0xb4b02ab8] main video output debug: Deinterlacing available
+[0xb4b02ab8] main video output debug: deinterlace 0, mode blend, is_needed 0
+[0xb4b02ab8] main video output debug: Opening vout display wrapper
+[0xb53042b0] main vout display debug: looking for vout display module: 6 candidates
+[0xb5307d28] main window debug: looking for vout window xid module: 3 candidates
+[0xb5307d28] main window debug: using vout window xid module "xcb_window"
+[0xb5307d28] main window debug: TIMER module_need() : 1.540 ms - Total 1.540 ms / 1 intvls (Avg 1.540 ms)
+[0xb530a448] main inhibit debug: looking for inhibit module: 2 candidates
+[0xb530a448] main inhibit debug: using inhibit module "xdg_screensaver"
+[0xb530a448] main inhibit debug: TIMER module_need() : 0.263 ms - Total 0.263 ms / 1 intvls (Avg 0.263 ms)
+[0xb530a448] xdg_screensaver inhibit debug: started xdg-screensaver (PID = 9715)
+[0xb53042b0] xcb_xv vout display debug: connected to X11.0 server
+[0xb53042b0] xcb_xv vout display debug:  vendor : The X.Org Foundation
+[0xb53042b0] xcb_xv vout display debug:  version: 11303000
+[0xb53042b0] xcb_xv vout display debug: using screen 0x86
+[0xb53042b0] xcb_xv vout display debug: using XVideo extension v2.2
+[0xb53042b0] xcb_xv vout display debug: cannot grab port 80: Xv error 2
+[0xb53042b0] xcb_xv vout display debug: using adaptor Intel(R) Textured Video
+[0xb53042b0] xcb_xv vout display debug: using port 81
+[0xb53042b0] xcb_xv vout display debug: using image format 0x30323449
+[0xb53042b0] xcb_xv vout display debug: using X11 visual ID 0x20 (depth: 24)
+[0xb53042b0] xcb_xv vout display debug: using X11 window 0x05200000
+[0xb53042b0] xcb_xv vout display debug: using X11 graphic context 0x05200002
+[0xb53042b0] main vout display debug: VoutDisplayEvent 'fullscreen' 0
+[0xb5300700] main input debug: Buffering 16%
+[0xb53042b0] main vout display debug: VoutDisplayEvent 'resize' 720x398 window
+[0xb53042b0] main vout display debug: using vout display module "xcb_xv"
+[0xb53042b0] main vout display debug: TIMER module_need() : 25.078 ms - Total 25.078 ms / 1 intvls (Avg 25.078 ms)
+[0xb5300700] main input debug: Buffering 16%
+[0xb5300700] main input debug: Buffering 17%
+[0xb4b02ab8] main video output debug: original format sz 720x398, of (0,0), vsz 720x398, 4cc I420, sar 1:1, msk r0x0 g0x0 b0x0
+[0xb4b04628] main spu text debug: removing module "freetype"
+[0xb4b04628] main spu text debug: looking for text renderer module: 2 candidates
+[0xb4b04628] freetype spu text debug: Building font databases.
+[0xb4b04628] freetype spu text debug: Took 0 microseconds
+[0xb4b04628] freetype spu text debug: Using Serif Bold as font from file /usr/share/fonts/truetype/ttf-dejavu/DejaVuSans.ttf
+[0xb4b04628] freetype spu text debug: using fontsize: 2
+[0xb4b04628] main spu text debug: using text renderer module "freetype"
+[0xb4b04628] main spu text debug: TIMER module_need() : 1.279 ms - Total 1.279 ms / 1 intvls (Avg 1.279 ms)
+[0xb53042b0] xcb_xv vout display debug: unhandled event 21
+[0xb53042b0] main vout display debug: VoutDisplayEvent 'resize' 720x398 window
+[0xb53042b0] main vout display debug: VoutDisplayEvent 'resize' 720x398 window
+[0xb53042b0] main vout display debug: VoutDisplayEvent 'resize' 720x398 window
+[0xb53042b0] xcb_xv vout display debug: unhandled event 19
+[0xb53042b0] xcb_xv vout display debug: display is visible
+[0xb53042b0] xcb_xv vout display debug: display is visible
+[0xb53042b0] main vout display debug: VoutDisplayEvent 'resize' 720x398 window
+[0xb53042b0] xcb_xv vout display debug: display is visible
+[0xb51015a0] avcodec decoder warning: disabling direct rendering
+[0xb5300700] main input debug: Buffering 19%
+[0xb5300700] main input debug: Buffering 19%
+[0x8812918] pulse audio output debug: nothing to play
+[0xb5300700] main input debug: Buffering 21%
+[0xb5300700] main input debug: Buffering 23%
+[0xb5300700] main input debug: Buffering 33%
+[h264 @ 0xb513dce0] illegal short term buffer state detected
+[0xb51015a0] main decoder debug: End of video preroll
+[0xb51015a0] main decoder debug: Received first picture
+[0xb5318f38] main blend debug: looking for video blending module: 1 candidate
+[0xb5300700] main input debug: Buffering 33%
+[0xb5318f38] main blend debug: using video blending module "blend"
+[0xb5318f38] main blend debug: TIMER module_need() : 0.624 ms - Total 0.624 ms / 1 intvls (Avg 0.624 ms)
+[0xb4b02ab8] main video output debug: Post-processing available
+[0xb5300700] main input debug: Buffering 33%
+[0xb5300700] main input debug: Buffering 33%
+[0xb5300700] main input debug: Buffering 33%
+[0xb5300700] main input debug: Buffering 33%
+[0xb5300700] main input debug: Buffering 33%
+[0xb5300700] main input debug: Buffering 34%
+[0xb5300700] main input debug: Buffering 36%
+[0xb5300700] main input debug: Buffering 36%
+[0x8812918] pulse audio output debug: nothing to play
+[0xb5300700] main input debug: Buffering 38%
+[0xb5300700] main input debug: Buffering 40%
+[0xb5300700] main input debug: Buffering 40%
+[0xb5300700] main input debug: Buffering 42%
+[0xb5300700] main input debug: Buffering 44%
+[0xb5300700] main input debug: Buffering 54%
+[0xb5300700] main input debug: Buffering 54%
+[0xb5300700] main input debug: Buffering 54%
+[0xb5300700] main input debug: Buffering 54%
+[0xb5300700] main input debug: Buffering 54%
+[0xb5300700] main input debug: Buffering 54%
+[0xb5300700] main input debug: Buffering 54%
+[0xb5300700] main input debug: Buffering 55%
+[0xb5300700] main input debug: Buffering 57%
+[0xb5300700] main input debug: Buffering 57%
+[0xb5300700] main input debug: Buffering 59%
+[0xb5300700] main input debug: Buffering 70%
+[0xb5300700] main input debug: Buffering 70%
+[0xb5300700] main input debug: Buffering 70%
+[0xb5300700] main input debug: Buffering 70%
+[0xb5300700] main input debug: Buffering 70%
+[0xb5300700] main input debug: Buffering 70%
+[0x8812918] pulse audio output debug: nothing to play
+[0xb5300700] main input debug: Buffering 70%
+[0xb5300700] main input debug: Buffering 70%
+[0xb5300700] main input debug: Buffering 72%
+[0xb5300700] main input debug: Buffering 72%
+[0xb5300700] main input debug: Buffering 74%
+[0xb5300700] main input debug: Buffering 76%
+[0xb5300700] main input debug: Buffering 87%
+[0xb5300700] main input debug: Buffering 87%
+[0xb5300700] main input debug: Buffering 87%
+[0xb5300700] main input debug: Buffering 87%
+[0xb5300700] main input debug: Buffering 87%
+[0xb5300700] main input debug: Buffering 87%
+[0xb5300700] main input debug: Buffering 87%
+[0xb5300700] main input debug: Buffering 87%
+[0xb5300700] main input debug: Buffering 89%
+[0xb5300700] main input debug: Buffering 89%
+[0xb5300700] main input debug: Buffering 91%
+[0xb5300700] main input debug: Buffering 93%
+[0xb5300700] main input debug: Stream buffering done (1042 ms in 912 ms)
+[0xb5300700] main input debug: Decoder buffering done in 0 ms
+[0x8812918] main audio output warning: PTS is out of range (-31300), dropping buffer
+[0x8812918] pulse audio output debug: cannot synchronize start
+[0x8812918] pulse audio output debug: deferring start (52130 us)
+[0x8812918] pulse audio output debug: deferring start (30701 us)
+[0x8812918] pulse audio output debug: deferring start (8674 us)
+[0x8812918] pulse audio output warning: starting late (-13158 us)
+[0x8812918] pulse audio output warning: too early by 43798 us
+[0x8812918] pulse audio output debug: changed sample rate to 47954 Hz
+[0x8812918] pulse audio output debug: started
+[0x8812918] pulse audio output warning: too early by 47023 us
+[0x8812918] pulse audio output debug: changed sample rate to 47908 Hz
+[0x8812918] pulse audio output debug: changed sample rate to 48000 Hz
+[0x8812918] pulse audio output warning: too early by 41433 us
+[0x8812918] pulse audio output debug: changed sample rate to 47954 Hz
+[0x8812918] pulse audio output warning: too early by 40170 us
+[0x8812918] pulse audio output debug: changed sample rate to 47940 Hz
+[0xb4b02ab8] main video output debug: picture might be displayed late (missing 0 ms)
+[0x8812918] pulse audio output debug: changed sample rate to 48000 Hz
+[0xb53042b0] main vout display debug: auto hiding mouse cursor
+[0xb4b02ab8] main video output debug: picture might be displayed late (missing 0 ms)
+[0x8812918] pulse audio output warning: too early by 40907 us
+[0x8812918] pulse audio output debug: changed sample rate to 47956 Hz
+[0xb5307d28] xcb_window window debug: key: 0x00000000
+[0xb5307d28] xcb_window window debug: key: 0x00000063
+[0x8812918] pulse audio output debug: changed sample rate to 48000 Hz
+[0x8812918] pulse audio output warning: too early by 40637 us
+[0x8812918] pulse audio output debug: changed sample rate to 47959 Hz
+[0xb4b02ab8] main video output debug: picture might be displayed late (missing 5 ms)
+[0x8812918] pulse audio output debug: changed sample rate to 48000 Hz
+[0xb4b02ab8] main video output warning: picture is too late to be displayed (missing 34 ms)
+^C[0x8692908] main libvlc debug: deactivating the playlist
+[0x880f450] main playlist debug: deactivating the playlist
+[0x880f450] main playlist debug: incoming request - stopping current input
+[0x880f450] main playlist debug: dying input
+[0xb5300700] main input debug: control: stopping input
+[0x880f450] main playlist debug: dying input
+[0xb51015a0] main decoder debug: removing module "avcodec"
+[0xb51015a0] avcodec decoder debug: ffmpeg codec (H264 - MPEG-4 AVC (part 10)) stopped
+[0xb51015a0] main decoder debug: killing decoder fourcc `h264', 1 PES in FIFO
+[0x880f450] main playlist debug: saving a free vout
+[0x880f450] main playlist debug: reusing provided vout
+[0xb512cf68] main packetizer debug: removing module "packetizer_h264"
+[0xb513e700] main decoder debug: removing module "faad"
+[0xb513e700] main decoder debug: killing decoder fourcc `mp4a', 0 PES in FIFO
+[0x8722370] main audio filter debug: removing module "scaletempo"
+[0x8722a08] main audio filter debug: removing module "samplerate"
+[0x8812918] main audio output debug: removing module "pulse"
+[0x87222d8] main mixer debug: removing module "float32_mixer"
+[0x880f450] main playlist debug: releasing audio output
+[0xb5100d68] main demux debug: removing module "live555"
+Sending request: TEARDOWN rtsp://127.0.0.1:18554/homeland.avi RTSP/1.0
+CSeq: 8
+User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)
+Session: 18d000fccc6ddd5a
+
+
+[0xb5300700] main input debug: Program doesn't contain anymore ES
+[0x880f450] main playlist debug: dead input
+[0xb4b02ab8] main video output debug: destroying useless vout
+[0xb5318f38] main blend debug: removing module "blend"
+[0xb53042b0] main vout display debug: removing module "xcb_xv"
+[0xb530a448] main inhibit debug: removing module "xdg_screensaver"
+[0xb530a448] xdg_screensaver inhibit debug: started xdg-screensaver (PID = 9747)
+[0xb4b04628] main spu text debug: removing module "freetype"
+[0xb4b28008] main scale debug: removing module "yuvp"
+[0xb4b04fe8] main scale debug: removing module "swscale"
+[0x872e148] main playlist export debug: saving Media Library to file /home/ord/.local/share/vlc/ml.xspf
+[0x872e148] main playlist export debug: looking for playlist export module: 1 candidate
+[0x872e148] main playlist export debug: using playlist export module "export"
+[0x872e148] main playlist export debug: TIMER module_need() : 0.385 ms - Total 0.385 ms / 1 intvls (Avg 0.385 ms)
+[0x872e148] main playlist export debug: removing module "export"
+[0x880f450] main playlist debug: playlist correctly deactivated
+[0x8692908] main libvlc debug: removing all services discovery tasks
+[0x8692908] main libvlc debug: removing all interfaces
+[0x8692908] main libvlc debug: exiting
+[0x880e140] main interface debug: removing module "dummy"
+[0x8726da0] main interface debug: removing module "globalhotkeys"
+[0x8810b58] main interface debug: removing module "inhibit"
+[0xb5300700] main input debug: TIMER input launching for 'rtsp://localhost:18554/homeland.avi' : 228.010 ms - Total 228.010 ms / 1 intvls (Avg 228.010 ms)
+[0x86a6af8] main interface debug: removing module "hotkeys"
+[0x880f450] main playlist debug: destroying
+[0x8692908] main libvlc debug: TIMER ML Load : Total 4.836 ms / 1 intvls (Avg 4.836 ms)
+[0x8692908] main libvlc debug: TIMER Items array build : Total 0.378 ms / 1 intvls (Avg 0.378 ms)
+[0x8692908] main libvlc debug: TIMER ML Dump : Total 0.708 ms / 1 intvls (Avg 0.708 ms)
+[0x8692908] main libvlc debug: removing stats
+[0x8692908] main libvlc debug: removing module "memcpymmxext"

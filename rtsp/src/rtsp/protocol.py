@@ -6,8 +6,6 @@ Created on Dec 14, 2013
 from rtsp.message import RequestMessage, OptionsResponseMessage
 from rtsp import directives, results
 
-NEWLINE = '\r\n'
-
 
 class Protocol(object):
     '''

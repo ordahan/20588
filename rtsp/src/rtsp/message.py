@@ -5,8 +5,6 @@ Created on Dec 14, 2013
 '''
 import re
 from rtsp import results, directives
-import rtsp
-
 
 class Message(object):
     '''
@@ -15,6 +13,7 @@ class Message(object):
 
     PROTOCOL = 'RTSP/1.0'
     SEQUENCE_FIELD = 'CSeq: '
+    NEWLINE = '\r\n'
 
     def __init__(self, sequence):
         '''
@@ -88,7 +87,7 @@ class ResponseMessage(Message):
                                           results.strings[self.result]),
                         self.SEQUENCE_FIELD + str(self.sequence)]
         message.extend(self.payload)
-        return (rtsp.protocol.NEWLINE).join(message)
+        return (self.NEWLINE).join(message)
 
 
 class OptionsResponseMessage(ResponseMessage):
@@ -101,7 +100,7 @@ class OptionsResponseMessage(ResponseMessage):
                              directives.PLAY,
                              directives.PAUSE,
                              directives.GET_PARAMETER),
-                   rtsp.protocol.NEWLINE]
+                   self.NEWLINE]
         ResponseMessage.__init__(self, sequence=sequence,
                                  result=result,
                                  payload=payload)

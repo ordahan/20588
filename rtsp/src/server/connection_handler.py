@@ -5,8 +5,6 @@ Created on Dec 14, 2013
 '''
 import SocketServer
 import rtsp.protocol
-import time
-
 
 class ConnectionHandler(SocketServer.StreamRequestHandler):
     '''
@@ -36,8 +34,7 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
         pr = cProfile.Profile()
         pr.enable()
 
-        # request = ''.join(self.rfile.)
-        request = self.request.recv(1024)
+        request = self.request.recv(2 ** 16 - 1)
 
         print request
 
@@ -49,4 +46,4 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
 
         pr.disable()
 
-        pr.print_stats()
+#         pr.print_stats()

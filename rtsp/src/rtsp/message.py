@@ -14,6 +14,7 @@ class Message(object):
 
     PROTOCOL = 'RTSP/1.0'
     SEQUENCE_FIELD = 'CSeq: '
+    CONTENT_LENGTH = 'Content-Length: '
     NEWLINE = '\r\n'
 
     def __init__(self, sequence):
@@ -76,21 +77,42 @@ class ResponseMessage(Message):
     An RTSP Response message
     '''
 
-    def __init__(self, sequence, result, payload=[]):
+    def __init__(self, sequence, result, additional_fields=[], content_lines=[]):
         self.result = result
-        self.payload = payload
+        self.additional_fields = additional_fields
+        self.content_lines = content_lines
 
         Message.__init__(self, sequence)
 
     def __str__(self):
 
         # Create the response by joining the basic structure together
-        # with the payload issued by the inheriting class
-        message = ['%s %d %s' % (self.PROTOCOL,
-                                 self.result,
-                                 result_codes.strings[self.result]),
-                                 self.SEQUENCE_FIELD + str(self.sequence)]
-        message.extend(self.payload)
+        # with the additional_fields and the content issued by the inheriting class
+
+        response_field = '%s %d %s' % (self.PROTOCOL,
+                                       self.result,
+                                       result_codes.strings[self.result])
+
+        sequence_field = self.SEQUENCE_FIELD + str(self.sequence)
+
+        content_length = sum([len(content_line) for content_line in self.content_lines])
+        content_length_field = self.CONTENT_LENGTH + str(content_length)
+
+        # Basic RTSP message structure
+        message = [response_field,
+                   sequence_field,
+                   content_length_field]
+
+        # All the fields the specific message needs
+        message.extend(self.additional_fields)
+
+        # There is content attached to the message
+        if (content_length > 0):
+            message.append('')
+            message.extend(self.content_lines)
+
+        # Finalizing newline of the RTSP response
+        message.append(self.NEWLINE)
 
         return (self.NEWLINE).join(message)
 
@@ -128,11 +150,11 @@ class OptionsResponseMessage(ResponseMessage):
                              directives.TEARDOWN,
                              directives.PLAY,
                              directives.PAUSE,
-                             directives.GET_PARAMETER),
-                   self.NEWLINE]
+                             directives.GET_PARAMETER)]
+
         ResponseMessage.__init__(self, sequence=sequence,
                                  result=result,
-                                 payload=payload)
+                                 additional_fields=payload)
 
 class DescribeResponseMessage(ResponseMessage):
 
@@ -169,21 +191,16 @@ class DescribeResponseMessage(ResponseMessage):
                    'Date: %s' % date,
                    'Content-Type: application/sdp',
                    'Content-Base: %s' % uri,
-                   'Content-Length: %d' % sum([len(sdp_field)
-                                               for sdp_field in sdp_fields]),
-                   'Cache-Control: no-cache',
-                   '']
-
-        payload.extend(sdp_fields)
-        payload.append(self.NEWLINE)
+                   'Cache-Control: no-cache']
 
         ResponseMessage.__init__(self, sequence=sequence,
                                  result=result,
-                                 payload=payload)
+                                 additional_fields=payload,
+                                 content_lines=sdp_fields)
 
     def get_deterministic_payload(self):
         deter_payload = [payload_line
-                         for payload_line in self.payload
+                         for payload_line in self.additional_fields
                          if (not payload_line.startswith('Date') and
                              not payload_line.startswith('o=-'))]
         return deter_payload

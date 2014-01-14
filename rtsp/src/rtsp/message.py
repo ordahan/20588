@@ -141,37 +141,41 @@ class DescribeResponseMessage(ResponseMessage):
                  result,
                  date=None,
                  uri=None,
-                 length=None,
                  sdp_o_param=None):
+
+        sdp_fields = [ 'v=0',
+                       'o=- {time} {time} IN IP4 desktop'.format(time=sdp_o_param),
+                       's=Unnamed',
+                       'i=N/A',
+                       'c=IN IP4 0.0.0.0',  # TODO: Make the IP configurable as well
+                       't=0 0',
+                       'a=tool:vlc 2.0.8',
+                       'a=recvonly',
+                       'a=type:broadcast',
+                       'a=charset:UTF-8',
+                       'a=control:%s' % uri,
+                       'm=video 0 RTP/AVP 96',
+                       'b=RR:0',
+                       'a=rtpmap:96 H264/90000',
+                       'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
+                       'a=control:%s/trackID=0' % uri,
+                       'm=audio 0 RTP/AVP 96',
+                       'b=RR:0',
+                       'a=rtpmap:96 mpeg4-generic/48000/2',
+                       'a=fmtp:96 streamtype=5; profile-level-id=15; mode=AAC-hbr; config=1190; SizeLength=13; IndexLength=3; IndexDeltaLength=3; Profile=1;',
+                       'a=control:%s/trackID=1' % uri, ]
+
         payload = ['Server: VLC/2.0.8',
                    'Date: %s' % date,
                    'Content-Type: application/sdp',
                    'Content-Base: %s' % uri,
-                   'Content-Length: %d' % length,
+                   'Content-Length: %d' % sum([len(sdp_field)
+                                               for sdp_field in sdp_fields]),
                    'Cache-Control: no-cache',
-                   '',
-                   'v=0',
-                   'o=- {time} {time} IN IP4 desktop'.format(time=sdp_o_param),
-                   's=Unnamed',
-                   'i=N/A',
-                   'c=IN IP4 0.0.0.0',  # TODO: Make the IP configurable as well
-                   't=0 0',
-                   'a=tool:vlc 2.0.8',
-                   'a=recvonly',
-                   'a=type:broadcast',
-                   'a=charset:UTF-8',
-                   'a=control:%s' % uri,
-                   'm=video 0 RTP/AVP 96',
-                   'b=RR:0',
-                   'a=rtpmap:96 H264/90000',
-                   'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
-                   'a=control:%s/trackID=0' % uri,
-                   'm=audio 0 RTP/AVP 96',
-                   'b=RR:0',
-                   'a=rtpmap:96 mpeg4-generic/48000/2',
-                   'a=fmtp:96 streamtype=5; profile-level-id=15; mode=AAC-hbr; config=1190; SizeLength=13; IndexLength=3; IndexDeltaLength=3; Profile=1;',
-                   'a=control:%s/trackID=1' % uri,
-                   self.NEWLINE]
+                   '']
+
+        payload.extend(sdp_fields)
+        payload.append(self.NEWLINE)
 
         ResponseMessage.__init__(self, sequence=sequence,
                                  result=result,

@@ -36,29 +36,40 @@ class RequestMessage(Message):
 
         Message.__init__(self, self.sequence)
 
+
+    def parse_request_header(self, message):
+    # Extract the directive
+        try:
+            parameters = re.match('([A-Z]+)\s+(.+)', message)
+
+            return parameters.group(1, 2)
+        except AttributeError as e:
+            print "Failed to parse request header line"
+            raise e
+        return e
+
+
+    def parse_sequence_number(self, message):
+    # Extract the sequence number
+        try:
+            return int(re.search(self.SEQUENCE_FIELD + '(\d+)', message).group(1))
+        except AttributeError as e:
+            print "Failed to parse sequence"
+            raise e
+
     def parse(self, message):
         '''
         Parses the given request into its different fields
         '''
         try:
+            message_fields = message.split(self.NEWLINE)
 
-            # Extract the directive
-            try:
-                self.directive = re.match('([A-Z]+)', message).group(1)
-            except AttributeError as e:
-                print "Failed to parse directive"
-                raise e
+            if (len(message_fields) == 0):
+                return False
 
-            # TODO: Extract the url in question
+            self.directive, self.uri = self.parse_request_header(message_fields[0])
 
-            # Extract the sequence number
-            try:
-                self.sequence = int(re.search(self.SEQUENCE_FIELD +
-                                              '(\d+)',
-                                              message).group(1))
-            except AttributeError as e:
-                print "Failed to parse sequence"
-                raise e
+            self.parse_sequence_number(message)
 
             return True
 

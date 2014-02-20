@@ -32,7 +32,6 @@ class Protocol(object):
                                                result=result_codes.OK,
                                                date='Sun, 12 Jan 2014 13:04:23 GMT',
                                                uri='rtsp://localhost:8554/homeland.avi',
-                                               length=717,  # TODO: Use the data from the file opened
                                                sdp_o_param=15455528565056244265)
         else:
             response = ResponseMessage()
@@ -56,7 +55,7 @@ class Protocol(object):
             print("Error parsing message: %s" % request)
             # TODO: Return an error response
             return ""
-
-        response = self.generate_response_for_request(request_message)
+        else:
+            response = self.generate_response_for_request(request_message)
 
         return str(response)

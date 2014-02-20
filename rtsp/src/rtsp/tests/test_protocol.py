@@ -38,7 +38,6 @@ class TestProtocol(unittest.TestCase):
                                                     result=result_codes.OK,
                                                     date='Hi Ho I dont know',
                                                     uri='rtsp://localhost:8554/homeland.avi',  # FIXME: Save this from the previous phase
-                                                    length=717,  # FIXME: Get this from somewhere else
                                                     sdp_o_param=1234)
 
         actual_response = self.protocol_handler.generate_response_for_request(request)

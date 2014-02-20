@@ -74,6 +74,7 @@ class TestOptions(TestMessage):
         expected_response = \
             '\r\n'.join(["RTSP/1.0 200 OK",
                          "CSeq: 2",
+                         "Content-Length: 0",
                          "Public: DESCRIBE,SETUP,TEARDOWN" +
                             ",PLAY,PAUSE,GET_PARAMETER",
                          '\r\n'])
@@ -106,18 +107,18 @@ class TestDescribe(TestMessage):
 
         date = 'Sun, 12 Jan 2014 13:04:23 GMT'
         uri = 'rtsp://127.0.0.1:18554/homeland.avi'
-        length = 717
+        length = 675
         sdp_o_param = 15455528565056244265
 
         expected_response = \
             '\r\n'.join([
                        'RTSP/1.0 200 OK',
                        'CSeq: 3',
+                       'Content-Length: %d' % length,
                        'Server: VLC/2.0.8',
                        'Date: %s' % date,
                        'Content-Type: application/sdp',
                        'Content-Base: %s' % uri,
-                       'Content-Length: %d' % length,
                        'Cache-Control: no-cache',
                        '',
                        'v=0',
@@ -147,7 +148,6 @@ class TestDescribe(TestMessage):
                                                       result=result_codes.OK,
                                                       date=date,
                                                       uri=uri,
-                                                      length=length,
                                                       sdp_o_param=sdp_o_param))
 
         self.assertMessagesEqual(expected_response, actual_response)

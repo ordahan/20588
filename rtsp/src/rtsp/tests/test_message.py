@@ -52,8 +52,8 @@ class TestOptions(TestMessage):
         # Basic valid message
         message = \
             ''.join(
-                    ['OPTIONS' + \
-                        'rtsp://localhost:10554/hello_world.avi RTSP/1.0\r\n',
+                    ['OPTIONS ' + \
+                     'rtsp://localhost:10554/hello_world.avi RTSP/1.0\r\n',
 
                      'CSeq: 2\r\n',
 

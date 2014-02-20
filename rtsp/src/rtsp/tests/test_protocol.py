@@ -15,7 +15,7 @@ class TestProtocol(unittest.TestCase):
 
     def setUp(self):
         self.protocol_handler = Protocol()
-        self.sequence = 1
+        self.sequence = 0
 
     def tearDown(self):
         pass
@@ -27,7 +27,8 @@ class TestProtocol(unittest.TestCase):
         expected_response = str(OptionsResponseMessage(self.sequence,
                                                        result=result_codes.OK))
 
-        self.assertEqual(expected_response, self.protocol_handler.handle_request(str(request)))
+        self.assertEqual(expected_response,
+                         self.protocol_handler.handle_request(str(request)))
 
     def describe(self):
 

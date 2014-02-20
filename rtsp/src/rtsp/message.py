@@ -69,7 +69,7 @@ class RequestMessage(Message):
 
             self.directive, self.uri = self.parse_request_header(message_fields[0])
 
-            self.parse_sequence_number(message)
+            self.sequence = self.parse_sequence_number(message)
 
             return True
 

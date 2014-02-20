@@ -18,21 +18,23 @@ class Protocol(object):
         '''
         Constructor
         '''
-        pass
+        self.uri = ''
 
 
-    def generate_response_for_request(self, request_message):
+    def process_message(self, request_message):
 
         if (request_message.directive == directives.OPTIONS):
+            self.uri = request_message.uri
+
             response = OptionsResponseMessage(sequence=request_message.sequence,
                                               result=result_codes.OK)
 
         elif (request_message.directive == directives.DESCRIBE):
             response = DescribeResponseMessage(sequence=request_message.sequence,
                                                result=result_codes.OK,
-                                               date='Sun, 12 Jan 2014 13:04:23 GMT',
-                                               uri='rtsp://localhost:8554/homeland.avi',
-                                               sdp_o_param=15455528565056244265)
+                                               date='Sun, 12 Jan 2014 13:04:23 GMT',  # FIXME: Retrieve this
+                                               uri=request_message.uri,  # TODO: Is the uri 'saved' for this connection? or does it come from the describe msg?
+                                               sdp_o_param=15455528565056244265)  # FIXME: How do we know to set this?
         else:
             response = ResponseMessage()
 
@@ -56,6 +58,6 @@ class Protocol(object):
             # TODO: Return an error response
             return ""
         else:
-            response = self.generate_response_for_request(request_message)
+            response = self.process_message(request_message)
 
         return str(response)

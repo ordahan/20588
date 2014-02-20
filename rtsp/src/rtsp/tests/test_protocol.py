@@ -16,6 +16,7 @@ class TestProtocol(unittest.TestCase):
     def setUp(self):
         self.protocol_handler = Protocol()
         self.sequence = 0
+        self.uri = 'rtsp://abcd.com/helloworld.avi'
 
     def tearDown(self):
         pass
@@ -23,25 +24,27 @@ class TestProtocol(unittest.TestCase):
     def options(self):
 
         request = RequestMessage(directive=directives.OPTIONS,
-                                 sequence=self.sequence)
-        expected_response = str(OptionsResponseMessage(self.sequence,
-                                                       result=result_codes.OK))
+                                 sequence=self.sequence,
+                                 uri=self.uri)
+        expected_response = OptionsResponseMessage(self.sequence,
+                                                   result=result_codes.OK)
 
-        self.assertEqual(expected_response,
-                         self.protocol_handler.handle_request(str(request)))
+        self.assertEqual(str(expected_response),
+                         str(self.protocol_handler.process_message(request)))
 
     def describe(self):
 
         request = RequestMessage(directive=directives.DESCRIBE,
-                                 sequence=self.sequence)
+                                 sequence=self.sequence,
+                                 uri=self.uri)
 
         expected_response = DescribeResponseMessage(self.sequence,
                                                     result=result_codes.OK,
                                                     date='Hi Ho I dont know',
-                                                    uri='rtsp://localhost:8554/homeland.avi',  # FIXME: Save this from the previous phase
+                                                    uri=self.uri,
                                                     sdp_o_param=1234)
 
-        actual_response = self.protocol_handler.generate_response_for_request(request)
+        actual_response = self.protocol_handler.process_message(request)
 
         self.assertResponsesEquals(expected_response, actual_response)
 

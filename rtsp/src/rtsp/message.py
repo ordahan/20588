@@ -29,15 +29,16 @@ class RequestMessage(Message):
     An RTSP Request message
     '''
 
-    def __init__(self, directive=None, sequence=0):
+    def __init__(self, directive=None, sequence=0, uri=None):
 
         self.directive = directive
         self.sequence = sequence
+        self.uri = uri
 
         Message.__init__(self, self.sequence)
 
 
-    def parse_request_header(self, message):
+    def parse_header(self, message):
     # Extract the directive
         try:
             parameters = re.match('([A-Z]+)\s+(.+)', message)
@@ -67,7 +68,7 @@ class RequestMessage(Message):
             if (len(message_fields) == 0):
                 return False
 
-            self.directive, self.uri = self.parse_request_header(message_fields[0])
+            self.directive, self.uri = self.parse_header(message_fields[0])
 
             self.sequence = self.parse_sequence_number(message)
 
@@ -78,8 +79,15 @@ class RequestMessage(Message):
             print "Originated from: '%s'" % message
             return False
 
+
+    def _generate_header(self):
+        if (self.uri is not None):
+            return '{} {}'.format(self.directive, self.uri)
+        else:
+            return self.directive
+
     def __str__(self):
-        return '\n\r'.join([self.directive,
+        return '\n\r'.join([self._generate_header(),
                             self.SEQUENCE_FIELD + str(self.sequence)])
 
 

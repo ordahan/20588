@@ -180,6 +180,8 @@ class TestSetup(TestMessage):
                          'CSeq: 4',
                          'Content-Length: 0',
                          'Transport: RTP/AVP/UDP;unicast;client_port=52656-52657;server_port=30000-30001',
+                         # FIXME: Generate a session for the message..not hardcode it
+                         'Session: 12345',
                          '\r\n'])
 
         actual_response = str(SetupResponseMessage(sequence=4,

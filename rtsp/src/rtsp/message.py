@@ -17,6 +17,7 @@ class Message(object):
     SEQUENCE_FIELD = 'CSeq: '
     CONTENT_LENGTH = 'Content-Length: '
     TRANSPORT = "Transport: "
+    SESSION = "Session: "
     NEWLINE = '\r\n'
 
     def __init__(self, sequence):
@@ -260,7 +261,8 @@ class SetupResponseMessage(ResponseMessage):
                     "RTP/AVP/UDP;unicast;client_port={}-{};server_port={}-{}".format(client_rtp_port,
                                                                                      client_rtcp_port,
                                                                                      server_rtp_port,
-                                                                                     server_rtcp_port)]
+                                                                                     server_rtcp_port),
+                   self.SESSION + '12345']
 
         ResponseMessage.__init__(self,
                                  sequence=sequence,

@@ -175,51 +175,19 @@ class TestSetup(TestMessage):
 
     def testResponse(self):
 
-#         date = 'Sun, 12 Jan 2014 13:04:23 GMT'
-#         uri = 'rtsp://127.0.0.1:18554/homeland.avi'
-#         length = 509
-#         sdp_o_param = 15455528565056244265
-#
-#         expected_response = \
-#             '\r\n'.join([
-#                        'RTSP/1.0 200 OK',
-#                        'CSeq: 3',
-#                        'Content-Length: %d' % length,
-#                        'Server: VLC/2.0.8',
-#                        'Date: %s' % date,
-#                        'Content-Type: application/sdp',
-#                        'Content-Base: %s' % uri,
-#                        'Cache-Control: no-cache',
-#                        '',
-#                        'v=0',
-#                        'o=- {time} {time} IN IP4 desktop'.format(time=sdp_o_param),
-#                        's=Unnamed',
-#                        'i=N/A',
-#                        'c=IN IP4 0.0.0.0',
-#                        't=0 0',
-#                        'a=tool:vlc 2.0.8',
-#                        'a=recvonly',
-#                        'a=type:broadcast',
-#                        'a=charset:UTF-8',
-#                        'a=control:%s' % uri,
-#                        'm=video 0 RTP/AVP 96',
-#                        'b=RR:0',
-#                        'a=rtpmap:96 H264/90000',
-#                        'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
-#                        'a=control:%s/trackID=0' % uri,
-#                        'm=audio 0 RTP/AVP 8',
-#                        'b=RR:0',
-#                        'a=control:%s/trackID=1' % uri,
-#                         '\r\n'])
-#
-#         actual_response = str(DescribeResponseMessage(sequence=3,
-#                                                       result=result_codes.OK,
-#                                                       date=date,
-#                                                       uri=uri,
-#                                                       sdp_o_param=sdp_o_param))
-#
-#         self.assertMessagesEqual(expected_response, actual_response)
-        self.assertTrue(False)
+        expected_response = \
+            '\r\n'.join(['RTSP/1.0 200 OK',
+                         'CSeq: 4',
+                         'Transport: RTP/AVP/UDP;unicast;client_port=52656-52657;server_port=30000-30001'])
+
+        actual_response = str(SetupResponseMessage(sequence=4,
+                                                      result=result_codes.OK,
+                                                      client_rtp_port=52656,
+                                                      client_rtcp_port=52657,
+                                                      server_rtp_port=30000,
+                                                      server_rtcp_port=30001))
+
+        self.assertMessagesEqual(expected_response, actual_response)
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'TestMessage.testOptions']

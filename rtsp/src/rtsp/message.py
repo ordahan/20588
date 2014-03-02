@@ -15,6 +15,7 @@ class Message(object):
     PROTOCOL = 'RTSP/1.0'
     SEQUENCE_FIELD = 'CSeq: '
     CONTENT_LENGTH = 'Content-Length: '
+    TRANSPORT = "Transport: "
     NEWLINE = '\r\n'
 
     def __init__(self, sequence):
@@ -58,6 +59,14 @@ class RequestMessage(Message):
             print "Failed to parse sequence"
             raise e
 
+    def parse_client_ports(self, message):
+        try:
+            parsed_transport_field = re.search(self.TRANSPORT + '.*client_port=(\d+)-(\d+)', message)
+            return int(parsed_transport_field.group(1)), int(parsed_transport_field.group(2))
+        except AttributeError as e:
+            print "No transport field available"
+            raise e
+
     def parse(self, message):
         '''
         Parses the given request into its different fields
@@ -71,6 +80,8 @@ class RequestMessage(Message):
             self.directive, self.uri = self.parse_header(message_fields[0])
 
             self.sequence = self.parse_sequence_number(message)
+
+            self.client_rtp_port, self.client_rtcp_port = self.parse_client_ports(message)
 
             return True
 
@@ -198,6 +209,7 @@ class DescribeResponseMessage(ResponseMessage):
                        'm=video 0 RTP/AVP 96',
                        'b=RR:0',
                        # TODO: Low, allow other encodings for video and audio
+                       # TODO: High, save the different channel's control URI for later usage (new class?)
                        'a=rtpmap:96 H264/90000',
                        'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
                        'a=control:%s/trackID=0' % uri,

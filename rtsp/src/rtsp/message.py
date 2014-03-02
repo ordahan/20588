@@ -44,9 +44,9 @@ class RequestMessage(Message):
     def parse_header(self, message):
     # Extract the directive
         try:
-            parameters = re.match('([A-Z]+)\s+(.+)', message)
+            parameters = re.match('([A-Z]+)\s+(.+)\s+(RTSP/1.0)', message)
 
-            return parameters.group(1, 2)
+            return parameters.group(1, 2, 3)
         except AttributeError as e:
             print "Failed to parse request header line"
             raise e
@@ -66,8 +66,7 @@ class RequestMessage(Message):
             parsed_transport_field = re.search(self.TRANSPORT + '.*client_port=(\d+)-(\d+)', message)
             return int(parsed_transport_field.group(1)), int(parsed_transport_field.group(2))
         except AttributeError as e:
-            print "No transport field available"
-            raise e
+            return (None, None)
 
     def parse(self, message):
         '''
@@ -79,7 +78,7 @@ class RequestMessage(Message):
             if (len(message_fields) == 0):
                 return False
 
-            self.directive, self.uri = self.parse_header(message_fields[0])
+            self.directive, self.uri, self.version = self.parse_header(message_fields[0])
 
             self.sequence = self.parse_sequence_number(message)
 

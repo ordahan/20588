@@ -5,7 +5,7 @@ Created on Dec 14, 2013
 '''
 import unittest
 from rtsp.message import RequestMessage, OptionsResponseMessage, \
-    DescribeResponseMessage
+    DescribeResponseMessage, SetupResponseMessage
 from rtsp import directives
 from rtsp import result_codes
 from difflib import context_diff
@@ -178,7 +178,9 @@ class TestSetup(TestMessage):
         expected_response = \
             '\r\n'.join(['RTSP/1.0 200 OK',
                          'CSeq: 4',
-                         'Transport: RTP/AVP/UDP;unicast;client_port=52656-52657;server_port=30000-30001'])
+                         'Content-Length: 0',
+                         'Transport: RTP/AVP/UDP;unicast;client_port=52656-52657;server_port=30000-30001',
+                         '\r\n'])
 
         actual_response = str(SetupResponseMessage(sequence=4,
                                                       result=result_codes.OK,

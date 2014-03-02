@@ -6,6 +6,7 @@ Created on Dec 14, 2013
 import re
 from rtsp import directives
 from rtsp import result_codes
+from xmlrpclib import Transport
 
 class Message(object):
     '''
@@ -30,11 +31,12 @@ class RequestMessage(Message):
     An RTSP Request message
     '''
 
-    def __init__(self, directive=None, sequence=0, uri=None):
+    def __init__(self, directive=None, sequence=0, uri=None, transport=None):
 
         self.directive = directive
         self.sequence = sequence
         self.uri = uri
+        self.transport = transport
 
         Message.__init__(self, self.sequence)
 
@@ -98,8 +100,13 @@ class RequestMessage(Message):
             return self.directive
 
     def __str__(self):
-        return '\n\r'.join([self._generate_header(),
-                            self.SEQUENCE_FIELD + str(self.sequence)])
+        fields = [self._generate_header(),
+                  self.SEQUENCE_FIELD + str(self.sequence)]
+
+        if (self.transport is not None):
+            fields.append(self.TRANSPORT + self.transport)
+
+        return '\n\r'.join(fields)
 
 
 class ResponseMessage(Message):
@@ -239,3 +246,24 @@ class DescribeResponseMessage(ResponseMessage):
                          if (not payload_line.startswith('Date') and
                              not payload_line.startswith('o=-'))]
         return deter_payload
+
+class SetupResponseMessage(ResponseMessage):
+
+    def __init__(self,
+                 sequence,
+                 result,
+                 client_rtp_port,
+                 client_rtcp_port,
+                 server_rtp_port,
+                 server_rtcp_port):
+
+        payload = [self.TRANSPORT +
+                    "RTP/AVP/UDP;unicast;client_port={}-{};server_port={}-{}".format(client_rtp_port,
+                                                                                     client_rtcp_port,
+                                                                                     server_rtp_port,
+                                                                                     server_rtcp_port)]
+
+        ResponseMessage.__init__(self,
+                                 sequence=sequence,
+                                 result=result,
+                                 additional_fields=payload)

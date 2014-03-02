@@ -8,7 +8,7 @@ from rtsp.protocol import Protocol
 from rtsp import directives
 from rtsp import result_codes
 from rtsp.message import OptionsResponseMessage, RequestMessage, \
-    DescribeResponseMessage
+    DescribeResponseMessage, SetupResponseMessage
 
 
 class TestProtocol(unittest.TestCase):
@@ -61,10 +61,13 @@ class TestProtocol(unittest.TestCase):
                                  sequence=self.sequence,
                                  uri=self.protocol_handler.video_control_uri,
                                  transport='client_port=52656-52657')
+        request.client_rtp_port = 52656
+        request.client_rtcp_port = 52657
+
         expected_response = SetupResponseMessage(self.sequence,
                                                  result=result_codes.OK,
-                                                 client_rtp_port=52656,
-                                                 client_rtcp_port=52657,
+                                                 client_rtp_port=request.client_rtp_port,
+                                                 client_rtcp_port=request.client_rtcp_port,
                                                  # FIXME: Randomize the ports selected, we can't really know these upfront :)
                                                  server_rtp_port=20000,
                                                  server_rtcp_port=20001)
@@ -77,13 +80,14 @@ class TestProtocol(unittest.TestCase):
 
         request = RequestMessage(directive=directives.SETUP,
                                  sequence=self.sequence,
-                                 uri=self.protocol_handler.audio_control_uri,
-                                 transport='client_port=52656-52657')
+                                 uri=self.protocol_handler.audio_control_uri)
+        request.client_rtp_port = 52656
+        request.client_rtcp_port = 52657
 
         expected_response = SetupResponseMessage(self.sequence,
                                                  result=result_codes.OK,
-                                                 client_rtp_port=52656,
-                                                 client_rtcp_port=52657,
+                                                 client_rtp_port=request.client_rtp_port,
+                                                 client_rtcp_port=request.client_rtcp_port,
                                                  # FIXME: Randomize the ports selected, we can't really know these upfront :)
                                                  server_rtp_port=30000,
                                                  server_rtcp_port=30001)

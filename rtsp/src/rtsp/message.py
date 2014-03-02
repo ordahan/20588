@@ -193,7 +193,12 @@ class DescribeResponseMessage(ResponseMessage):
                  result,
                  date=None,
                  uri=None,
-                 sdp_o_param=None):
+                 sdp_o_param=None,
+                 video_control_uri=None,
+                 audio_control_uri=None):
+
+        self.video_control_uri = video_control_uri
+        self.audio_control_uri = audio_control_uri
 
         sdp_fields = [ 'v=0',
                        'o=- {time} {time} IN IP4 desktop'.format(time=sdp_o_param),
@@ -212,10 +217,10 @@ class DescribeResponseMessage(ResponseMessage):
                        # TODO: High, save the different channel's control URI for later usage (new class?)
                        'a=rtpmap:96 H264/90000',
                        'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
-                       'a=control:%s/trackID=0' % uri,
+                       'a=control:%s' % self.video_control_uri,
                        'm=audio 0 RTP/AVP 8',
                        'b=RR:0',
-                       'a=control:%s/trackID=1' % uri, ]
+                       'a=control:%s' % self.audio_control_uri ]
 
         payload = ['Server: VLC/2.0.8',
                    'Date: %s' % date,
@@ -230,7 +235,7 @@ class DescribeResponseMessage(ResponseMessage):
 
     def get_deterministic_payload(self):
         deter_payload = [payload_line
-                         for payload_line in self.additional_fields
+                         for payload_line in (self.additional_fields + self.content_lines)
                          if (not payload_line.startswith('Date') and
                              not payload_line.startswith('o=-'))]
         return deter_payload

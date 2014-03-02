@@ -104,6 +104,8 @@ class TestDescribe(TestMessage):
 
         date = 'Sun, 12 Jan 2014 13:04:23 GMT'
         uri = 'rtsp://127.0.0.1:18554/homeland.avi'
+        video_control = uri + '/trackID=0'
+        audio_control = uri + '/trackID=1'
         length = 509
         sdp_o_param = 15455528565056244265
 
@@ -133,17 +135,19 @@ class TestDescribe(TestMessage):
                        'b=RR:0',
                        'a=rtpmap:96 H264/90000',
                        'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
-                       'a=control:%s/trackID=0' % uri,
+                       'a=control:%s' % video_control,
                        'm=audio 0 RTP/AVP 8',
                        'b=RR:0',
-                       'a=control:%s/trackID=1' % uri,
+                       'a=control:%s' % audio_control,
                         '\r\n'])
 
         actual_response = str(DescribeResponseMessage(sequence=3,
                                                       result=result_codes.OK,
                                                       date=date,
                                                       uri=uri,
-                                                      sdp_o_param=sdp_o_param))
+                                                      sdp_o_param=sdp_o_param,
+                                                      video_control_uri=video_control,
+                                                      audio_control_uri=audio_control))
 
         self.assertMessagesEqual(expected_response, actual_response)
 

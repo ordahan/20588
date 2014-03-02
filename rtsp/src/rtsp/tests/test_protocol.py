@@ -42,11 +42,15 @@ class TestProtocol(unittest.TestCase):
                                                     result=result_codes.OK,
                                                     date='Hi Ho I dont know',
                                                     uri=self.uri,
-                                                    sdp_o_param=1234)
+                                                    sdp_o_param=1234,
+                                                    video_control_uri=self.uri + '/trackID=0',
+                                                    audio_control_uri=self.uri + '/trackID=1')
 
         actual_response = self.protocol_handler.process_message(request)
 
         self.assertResponsesEquals(expected_response, actual_response)
+        self.assertEqual(expected_response.video_control_uri, self.protocol_handler.video_control_uri)
+        self.assertEqual(expected_response.audio_control_uri, self.protocol_handler.audio_control_uri)
 
     def assertResponsesEquals(self, expected_response, actual_response):
         try:

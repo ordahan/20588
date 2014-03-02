@@ -126,6 +126,7 @@ class TestNominalScenario(TestProtocol):
     def testHappyFlow(self):
         self.exec_protocol_stage(self.options())
         self.exec_protocol_stage(self.describe())
+        self.exec_protocol_stage(self.setup())
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'TestMessage.testOptions']

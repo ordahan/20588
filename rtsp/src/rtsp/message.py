@@ -6,6 +6,7 @@ Created on Dec 14, 2013
 import re
 from rtsp import directives
 from rtsp import result_codes
+from xmlrpclib import Transport
 
 class Message(object):
     '''
@@ -15,6 +16,8 @@ class Message(object):
     PROTOCOL = 'RTSP/1.0'
     SEQUENCE_FIELD = 'CSeq: '
     CONTENT_LENGTH = 'Content-Length: '
+    TRANSPORT = "Transport: "
+    SESSION = "Session: "
     NEWLINE = '\r\n'
 
     def __init__(self, sequence):
@@ -29,11 +32,12 @@ class RequestMessage(Message):
     An RTSP Request message
     '''
 
-    def __init__(self, directive=None, sequence=0, uri=None):
+    def __init__(self, directive=None, sequence=0, uri=None, transport=None):
 
         self.directive = directive
         self.sequence = sequence
         self.uri = uri
+        self.transport = transport
 
         Message.__init__(self, self.sequence)
 
@@ -41,9 +45,9 @@ class RequestMessage(Message):
     def parse_header(self, message):
     # Extract the directive
         try:
-            parameters = re.match('([A-Z]+)\s+(.+)', message)
+            parameters = re.match('([A-Z]+)\s+(.+)\s+(RTSP/1.0)', message)
 
-            return parameters.group(1, 2)
+            return parameters.group(1, 2, 3)
         except AttributeError as e:
             print "Failed to parse request header line"
             raise e
@@ -58,6 +62,13 @@ class RequestMessage(Message):
             print "Failed to parse sequence"
             raise e
 
+    def parse_client_ports(self, message):
+        try:
+            parsed_transport_field = re.search(self.TRANSPORT + '.*client_port=(\d+)-(\d+)', message)
+            return int(parsed_transport_field.group(1)), int(parsed_transport_field.group(2))
+        except AttributeError as e:
+            return (None, None)
+
     def parse(self, message):
         '''
         Parses the given request into its different fields
@@ -68,9 +79,11 @@ class RequestMessage(Message):
             if (len(message_fields) == 0):
                 return False
 
-            self.directive, self.uri = self.parse_header(message_fields[0])
+            self.directive, self.uri, self.version = self.parse_header(message_fields[0])
 
             self.sequence = self.parse_sequence_number(message)
+
+            self.client_rtp_port, self.client_rtcp_port = self.parse_client_ports(message)
 
             return True
 
@@ -87,8 +100,13 @@ class RequestMessage(Message):
             return self.directive
 
     def __str__(self):
-        return '\n\r'.join([self._generate_header(),
-                            self.SEQUENCE_FIELD + str(self.sequence)])
+        fields = [self._generate_header(),
+                  self.SEQUENCE_FIELD + str(self.sequence)]
+
+        if (self.transport is not None):
+            fields.append(self.TRANSPORT + self.transport)
+
+        return '\n\r'.join(fields)
 
 
 class ResponseMessage(Message):
@@ -182,7 +200,12 @@ class DescribeResponseMessage(ResponseMessage):
                  result,
                  date=None,
                  uri=None,
-                 sdp_o_param=None):
+                 sdp_o_param=None,
+                 video_control_uri=None,
+                 audio_control_uri=None):
+
+        self.video_control_uri = video_control_uri
+        self.audio_control_uri = audio_control_uri
 
         sdp_fields = [ 'v=0',
                        'o=- {time} {time} IN IP4 desktop'.format(time=sdp_o_param),
@@ -198,12 +221,13 @@ class DescribeResponseMessage(ResponseMessage):
                        'm=video 0 RTP/AVP 96',
                        'b=RR:0',
                        # TODO: Low, allow other encodings for video and audio
+                       # TODO: High, save the different channel's control URI for later usage (new class?)
                        'a=rtpmap:96 H264/90000',
                        'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
-                       'a=control:%s/trackID=0' % uri,
+                       'a=control:%s' % self.video_control_uri,
                        'm=audio 0 RTP/AVP 8',
                        'b=RR:0',
-                       'a=control:%s/trackID=1' % uri, ]
+                       'a=control:%s' % self.audio_control_uri ]
 
         payload = ['Server: VLC/2.0.8',
                    'Date: %s' % date,
@@ -218,7 +242,29 @@ class DescribeResponseMessage(ResponseMessage):
 
     def get_deterministic_payload(self):
         deter_payload = [payload_line
-                         for payload_line in self.additional_fields
+                         for payload_line in (self.additional_fields + self.content_lines)
                          if (not payload_line.startswith('Date') and
                              not payload_line.startswith('o=-'))]
         return deter_payload
+
+class SetupResponseMessage(ResponseMessage):
+
+    def __init__(self,
+                 sequence,
+                 result,
+                 client_rtp_port,
+                 client_rtcp_port,
+                 server_rtp_port,
+                 server_rtcp_port):
+
+        payload = [self.TRANSPORT +
+                    "RTP/AVP/UDP;unicast;client_port={}-{};server_port={}-{}".format(client_rtp_port,
+                                                                                     client_rtcp_port,
+                                                                                     server_rtp_port,
+                                                                                     server_rtcp_port),
+                   self.SESSION + '12345']
+
+        ResponseMessage.__init__(self,
+                                 sequence=sequence,
+                                 result=result,
+                                 additional_fields=payload)

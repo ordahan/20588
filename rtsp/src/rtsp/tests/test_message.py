@@ -5,7 +5,7 @@ Created on Dec 14, 2013
 '''
 import unittest
 from rtsp.message import RequestMessage, OptionsResponseMessage, \
-    DescribeResponseMessage
+    DescribeResponseMessage, SetupResponseMessage
 from rtsp import directives
 from rtsp import result_codes
 from difflib import context_diff
@@ -104,6 +104,8 @@ class TestDescribe(TestMessage):
 
         date = 'Sun, 12 Jan 2014 13:04:23 GMT'
         uri = 'rtsp://127.0.0.1:18554/homeland.avi'
+        video_control = uri + '/trackID=0'
+        audio_control = uri + '/trackID=1'
         length = 509
         sdp_o_param = 15455528565056244265
 
@@ -133,17 +135,61 @@ class TestDescribe(TestMessage):
                        'b=RR:0',
                        'a=rtpmap:96 H264/90000',
                        'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
-                       'a=control:%s/trackID=0' % uri,
+                       'a=control:%s' % video_control,
                        'm=audio 0 RTP/AVP 8',
                        'b=RR:0',
-                       'a=control:%s/trackID=1' % uri,
+                       'a=control:%s' % audio_control,
                         '\r\n'])
 
         actual_response = str(DescribeResponseMessage(sequence=3,
                                                       result=result_codes.OK,
                                                       date=date,
                                                       uri=uri,
-                                                      sdp_o_param=sdp_o_param))
+                                                      sdp_o_param=sdp_o_param,
+                                                      video_control_uri=video_control,
+                                                      audio_control_uri=audio_control))
+
+        self.assertMessagesEqual(expected_response, actual_response)
+
+
+class TestSetup(TestMessage):
+
+    def testParse(self):
+        '''
+        Tests the parsing of the setup message
+        '''
+        # Basic valid message
+        message = \
+            '\r\n'.join(['SETUP rtsp://127.0.0.1:18554/homeland.avi/trackID=0 RTSP/1.0',
+                         'CSeq: 4',
+                         'User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)',
+                         'Transport: RTP/AVP;unicast;client_port=52656-52657',
+                         '\r\n'])
+
+        self.request.parse(message)
+
+        self.assertEqual(4, self.request.sequence)
+        self.assertEqual(directives.SETUP, self.request.directive)
+        self.assertEqual(52656, self.request.client_rtp_port)
+        self.assertEqual(52657, self.request.client_rtcp_port)
+
+    def testResponse(self):
+
+        expected_response = \
+            '\r\n'.join(['RTSP/1.0 200 OK',
+                         'CSeq: 4',
+                         'Content-Length: 0',
+                         'Transport: RTP/AVP/UDP;unicast;client_port=52656-52657;server_port=30000-30001',
+                         # FIXME: Generate a session for the message..not hardcode it
+                         'Session: 12345',
+                         '\r\n'])
+
+        actual_response = str(SetupResponseMessage(sequence=4,
+                                                      result=result_codes.OK,
+                                                      client_rtp_port=52656,
+                                                      client_rtcp_port=52657,
+                                                      server_rtp_port=30000,
+                                                      server_rtcp_port=30001))
 
         self.assertMessagesEqual(expected_response, actual_response)
 

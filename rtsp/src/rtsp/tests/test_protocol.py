@@ -8,7 +8,7 @@ from rtsp.protocol import Protocol
 from rtsp import directives
 from rtsp import result_codes
 from rtsp.message import OptionsResponseMessage, RequestMessage, \
-    DescribeResponseMessage
+    DescribeResponseMessage, SetupResponseMessage
 
 
 class TestProtocol(unittest.TestCase):
@@ -42,11 +42,58 @@ class TestProtocol(unittest.TestCase):
                                                     result=result_codes.OK,
                                                     date='Hi Ho I dont know',
                                                     uri=self.uri,
-                                                    sdp_o_param=1234)
+                                                    sdp_o_param=1234,
+                                                    video_control_uri=self.uri + '/trackID=0',
+                                                    audio_control_uri=self.uri + '/trackID=1')
 
         actual_response = self.protocol_handler.process_message(request)
 
         self.assertResponsesEquals(expected_response, actual_response)
+        self.assertEqual(expected_response.video_control_uri, self.protocol_handler.video_control_uri)
+        self.assertEqual(expected_response.audio_control_uri, self.protocol_handler.audio_control_uri)
+
+    def setup(self):
+
+        # Video
+        self.protocol_handler.video_control_uri = self.uri + '/vid'
+
+        request = RequestMessage(directive=directives.SETUP,
+                                 sequence=self.sequence,
+                                 uri=self.protocol_handler.video_control_uri,
+                                 transport='client_port=52656-52657')
+        request.client_rtp_port = 52656
+        request.client_rtcp_port = 52657
+
+        expected_response = SetupResponseMessage(self.sequence,
+                                                 result=result_codes.OK,
+                                                 client_rtp_port=request.client_rtp_port,
+                                                 client_rtcp_port=request.client_rtcp_port,
+                                                 # FIXME: Randomize the ports selected, we can't really know these upfront :)
+                                                 server_rtp_port=20000,
+                                                 server_rtcp_port=20001)
+
+        self.assertEqual(str(expected_response),
+                         str(self.protocol_handler.process_message(request)))
+
+        # Audio
+        self.protocol_handler.audio_control_uri = self.uri + '/aud'
+
+        request = RequestMessage(directive=directives.SETUP,
+                                 sequence=self.sequence,
+                                 uri=self.protocol_handler.audio_control_uri)
+        request.client_rtp_port = 52656
+        request.client_rtcp_port = 52657
+
+        expected_response = SetupResponseMessage(self.sequence,
+                                                 result=result_codes.OK,
+                                                 client_rtp_port=request.client_rtp_port,
+                                                 client_rtcp_port=request.client_rtcp_port,
+                                                 # FIXME: Randomize the ports selected, we can't really know these upfront :)
+                                                 server_rtp_port=30000,
+                                                 server_rtcp_port=30001)
+
+        self.assertEqual(str(expected_response),
+                         str(self.protocol_handler.process_message(request)))
 
     def assertResponsesEquals(self, expected_response, actual_response):
         try:
@@ -71,6 +118,9 @@ class TestProtocolBuildingBlocks(TestProtocol):
     def testDescribe(self):
         self.exec_protocol_stage(self.describe())
 
+    def testSetup(self):
+        self.exec_protocol_stage(self.setup())
+
 
 class TestNominalScenario(TestProtocol):
     '''
@@ -80,6 +130,7 @@ class TestNominalScenario(TestProtocol):
     def testHappyFlow(self):
         self.exec_protocol_stage(self.options())
         self.exec_protocol_stage(self.describe())
+        self.exec_protocol_stage(self.setup())
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'TestMessage.testOptions']

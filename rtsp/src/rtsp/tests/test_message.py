@@ -67,9 +67,6 @@ class TestOptions(TestMessage):
         self.assertEqual(2, self.request.sequence)
         self.assertEqual(directives.OPTIONS, self.request.directive)
 
-        # TODO: More validity tests for parsing
-        # 1) Options without URI - atm failing
-
     def testResponse(self):
         expected_response = \
             '\r\n'.join(["RTSP/1.0 200 OK",
@@ -107,7 +104,7 @@ class TestDescribe(TestMessage):
 
         date = 'Sun, 12 Jan 2014 13:04:23 GMT'
         uri = 'rtsp://127.0.0.1:18554/homeland.avi'
-        length = 675
+        length = 509
         sdp_o_param = 15455528565056244265
 
         expected_response = \
@@ -137,10 +134,8 @@ class TestDescribe(TestMessage):
                        'a=rtpmap:96 H264/90000',
                        'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
                        'a=control:%s/trackID=0' % uri,
-                       'm=audio 0 RTP/AVP 96',
+                       'm=audio 0 RTP/AVP 8',
                        'b=RR:0',
-                       'a=rtpmap:96 mpeg4-generic/48000/2',
-                       'a=fmtp:96 streamtype=5; profile-level-id=15; mode=AAC-hbr; config=1190; SizeLength=13; IndexLength=3; IndexDeltaLength=3; Profile=1;',
                        'a=control:%s/trackID=1' % uri,
                         '\r\n'])
 

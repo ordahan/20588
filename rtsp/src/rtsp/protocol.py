@@ -7,6 +7,7 @@ from rtsp.message import RequestMessage, OptionsResponseMessage, \
     DescribeResponseMessage, ResponseMessage
 from rtsp import directives
 from rtsp import result_codes
+import datetime
 
 
 class Protocol(object):
@@ -32,9 +33,9 @@ class Protocol(object):
         elif (request_message.directive == directives.DESCRIBE):
             response = DescribeResponseMessage(sequence=request_message.sequence,
                                                result=result_codes.OK,
-                                               date='Sun, 12 Jan 2014 13:04:23 GMT',  # FIXME: Retrieve this
-                                               uri=request_message.uri,  # TODO: Is the uri 'saved' for this connection? or does it come from the describe msg?
-                                               sdp_o_param=15455528565056244265)  # FIXME: How do we know to set this?
+                                               date=datetime.datetime.utcnow().strftime("%a, %d %b %Y %X GMT"),
+                                               uri=request_message.uri,  # TODO: Low, Is the uri 'saved' for this connection? or does it come from the describe msg?
+                                               sdp_o_param=15455528565056244265)  # FIXME: Get the current NTP timestamp
         else:
             response = ResponseMessage()
 

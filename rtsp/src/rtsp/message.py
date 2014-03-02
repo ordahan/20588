@@ -197,6 +197,7 @@ class DescribeResponseMessage(ResponseMessage):
                        'a=control:%s' % uri,
                        'm=video 0 RTP/AVP 96',
                        'b=RR:0',
+                       # TODO: Low, allow other encodings for video and audio
                        'a=rtpmap:96 H264/90000',
                        'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
                        'a=control:%s/trackID=0' % uri,

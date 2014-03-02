@@ -67,9 +67,6 @@ class TestOptions(TestMessage):
         self.assertEqual(2, self.request.sequence)
         self.assertEqual(directives.OPTIONS, self.request.directive)
 
-        # TODO: More validity tests for parsing
-        # 1) Options without URI - atm failing
-
     def testResponse(self):
         expected_response = \
             '\r\n'.join(["RTSP/1.0 200 OK",

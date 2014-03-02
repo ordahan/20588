@@ -31,11 +31,15 @@ class Protocol(object):
                                               result=result_codes.OK)
 
         elif (request_message.directive == directives.DESCRIBE):
+            current_time = datetime.datetime.utcnow()
+            time_diff_from_ntp_epoch = current_time - datetime.datetime(1900, 1, 1, 0, 0, 0)
+            ntp_timestamp = time_diff_from_ntp_epoch.days * 24 * 60 * 60 + time_diff_from_ntp_epoch.seconds
+
             response = DescribeResponseMessage(sequence=request_message.sequence,
                                                result=result_codes.OK,
-                                               date=datetime.datetime.utcnow().strftime("%a, %d %b %Y %X GMT"),
+                                               date=current_time.strftime("%a, %d %b %Y %X GMT"),
                                                uri=request_message.uri,  # TODO: Low, Is the uri 'saved' for this connection? or does it come from the describe msg?
-                                               sdp_o_param=15455528565056244265)  # FIXME: Get the current NTP timestamp
+                                               sdp_o_param=ntp_timestamp)
         else:
             response = ResponseMessage()
 

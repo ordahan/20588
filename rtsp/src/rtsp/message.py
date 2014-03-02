@@ -200,10 +200,8 @@ class DescribeResponseMessage(ResponseMessage):
                        'a=rtpmap:96 H264/90000',
                        'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
                        'a=control:%s/trackID=0' % uri,
-                       'm=audio 0 RTP/AVP 96',
+                       'm=audio 0 RTP/AVP 8',
                        'b=RR:0',
-                       'a=rtpmap:96 mpeg4-generic/48000/2',
-                       'a=fmtp:96 streamtype=5; profile-level-id=15; mode=AAC-hbr; config=1190; SizeLength=13; IndexLength=3; IndexDeltaLength=3; Profile=1;',
                        'a=control:%s/trackID=1' % uri, ]
 
         payload = ['Server: VLC/2.0.8',

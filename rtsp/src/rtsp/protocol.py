@@ -100,8 +100,9 @@ udpsrc port=%d ! rtpbin1.recv_rtcp_sink_1" % (self.client_video_rtp_port,
                                               30001,)) .split())
 
         elif (request_message.directive == directives.GET_PARAMETER):
-            # TODO: Support GET_PARAMETER
-            response = None
+            # Default response to GET_PARAMETER
+            response = ResponseMessage(sequence=request_message.sequence,
+                                       result=result_codes.OK)
         elif (request_message.directive == directives.TEARDOWN):
             response = None
         else:

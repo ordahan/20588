@@ -31,4 +31,9 @@ class RTSPServer(SocketServer.TCPServer):
         '''
         Runs the server.
         '''
+
+        print "Starting to run RTSP server..."
+
         self.serve_forever()
+
+        print "Shutting down RTSP server..."

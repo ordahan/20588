@@ -18,13 +18,16 @@ class Test(unittest.TestCase):
 
 
     def tearDown(self):
+        print "Ending test...."
         self.rtsp_server_process.terminate()
+        print "Done"
 
 
     def testNormalPlayScenario(self):
-        self.vlc_client_process = subprocess.Popen('cvlc -vvv rtsp://localhost:8554/30rock.avi'.split(),)
-        time.sleep(1)
+        self.vlc_client_process = subprocess.Popen('vlc -vvv rtsp://localhost:8554/30rock.avi'.split(),)
+        time.sleep(10)
         self.vlc_client_process.terminate()
+        time.sleep(1)
 
 
 if __name__ == "__main__":

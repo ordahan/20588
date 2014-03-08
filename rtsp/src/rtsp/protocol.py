@@ -24,6 +24,7 @@ class Protocol(object):
         self.uri = ''
         self.video_control_uri = ''
         self.audio_control_uri = ''
+        self.rtp_streamer = None
 
 
     def process_message(self, request_message):
@@ -82,7 +83,7 @@ class Protocol(object):
         elif (request_message.directive == directives.PLAY):
             response = PlayResponseMessage(sequence=request_message.sequence,
                                            result=result_codes.OK)
-            # TODO: Start GStreamer
+            # TODO: Use a python GStreamer interface
             self.rtp_streamer_process = subprocess.Popen(("gst-launch-0.10 -v gstrtpbin name=rtpbin1 \
 filesrc location=/home/ord/Videos/30rock.avi ! decodebin name=dec \
 dec.  ! queue ! x264enc ! rtph264pay ! rtpbin1.send_rtp_sink_0 \
@@ -94,17 +95,19 @@ rtpbin1.send_rtp_src_1 ! udpsink host=127.0.0.1 port=%d \
 rtpbin1.send_rtcp_src_1 ! udpsink host=127.0.0.1 port=%d \
 udpsrc port=%d ! rtpbin1.recv_rtcp_sink_1" % (self.client_video_rtp_port,
                                               self.client_video_rtcp_port,
-                                              20001,
+                                              20001,  # FIXME: Magic numbers
                                               self.client_audio_rtp_port,
                                               self.client_audio_rtcp_port,
                                               30001,)) .split())
 
         elif (request_message.directive == directives.GET_PARAMETER):
-            # Default response to GET_PARAMETER
             response = ResponseMessage(sequence=request_message.sequence,
                                        result=result_codes.OK)
         elif (request_message.directive == directives.TEARDOWN):
-            self.rtp_streamer.process.terminate()
+            if (self.rtp_streamer_process is not None):
+                print "Killing rtp_streamer_process (%d)" % self.rtp_streamer_process.pid
+                self.rtp_streamer_process.kill()
+                self.rtp_streamer_process = None
             response = None
         else:
             response = None

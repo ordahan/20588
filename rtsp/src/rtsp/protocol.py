@@ -38,6 +38,7 @@ class Protocol(object):
 
         # Describe request - returns the file's details (including the file's streams)
         elif (request_message.directive == directives.DESCRIBE):
+
             current_time = datetime.datetime.utcnow()
             time_diff_from_ntp_epoch = current_time - datetime.datetime(1900, 1, 1, 0, 0, 0)
             ntp_timestamp = time_diff_from_ntp_epoch.days * 24 * 60 * 60 + time_diff_from_ntp_epoch.seconds
@@ -47,6 +48,7 @@ class Protocol(object):
             response = DescribeResponseMessage(sequence=request_message.sequence,
                                                result=result_codes.OK,
                                                date=current_time.strftime("%a, %d %b %Y %X GMT"),
+                                               # TODO: High, Actually serve the file that is requested by the URI
                                                uri=request_message.uri,  # TODO: Low, Is the uri 'saved' for this connection? or does it come from the describe msg?
                                                sdp_o_param=ntp_timestamp,
                                                video_control_uri=self.video_control_uri,
@@ -64,7 +66,7 @@ class Protocol(object):
                                                 result=result_codes.OK,
                                                 client_rtp_port=self.client_video_rtp_port,
                                                 client_rtcp_port=self.client_video_rtcp_port,
-                                                # FIXME: Randome ports
+                                                # FIXME: Random ports
                                                 server_rtp_port=20000,
                                                 server_rtcp_port=20001)
 
@@ -77,13 +79,14 @@ class Protocol(object):
                                                 result=result_codes.OK,
                                                 client_rtp_port=self.client_audio_rtp_port,
                                                 client_rtcp_port=self.client_audio_rtcp_port,
-                                                # FIXME: Randome ports
+                                                # FIXME: Random ports
                                                 server_rtp_port=30000,
                                                 server_rtcp_port=30001)
         elif (request_message.directive == directives.PLAY):
             response = PlayResponseMessage(sequence=request_message.sequence,
                                            result=result_codes.OK)
-            # TODO: Use a python GStreamer interface
+            # TODO: Low, Use a python GStreamer interface
+            # FIXME: Send the RTP streams to the IP of the client (not 127.0.0.1)
             self.rtp_streamer_process = subprocess.Popen(("gst-launch-0.10 -v gstrtpbin name=rtpbin1 \
 filesrc location=/home/ord/Videos/30rock.avi ! decodebin name=dec \
 dec.  ! queue ! x264enc ! rtph264pay ! rtpbin1.send_rtp_sink_0 \

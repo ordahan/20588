@@ -208,10 +208,11 @@ class DescribeResponseMessage(ResponseMessage):
         self.audio_control_uri = audio_control_uri
 
         sdp_fields = [ 'v=0',
+                      # FIXME: High, Make the IP ('desktop') configurable as well
                        'o=- {time} {time} IN IP4 desktop'.format(time=sdp_o_param),
                        's=Unnamed',
                        'i=N/A',
-                       'c=IN IP4 0.0.0.0',  # TODO: Make the IP configurable as well
+                       'c=IN IP4 0.0.0.0',  # FIXME: High, Make the IP configurable as well
                        't=0 0',
                        'a=tool:vlc 2.0.8',
                        'a=recvonly',
@@ -221,7 +222,6 @@ class DescribeResponseMessage(ResponseMessage):
                        'm=video 0 RTP/AVP 96',
                        'b=RR:0',
                        # TODO: Low, allow other encodings for video and audio
-                       # TODO: High, save the different channel's control URI for later usage (new class?)
                        'a=rtpmap:96 H264/90000',
                        'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
                        'a=control:%s' % self.video_control_uri,

@@ -12,7 +12,7 @@ import datetime
 
 class Protocol(object):
     '''
-    Handles the RTP protocol for a single connection.
+    Handles the RTSP protocol for a single connection.
     '''
 
     def __init__(self):
@@ -26,12 +26,14 @@ class Protocol(object):
 
     def process_message(self, request_message):
 
+        # Options request - returns the options on the given file
         if (request_message.directive == directives.OPTIONS):
             self.uri = request_message.uri
 
             response = OptionsResponseMessage(sequence=request_message.sequence,
                                               result=result_codes.OK)
 
+        # Describe request - returns the file's details (including the file's streams)
         elif (request_message.directive == directives.DESCRIBE):
             current_time = datetime.datetime.utcnow()
             time_diff_from_ntp_epoch = current_time - datetime.datetime(1900, 1, 1, 0, 0, 0)
@@ -46,6 +48,8 @@ class Protocol(object):
                                                sdp_o_param=ntp_timestamp,
                                                video_control_uri=self.video_control_uri,
                                                audio_control_uri=self.audio_control_uri)
+
+        # Setup request - client's setup configurations for each stream
         elif (request_message.directive == directives.SETUP):
 
             if (request_message.uri == self.video_control_uri):
@@ -56,6 +60,7 @@ class Protocol(object):
                                                 # FIXME: Randome ports
                                                 server_rtp_port=20000,
                                                 server_rtcp_port=20001)
+
             elif (request_message.uri == self.audio_control_uri):
                 response = SetupResponseMessage(sequence=request_message.sequence,
                                                 result=result_codes.OK,
@@ -64,6 +69,8 @@ class Protocol(object):
                                                 # FIXME: Randome ports
                                                 server_rtp_port=30000,
                                                 server_rtcp_port=30001)
+        # TODO: Play request
+
         else:
             response = ResponseMessage()
 
@@ -72,8 +79,8 @@ class Protocol(object):
     def handle_request(self, request):
         '''
         Handles the given message.
-        Returns the message to send back to the client (in
-        the same format as the request given)
+        Returns the response to send back to the client (in
+        the same format as the request was given)
         This method is in charge of translating from string to request/response
         objects and back (CLEAN CODE? ME THINK NOT :D)
 
@@ -86,7 +93,6 @@ class Protocol(object):
             print("Error parsing message: %s" % request)
             # TODO: Return an error response
             return ""
-        else:
-            response = self.process_message(request_message)
 
+        response = self.process_message(request_message)
         return str(response)

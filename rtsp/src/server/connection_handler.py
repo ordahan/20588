@@ -24,6 +24,20 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
         self.rtsp_protocol_handler = rtsp.protocol.Protocol()
         SocketServer.StreamRequestHandler.setup(self)
 
+
+    def respond_to_client(self, response):
+        return self.wfile.write(response)
+
+
+    def read_client_request(self):
+        # TODO: Config the received size + make global define
+        request = self.request.recv(4096)
+
+        if (request == ''):
+            return None
+        else:
+            return request
+
     def handle(self):
         '''
         This method is called by the server 'behind-the-scenes'
@@ -39,13 +53,14 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
                 pr = cProfile.Profile()
                 pr.enable()
 
-            request = self.request.recv(4096)
-            if (request == ''):
+            request = self.read_client_request()
+
+            # TODO: consider blocking until receiving data
+
+            # If no data was read, sleep and try again.
+            if (request == None):
                 time.sleep(0.1)
                 continue
-    #         self.timeout = 0.2
-    #         self.rbufsize = 0
-    #         request = ''.join(self.rfile.readlines())
 
             print "Got:"
             print "--------------------------------------------"
@@ -59,8 +74,7 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
             print response
             print "--------------------------------------------"
 
-
-            self.wfile.write(response)
+            self.respond_to_client(response)
 
             if (__profile__):
                 pr.disable()

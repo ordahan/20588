@@ -22,6 +22,7 @@ class RTSPServer(SocketServer.TCPServer):
         # Allow the socket to be re-bound right after we shutdown
         # the server
         SocketServer.TCPServer.allow_reuse_address = True
+
         SocketServer.TCPServer.__init__(self,
                                         (bind_address, tcp_port),
                                         connection_handler.ConnectionHandler)

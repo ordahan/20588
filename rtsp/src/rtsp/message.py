@@ -45,7 +45,7 @@ class RequestMessage(Message):
     def parse_header(self, message):
     # Extract the directive
         try:
-            parameters = re.match('([A-Z]+)\s+(.+)\s+(RTSP/1.0)', message)
+            parameters = re.match('([A-Z_]+)\s+(.+)\s+(RTSP/1.0)', message)
 
             return parameters.group(1, 2, 3)
         except AttributeError as e:

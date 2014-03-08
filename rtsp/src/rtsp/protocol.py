@@ -70,9 +70,11 @@ class Protocol(object):
                                                 server_rtp_port=30000,
                                                 server_rtcp_port=30001)
         # TODO: Play request
-
+#         elif (request_message.directive == directives.SETUP):
+        elif (request_message.directive == directives.TEARDOWN):
+            response = None
         else:
-            response = ResponseMessage()
+            response = None
 
         return response
 
@@ -95,4 +97,8 @@ class Protocol(object):
             return ""
 
         response = self.process_message(request_message)
+
+        if (response is None):
+            return None
+
         return str(response)

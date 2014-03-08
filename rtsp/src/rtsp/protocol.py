@@ -4,7 +4,8 @@ Created on Dec 14, 2013
 @author: ord
 '''
 from rtsp.message import RequestMessage, OptionsResponseMessage, \
-    DescribeResponseMessage, ResponseMessage, SetupResponseMessage
+    DescribeResponseMessage, ResponseMessage, SetupResponseMessage, \
+    PlayResponseMessage
 from rtsp import directives
 from rtsp import result_codes
 import datetime
@@ -69,8 +70,9 @@ class Protocol(object):
                                                 # FIXME: Randome ports
                                                 server_rtp_port=30000,
                                                 server_rtcp_port=30001)
-        # TODO: Play request
-#         elif (request_message.directive == directives.SETUP):
+        elif (request_message.directive == directives.PLAY):
+            response = PlayResponseMessage(sequence=request_message.sequence,
+                                           result=result_codes.OK)
         elif (request_message.directive == directives.TEARDOWN):
             response = None
         else:

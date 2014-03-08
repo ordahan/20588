@@ -268,3 +268,14 @@ class SetupResponseMessage(ResponseMessage):
                                  sequence=sequence,
                                  result=result,
                                  additional_fields=payload)
+class PlayResponseMessage(ResponseMessage):
+    def __init__(self,
+                 sequence,
+                 result):
+
+        payload = []
+
+        ResponseMessage.__init__(self,
+                         sequence=sequence,
+                         result=result,
+                         additional_fields=payload)

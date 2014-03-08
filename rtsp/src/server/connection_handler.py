@@ -45,8 +45,9 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
         '''
 
         __profile__ = False
+        connection_alive = True
 
-        while (True):
+        while (connection_alive):
             if (__profile__):
                 import cProfile
 
@@ -69,12 +70,16 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
 
             response = self.rtsp_protocol_handler.handle_request(request)
 
-            print "Sent:"
-            print "--------------------------------------------"
-            print response
-            print "--------------------------------------------"
+            if (response is None):
+                print "Connection is terminated (no response sent to client)"
+                connection_alive = False
+            else:
+                print "Sent:"
+                print "--------------------------------------------"
+                print response
+                print "--------------------------------------------"
 
-            self.respond_to_client(response)
+                self.respond_to_client(response)
 
             if (__profile__):
                 pr.disable()

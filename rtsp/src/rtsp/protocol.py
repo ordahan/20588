@@ -103,6 +103,7 @@ udpsrc port=%d ! rtpbin1.recv_rtcp_sink_1" % (self.client_video_rtp_port,
             # TODO: Support GET_PARAMETER
             response = None
         elif (request_message.directive == directives.TEARDOWN):
+            self.rtp_streamer.process.terminate()
             response = None
         else:
             response = None

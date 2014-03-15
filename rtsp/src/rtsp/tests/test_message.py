@@ -103,10 +103,11 @@ class TestDescribe(TestMessage):
     def testResponse(self):
 
         date = 'Sun, 12 Jan 2014 13:04:23 GMT'
-        uri = 'rtsp://127.0.0.1:18554/homeland.avi'
+        server_ip = '127.0.0.1:18554'
+        uri = 'rtsp://' + server_ip + '/homeland.avi'
         video_control = uri + '/trackID=0'
         audio_control = uri + '/trackID=1'
-        length = 509
+        length = 517
         sdp_o_param = 15455528565056244265
 
         expected_response = \
@@ -121,7 +122,7 @@ class TestDescribe(TestMessage):
                        'Cache-Control: no-cache',
                        '',
                        'v=0',
-                       'o=- {time} {time} IN IP4 desktop'.format(time=sdp_o_param),
+                       'o=- {time} {time} IN IP4 {ip}'.format(time=sdp_o_param, ip=server_ip),
                        's=Unnamed',
                        'i=N/A',
                        'c=IN IP4 0.0.0.0',
@@ -144,7 +145,7 @@ class TestDescribe(TestMessage):
         actual_response = str(DescribeResponseMessage(sequence=3,
                                                       result=result_codes.OK,
                                                       date=date,
-                                                      uri=uri,
+                                                      server_uri=uri,
                                                       sdp_o_param=sdp_o_param,
                                                       video_control_uri=video_control,
                                                       audio_control_uri=audio_control))
@@ -180,7 +181,7 @@ class TestSetup(TestMessage):
                          'CSeq: 4',
                          'Content-Length: 0',
                          'Transport: RTP/AVP/UDP;unicast;client_port=52656-52657;server_port=30000-30001',
-                         # FIXME: Generate a session for the message..not hardcode it
+                         # FIXME: HIGH Generate a session for the message..not hardcode it
                          'Session: 12345',
                          '\r\n'])
 
@@ -193,7 +194,7 @@ class TestSetup(TestMessage):
 
         self.assertMessagesEqual(expected_response, actual_response)
 
-# FIXME: Test PLAY message
+# FIXME: LOW Test PLAY message
 
 class TestGetParameter(TestMessage):
 
@@ -213,26 +214,6 @@ class TestGetParameter(TestMessage):
 
         self.assertEqual(7, self.request.sequence)
         self.assertEqual(directives.GET_PARAMETER, self.request.directive)
-
-#     def testResponse(self):
-#
-#         expected_response = \
-#             '\r\n'.join(['RTSP/1.0 200 OK',
-#                          'CSeq: 4',
-#                          'Content-Length: 0',
-#                          'Transport: RTP/AVP/UDP;unicast;client_port=52656-52657;server_port=30000-30001',
-#                          # FIXME: Generate a session for the message..not hardcode it
-#                          'Session: 12345',
-#                          '\r\n'])
-#
-#         actual_response = str(SetupResponseMessage(sequence=4,
-#                                                       result=result_codes.OK,
-#                                                       client_rtp_port=52656,
-#                                                       client_rtcp_port=52657,
-#                                                       server_rtp_port=30000,
-#                                                       server_rtcp_port=30001))
-#
-#         self.assertMessagesEqual(expected_response, actual_response)
 
 if __name__ == "__main__":
     # import sys;sys.argv = ['', 'TestMessage.testOptions']

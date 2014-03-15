@@ -48,8 +48,8 @@ class Protocol(object):
             response = DescribeResponseMessage(sequence=request_message.sequence,
                                                result=result_codes.OK,
                                                date=current_time.strftime("%a, %d %b %Y %X GMT"),
-                                               # TODO: High, Actually serve the file that is requested by the URI
-                                               uri=request_message.uri,  # TODO: Low, Is the uri 'saved' for this connection? or does it come from the describe msg?
+                                               # TODO: HIGH Actually serve the file that is requested by the URI
+                                               server_uri=request_message.uri,  # TODO: LOW Is the uri 'saved' for this connection? or does it come from the describe msg?
                                                sdp_o_param=ntp_timestamp,
                                                video_control_uri=self.video_control_uri,
                                                audio_control_uri=self.audio_control_uri)
@@ -66,7 +66,8 @@ class Protocol(object):
                                                 result=result_codes.OK,
                                                 client_rtp_port=self.client_video_rtp_port,
                                                 client_rtcp_port=self.client_video_rtcp_port,
-                                                # FIXME: Random ports
+                                                # FIXME: HIGH Random ports
+                                                # FIXME: MED Check if the port is ready
                                                 server_rtp_port=20000,
                                                 server_rtcp_port=20001)
 
@@ -79,14 +80,15 @@ class Protocol(object):
                                                 result=result_codes.OK,
                                                 client_rtp_port=self.client_audio_rtp_port,
                                                 client_rtcp_port=self.client_audio_rtcp_port,
-                                                # FIXME: Random ports
+                                                # FIXME: HIGH Random ports
+                                                # FIXME: MED Check if the port is ready
                                                 server_rtp_port=30000,
                                                 server_rtcp_port=30001)
         elif (request_message.directive == directives.PLAY):
             response = PlayResponseMessage(sequence=request_message.sequence,
                                            result=result_codes.OK)
-            # TODO: Low, Use a python GStreamer interface
-            # FIXME: Send the RTP streams to the IP of the client (not 127.0.0.1)
+            # TODO: LOW Use a python GStreamer interface
+            # FIXME: HIGH Send the RTP streams to the IP of the client (not 127.0.0.1)
             self.rtp_streamer_process = subprocess.Popen(("gst-launch-0.10 -v gstrtpbin name=rtpbin1 \
 filesrc location=/home/ord/Videos/30rock.avi ! decodebin name=dec \
 dec.  ! queue ! x264enc ! rtph264pay ! rtpbin1.send_rtp_sink_0 \
@@ -98,7 +100,7 @@ rtpbin1.send_rtp_src_1 ! udpsink host=127.0.0.1 port=%d \
 rtpbin1.send_rtcp_src_1 ! udpsink host=127.0.0.1 port=%d \
 udpsrc port=%d ! rtpbin1.recv_rtcp_sink_1" % (self.client_video_rtp_port,
                                               self.client_video_rtcp_port,
-                                              20001,  # FIXME: Magic numbers
+                                              20001,  # FIXME: HIGH Magic numbers
                                               self.client_audio_rtp_port,
                                               self.client_audio_rtcp_port,
                                               30001,)) .split())
@@ -132,7 +134,7 @@ udpsrc port=%d ! rtpbin1.recv_rtcp_sink_1" % (self.client_video_rtp_port,
         request_message = RequestMessage()
         if (request_message.parse(request) == False):
             print("Error parsing message: %s" % request)
-            # TODO: Return an error response
+            # TODO: MED Return an error response
             return ""
 
         response = self.process_message(request_message)

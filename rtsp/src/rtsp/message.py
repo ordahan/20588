@@ -199,7 +199,7 @@ class DescribeResponseMessage(ResponseMessage):
                  sequence,
                  result,
                  date=None,
-                 uri=None,
+                 server_uri=None,
                  sdp_o_param=None,
                  video_control_uri=None,
                  audio_control_uri=None):
@@ -207,21 +207,22 @@ class DescribeResponseMessage(ResponseMessage):
         self.video_control_uri = video_control_uri
         self.audio_control_uri = audio_control_uri
 
+        server_ip = re.match(re.escape('rtsp://') + r'(.*)/', server_uri).group(1)
+
         sdp_fields = [ 'v=0',
-                      # FIXME: High, Make the IP ('desktop') configurable as well
-                       'o=- {time} {time} IN IP4 desktop'.format(time=sdp_o_param),
+                       'o=- {time} {time} IN IP4 {ip}'.format(time=sdp_o_param, ip=server_ip),
                        's=Unnamed',
                        'i=N/A',
-                       'c=IN IP4 0.0.0.0',  # FIXME: High, Make the IP configurable as well
+                       'c=IN IP4 0.0.0.0',  # FIXME: HIGH(?) Make the IP configurable as well
                        't=0 0',
                        'a=tool:vlc 2.0.8',
                        'a=recvonly',
                        'a=type:broadcast',
                        'a=charset:UTF-8',
-                       'a=control:%s' % uri,
+                       'a=control:%s' % server_uri,
                        'm=video 0 RTP/AVP 96',
                        'b=RR:0',
-                       # TODO: Low, allow other encodings for video and audio
+                       # TODO: LOW allow other encodings for video and audio
                        'a=rtpmap:96 H264/90000',
                        'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
                        'a=control:%s' % self.video_control_uri,
@@ -232,7 +233,7 @@ class DescribeResponseMessage(ResponseMessage):
         payload = ['Server: VLC/2.0.8',
                    'Date: %s' % date,
                    'Content-Type: application/sdp',
-                   'Content-Base: %s' % uri,
+                   'Content-Base: %s' % server_uri,
                    'Cache-Control: no-cache']
 
         ResponseMessage.__init__(self, sequence=sequence,

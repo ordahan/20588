@@ -30,7 +30,7 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
 
 
     def read_client_request(self):
-        # TODO: Config the received size + make global define
+        # TODO: LOW Config the received size + make global define
         request = self.request.recv(4096)
 
         if (request == ''):
@@ -56,7 +56,7 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
 
             request = self.read_client_request()
 
-            # TODO: consider blocking until receiving data
+            # TODO: LOW consider blocking until receiving data
 
             # If no data was read, sleep and try again.
             if (request == None):

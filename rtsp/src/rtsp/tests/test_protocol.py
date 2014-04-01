@@ -41,7 +41,7 @@ class TestProtocol(unittest.TestCase):
         expected_response = DescribeResponseMessage(self.sequence,
                                                     result=result_codes.OK,
                                                     date='Hi Ho I dont know',
-                                                    uri=self.uri,
+                                                    server_uri=self.uri,
                                                     sdp_o_param=1234,
                                                     video_control_uri=self.uri + '/trackID=0',
                                                     audio_control_uri=self.uri + '/trackID=1')

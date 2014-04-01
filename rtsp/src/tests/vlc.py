@@ -13,7 +13,7 @@ class Test(unittest.TestCase):
 
 
     def setUp(self):
-        self.rtsp_server_process = multiprocessing.Process(target=RTSPServer().run)
+        self.rtsp_server_process = multiprocessing.Process(target=RTSPServer(bind_address="192.168.0.195").run)
         self.rtsp_server_process.start()
 
 
@@ -24,7 +24,7 @@ class Test(unittest.TestCase):
 
 
     def testNormalPlayScenario(self):
-        self.vlc_client_process = subprocess.Popen('vlc -vvv rtsp://localhost:8554/30rock.avi'.split(),)
+        self.vlc_client_process = subprocess.Popen('vlc -vvv rtsp://192.168.0.195:8554/30rock.avi'.split())
         time.sleep(10)
         self.vlc_client_process.terminate()
         time.sleep(1)

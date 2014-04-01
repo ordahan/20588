@@ -21,7 +21,8 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
         Initializes the objects we need in order to handle the
         connection.
         '''
-        self.rtsp_protocol_handler = rtsp.protocol.Protocol()
+
+        self.rtsp_protocol_handler = rtsp.protocol.Protocol(client_ip_address=self.client_address[0])
         SocketServer.StreamRequestHandler.setup(self)
 
 
@@ -30,7 +31,7 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
 
 
     def read_client_request(self):
-        # TODO: Config the received size + make global define
+        # TODO: LOW Config the received size + make global define
         request = self.request.recv(4096)
 
         if (request == ''):
@@ -56,7 +57,7 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
 
             request = self.read_client_request()
 
-            # TODO: consider blocking until receiving data
+            # TODO: LOW consider blocking until receiving data
 
             # If no data was read, sleep and try again.
             if (request == None):

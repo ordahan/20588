@@ -21,7 +21,8 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
         Initializes the objects we need in order to handle the
         connection.
         '''
-        self.rtsp_protocol_handler = rtsp.protocol.Protocol()
+
+        self.rtsp_protocol_handler = rtsp.protocol.Protocol(client_ip_address=self.client_address[0])
         SocketServer.StreamRequestHandler.setup(self)
 
 

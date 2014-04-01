@@ -17,7 +17,7 @@ class Protocol(object):
     Handles the RTSP protocol for a single connection.
     '''
 
-    def __init__(self):
+    def __init__(self, client_ip_address):
         '''
         Constructor
         '''
@@ -25,6 +25,7 @@ class Protocol(object):
         self.video_control_uri = ''
         self.audio_control_uri = ''
         self.rtp_streamer = None
+        self.client_ip_address = client_ip_address
 
 
     def process_message(self, request_message):
@@ -89,21 +90,39 @@ class Protocol(object):
                                            result=result_codes.OK)
             # TODO: LOW Use a python GStreamer interface
             # FIXME: HIGH Send the RTP streams to the IP of the client (not 127.0.0.1)
+
+            print(("gst-launch-0.10 -v gstrtpbin name=rtpbin1 \
+filesrc location=/home/ord/Videos/30rock.avi ! decodebin name=dec \
+dec.  ! queue ! x264enc ! rtph264pay ! rtpbin1.send_rtp_sink_0 \
+rtpbin1.send_rtp_src_0 ! udpsink host={ip} port={} \
+rtpbin1.send_rtcp_src_0 ! udpsink host={ip} port={} \
+udpsrc port={} ! rtpbin1.recv_rtcp_sink_0 \
+dec. ! queue ! audioresample ! audioconvert ! alawenc ! rtppcmapay ! rtpbin1.send_rtp_sink_1 \
+rtpbin1.send_rtp_src_1 ! udpsink host={ip} port={} \
+rtpbin1.send_rtcp_src_1 ! udpsink host={ip} port={} \
+udpsrc port={} ! rtpbin1.recv_rtcp_sink_1".format(self.client_video_rtp_port,
+                                                  self.client_video_rtcp_port,
+                                                  20001,  # FIXME: HIGH Magic numbers
+                                                  self.client_audio_rtp_port,
+                                                  self.client_audio_rtcp_port,
+                                                  30001,
+                                                  ip=self.client_ip_address)))
             self.rtp_streamer_process = subprocess.Popen(("gst-launch-0.10 -v gstrtpbin name=rtpbin1 \
 filesrc location=/home/ord/Videos/30rock.avi ! decodebin name=dec \
 dec.  ! queue ! x264enc ! rtph264pay ! rtpbin1.send_rtp_sink_0 \
-rtpbin1.send_rtp_src_0 ! udpsink host=127.0.0.1 port=%d \
-rtpbin1.send_rtcp_src_0 ! udpsink host=127.0.0.1 port=%d \
-udpsrc port=%d ! rtpbin1.recv_rtcp_sink_0 \
+rtpbin1.send_rtp_src_0 ! udpsink host={ip} port={} \
+rtpbin1.send_rtcp_src_0 ! udpsink host={ip} port={} \
+udpsrc port={} ! rtpbin1.recv_rtcp_sink_0 \
 dec. ! queue ! audioresample ! audioconvert ! alawenc ! rtppcmapay ! rtpbin1.send_rtp_sink_1 \
-rtpbin1.send_rtp_src_1 ! udpsink host=127.0.0.1 port=%d \
-rtpbin1.send_rtcp_src_1 ! udpsink host=127.0.0.1 port=%d \
-udpsrc port=%d ! rtpbin1.recv_rtcp_sink_1" % (self.client_video_rtp_port,
-                                              self.client_video_rtcp_port,
-                                              20001,  # FIXME: HIGH Magic numbers
-                                              self.client_audio_rtp_port,
-                                              self.client_audio_rtcp_port,
-                                              30001,)) .split())
+rtpbin1.send_rtp_src_1 ! udpsink host={ip} port={} \
+rtpbin1.send_rtcp_src_1 ! udpsink host={ip} port={} \
+udpsrc port={} ! rtpbin1.recv_rtcp_sink_1".format(self.client_video_rtp_port,
+                                                  self.client_video_rtcp_port,
+                                                  20001,  # FIXME: HIGH Magic numbers
+                                                  self.client_audio_rtp_port,
+                                                  self.client_audio_rtcp_port,
+                                                  30001,
+                                                  ip=self.client_ip_address)) .split())
 
         elif (request_message.directive == directives.GET_PARAMETER):
             response = ResponseMessage(sequence=request_message.sequence,

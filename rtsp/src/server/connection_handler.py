@@ -25,6 +25,9 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
         self.rtsp_protocol_handler = rtsp.protocol.Protocol(client_ip_address=self.client_address[0])
         SocketServer.StreamRequestHandler.setup(self)
 
+    def finish(self):
+        self.rtsp_protocol_handler.kill_streamer()
+        SocketServer.StreamRequestHandler.finish(self)
 
     def respond_to_client(self, response):
         return self.wfile.write(response)

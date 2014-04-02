@@ -10,6 +10,7 @@ from rtsp import directives
 from rtsp import result_codes
 import datetime
 import subprocess
+import os
 
 
 class Protocol(object):
@@ -24,11 +25,13 @@ class Protocol(object):
         self.uri = ''
         self.video_control_uri = ''
         self.audio_control_uri = ''
-        self.rtp_streamer = None
+        self.rtp_streamer_process = None
         self.client_ip_address = client_ip_address
+        self.file = ''
 
 
     def process_message(self, request_message):
+        response = None
 
         # Options request - returns the options on the given file
         if (request_message.directive == directives.OPTIONS):
@@ -44,16 +47,21 @@ class Protocol(object):
             time_diff_from_ntp_epoch = current_time - datetime.datetime(1900, 1, 1, 0, 0, 0)
             ntp_timestamp = time_diff_from_ntp_epoch.days * 24 * 60 * 60 + time_diff_from_ntp_epoch.seconds
 
-            self.video_control_uri = request_message.uri + '/trackID=0'
-            self.audio_control_uri = request_message.uri + '/trackID=1'
-            response = DescribeResponseMessage(sequence=request_message.sequence,
-                                               result=result_codes.OK,
-                                               date=current_time.strftime("%a, %d %b %Y %X GMT"),
-                                               # TODO: HIGH Actually serve the file that is requested by the URI
-                                               server_uri=request_message.uri,  # TODO: LOW Is the uri 'saved' for this connection? or does it come from the describe msg?
-                                               sdp_o_param=ntp_timestamp,
-                                               video_control_uri=self.video_control_uri,
-                                               audio_control_uri=self.audio_control_uri)
+            self.file = self.uri.rsplit('/', 1)[1]
+
+            if (os.access(self.file, os.R_OK)):
+                self.video_control_uri = request_message.uri + '/trackID=0'
+                self.audio_control_uri = request_message.uri + '/trackID=1'
+                response = DescribeResponseMessage(sequence=request_message.sequence,
+                                                   result=result_codes.OK,
+                                                   date=current_time.strftime("%a, %d %b %Y %X GMT"),
+                                                   # TODO: HIGH Actually serve the file that is requested by the URI
+                                                   server_uri=request_message.uri,  # TODO: LOW Is the uri 'saved' for this connection? or does it come from the describe msg?
+                                                   sdp_o_param=ntp_timestamp,
+                                                   video_control_uri=self.video_control_uri,
+                                                   audio_control_uri=self.audio_control_uri)
+            else:
+                print "File '{}' doesn't exist ({})".format(self.file, self.uri)
 
         # Setup request - client's setup configurations for each stream
         elif (request_message.directive == directives.SETUP):
@@ -90,24 +98,8 @@ class Protocol(object):
                                            result=result_codes.OK)
             # TODO: LOW Use a python GStreamer interface
 
-            print(("gst-launch-0.10 -v gstrtpbin name=rtpbin1 \
-filesrc location=/home/ord/Videos/30rock.avi ! decodebin name=dec \
-dec.  ! queue ! x264enc ! rtph264pay ! rtpbin1.send_rtp_sink_0 \
-rtpbin1.send_rtp_src_0 ! udpsink host={ip} port={} \
-rtpbin1.send_rtcp_src_0 ! udpsink host={ip} port={} \
-udpsrc port={} ! rtpbin1.recv_rtcp_sink_0 \
-dec. ! queue ! audioresample ! audioconvert ! alawenc ! rtppcmapay ! rtpbin1.send_rtp_sink_1 \
-rtpbin1.send_rtp_src_1 ! udpsink host={ip} port={} \
-rtpbin1.send_rtcp_src_1 ! udpsink host={ip} port={} \
-udpsrc port={} ! rtpbin1.recv_rtcp_sink_1".format(self.client_video_rtp_port,
-                                                  self.client_video_rtcp_port,
-                                                  20001,  # FIXME: HIGH Magic numbers
-                                                  self.client_audio_rtp_port,
-                                                  self.client_audio_rtcp_port,
-                                                  30001,
-                                                  ip=self.client_ip_address)))
             self.rtp_streamer_process = subprocess.Popen(("gst-launch-0.10 -v gstrtpbin name=rtpbin1 \
-filesrc location=/home/ord/Videos/30rock.avi ! decodebin name=dec \
+filesrc location={} ! decodebin name=dec \
 dec.  ! queue ! x264enc ! rtph264pay ! rtpbin1.send_rtp_sink_0 \
 rtpbin1.send_rtp_src_0 ! udpsink host={ip} port={} \
 rtpbin1.send_rtcp_src_0 ! udpsink host={ip} port={} \
@@ -115,7 +107,8 @@ udpsrc port={} ! rtpbin1.recv_rtcp_sink_0 \
 dec. ! queue ! audioresample ! audioconvert ! alawenc ! rtppcmapay ! rtpbin1.send_rtp_sink_1 \
 rtpbin1.send_rtp_src_1 ! udpsink host={ip} port={} \
 rtpbin1.send_rtcp_src_1 ! udpsink host={ip} port={} \
-udpsrc port={} ! rtpbin1.recv_rtcp_sink_1".format(self.client_video_rtp_port,
+udpsrc port={} ! rtpbin1.recv_rtcp_sink_1".format(self.file,
+                                                  self.client_video_rtp_port,
                                                   self.client_video_rtcp_port,
                                                   20001,  # FIXME: HIGH Magic numbers
                                                   self.client_audio_rtp_port,
@@ -127,10 +120,7 @@ udpsrc port={} ! rtpbin1.recv_rtcp_sink_1".format(self.client_video_rtp_port,
             response = ResponseMessage(sequence=request_message.sequence,
                                        result=result_codes.OK)
         elif (request_message.directive == directives.TEARDOWN):
-            if (self.rtp_streamer_process is not None):
-                print "Killing rtp_streamer_process (%d)" % self.rtp_streamer_process.pid
-                self.rtp_streamer_process.kill()
-                self.rtp_streamer_process = None
+            self.kill_streamer()
             response = None
         else:
             response = None
@@ -161,3 +151,10 @@ udpsrc port={} ! rtpbin1.recv_rtcp_sink_1".format(self.client_video_rtp_port,
             return None
 
         return str(response)
+
+    def kill_streamer(self):
+        if (self.rtp_streamer_process is not None):
+            print "Killing rtp_streamer_process (%d)" % self.rtp_streamer_process.pid
+            self.rtp_streamer_process.kill()
+            self.rtp_streamer_process = None
+

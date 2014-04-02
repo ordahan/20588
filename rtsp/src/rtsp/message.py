@@ -213,7 +213,7 @@ class DescribeResponseMessage(ResponseMessage):
                        'o=- {time} {time} IN IP4 {ip}'.format(time=sdp_o_param, ip=server_ip),
                        's=Unnamed',
                        'i=N/A',
-                       'c=IN IP4 0.0.0.0',  # FIXME: HIGH(?) Make the IP configurable as well
+                       'c=IN IP4 0.0.0.0',
                        't=0 0',
                        'a=tool:vlc 2.0.8',
                        'a=recvonly',

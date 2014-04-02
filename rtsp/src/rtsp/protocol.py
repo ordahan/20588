@@ -89,7 +89,6 @@ class Protocol(object):
             response = PlayResponseMessage(sequence=request_message.sequence,
                                            result=result_codes.OK)
             # TODO: LOW Use a python GStreamer interface
-            # FIXME: HIGH Send the RTP streams to the IP of the client (not 127.0.0.1)
 
             print(("gst-launch-0.10 -v gstrtpbin name=rtpbin1 \
 filesrc location=/home/ord/Videos/30rock.avi ! decodebin name=dec \

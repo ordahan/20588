@@ -6,7 +6,6 @@ Created on Dec 14, 2013
 import re
 from rtsp import directives
 from rtsp import result_codes
-from xmlrpclib import Transport
 
 class Message(object):
     '''
@@ -222,7 +221,6 @@ class DescribeResponseMessage(ResponseMessage):
                        'a=control:%s' % server_uri,
                        'm=video 0 RTP/AVP 96',
                        'b=RR:0',
-                       # TODO: LOW allow other encodings for video and audio
                        'a=rtpmap:96 H264/90000',
                        'a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;',
                        'a=control:%s' % self.video_control_uri,

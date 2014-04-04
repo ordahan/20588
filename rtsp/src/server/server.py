@@ -7,7 +7,7 @@ import SocketServer
 import connection_handler
 
 
-class RTSPServer(SocketServer.TCPServer):
+class RTSPServer(SocketServer.ThreadingMixIn, SocketServer.TCPServer):
     '''
     Implements an RTSP based video server
     '''
@@ -19,7 +19,8 @@ class RTSPServer(SocketServer.TCPServer):
         '''
         # Allow the socket to be re-bound right after we shutdown
         # the server
-        SocketServer.TCPServer.allow_reuse_address = True
+        self.allow_reuse_address = True
+        self.daemon_threads = False
 
         SocketServer.TCPServer.__init__(self,
                                         (bind_address, tcp_port),

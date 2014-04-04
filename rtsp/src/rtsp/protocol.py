@@ -28,6 +28,7 @@ class Protocol(object):
         self.rtp_streamer = Streamer()
         self.client_ip_address = client_ip_address
         self.file = ''
+        self.session = 12345
 
 
     def process_message(self, request_message):
@@ -56,7 +57,7 @@ class Protocol(object):
                 response = DescribeResponseMessage(sequence=request_message.sequence,
                                                    result=result_codes.OK,
                                                    date=current_time.strftime("%a, %d %b %Y %X GMT"),
-                                                   server_uri=request_message.uri,  # TODO: LOW Is the uri 'saved' for this connection? or does it come from the describe msg?
+                                                   server_uri=request_message.uri,
                                                    sdp_o_param=ntp_timestamp,
                                                    video_control_uri=self.video_control_uri,
                                                    audio_control_uri=self.audio_control_uri)
@@ -77,7 +78,8 @@ class Protocol(object):
                                                 client_rtp_port=self.client_video_rtp_port,
                                                 client_rtcp_port=self.client_video_rtcp_port,
                                                 server_rtp_port=self.rtp_streamer.server_video_rtcp_port - 1,
-                                                server_rtcp_port=self.rtp_streamer.server_video_rtcp_port)
+                                                server_rtcp_port=self.rtp_streamer.server_video_rtcp_port,
+                                                session=self.session)
             # Setup for audio channel
             elif (request_message.uri == self.audio_control_uri):
 
@@ -89,7 +91,8 @@ class Protocol(object):
                                                 client_rtp_port=self.client_audio_rtp_port,
                                                 client_rtcp_port=self.client_audio_rtcp_port,
                                                 server_rtp_port=self.rtp_streamer.server_audio_rtcp_port - 1,
-                                                server_rtcp_port=self.rtp_streamer.server_audio_rtcp_port)
+                                                server_rtcp_port=self.rtp_streamer.server_audio_rtcp_port,
+                                                session=self.session)
         # Play request
         elif (request_message.directive == directives.PLAY):
             response = PlayResponseMessage(sequence=request_message.sequence,
@@ -112,34 +115,43 @@ class Protocol(object):
             response = None
         # Unknown request - responding none
         else:
-            response = None
+            response = ResponseMessage(request_message.sequence,
+                                       result_codes.OPTION_NOT_SUPPORTED)
 
         return response
 
-    def handle_request(self, request):
+    def handle_request(self, request_text):
         '''
         Handles the given message.
-        Returns the response to send back to the client (in
-        the same format as the request was given)
-        This method is in charge of translating from string to request/response
-        objects and back (CLEAN CODE? ME THINK NOT :D)
+        Returns the response_text to send back to the client (in
+        the same format as the request_text was given)
+        This method is in charge of translating from string to request_message/response_message
+        objects and back to string
 
-        request - String representing the request to handle
+        request_text - String representing the request_text to handle
+
+        returns - A response_text to send, and whether or not the protocol is alive
         '''
 
-        # Create a request from the given string
+        protocol_is_alive = True
+        response_text = None
+
+        # Create a request_message from the given string
         request_message = RequestMessage()
-        if (request_message.parse(request) == False):
-            print("Error parsing message: %s" % request)
-            # TODO: MED Return an error response
-            return ""
+        if (request_message.parse(request_text) == True):
+            response_message = self.process_message(request_message)
+        else:
+            print("Error parsing message: %s" % request_text)
+            response_message = ResponseMessage(0,
+                                       result_codes.INTERNAL_SERVER_ERROR)
 
-        response = self.process_message(request_message)
+        if (response_message is not None):
+            response_text = str(response_message)
 
-        if (response is None):
-            return None
+            if (response_message.result != result_codes.OK):
+                protocol_is_alive = False
 
-        return str(response)
+        return (response_text, protocol_is_alive)
 
     def kill_streamer(self):
         self.rtp_streamer.stop()

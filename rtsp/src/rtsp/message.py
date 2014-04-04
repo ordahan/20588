@@ -254,19 +254,28 @@ class SetupResponseMessage(ResponseMessage):
                  client_rtp_port,
                  client_rtcp_port,
                  server_rtp_port,
-                 server_rtcp_port):
+                 server_rtcp_port,
+                 session):
 
         payload = [self.TRANSPORT +
                     "RTP/AVP/UDP;unicast;client_port={}-{};server_port={}-{}".format(client_rtp_port,
                                                                                      client_rtcp_port,
                                                                                      server_rtp_port,
                                                                                      server_rtcp_port),
-                   self.SESSION + '12345']
+                   self.SESSION + str(session)]
 
         ResponseMessage.__init__(self,
                                  sequence=sequence,
                                  result=result,
                                  additional_fields=payload)
+
+    def get_deterministic_payload(self):
+        deter_payload = [payload_line
+                         for payload_line in (self.additional_fields + self.content_lines)
+                         if (not payload_line.startswith(self.TRANSPORT) and
+                             not payload_line.startswith(self.SESSION))]
+
+        return deter_payload
 class PlayResponseMessage(ResponseMessage):
     def __init__(self,
                  sequence,

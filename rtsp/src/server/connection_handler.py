@@ -36,7 +36,6 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
 
 
     def read_client_request(self):
-        # TODO: LOW Config the received size + make global define
         request = self.request.recv(4096)
 
         if (request == ''):
@@ -62,8 +61,6 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
 
             request = self.read_client_request()
 
-            # TODO: LOW consider blocking until receiving data
-
             # If no data was read, sleep and try again.
             if (request == None):
                 time.sleep(0.1)
@@ -74,11 +71,10 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
             print request
             print "--------------------------------------------"
 
-            response = self.rtsp_protocol_handler.handle_request(request)
+            response, connection_alive = self.rtsp_protocol_handler.handle_request(request)
 
             if (response is None):
-                print "Connection is terminated (no response sent to client)"
-                connection_alive = False
+                print "No response sent to client"
             else:
                 print "Sent:"
                 print "--------------------------------------------"
@@ -90,3 +86,5 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
             if (__profile__):
                 pr.disable()
                 pr.print_stats()
+
+        print "Connection is terminated."

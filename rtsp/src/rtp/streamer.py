@@ -4,12 +4,21 @@ Created on Apr 4, 2014
 @author: ord
 '''
 import subprocess
+import socket
 
 
 class Streamer(object):
     '''
     Streams the requested file to given RTP port and listens to the given RTCP port.
     '''
+
+
+    def _get_free_port_from_os(self):
+        placeholder_sock = socket.socket()
+        placeholder_sock.bind(('', 0))
+        free_port_received_from_os = placeholder_sock.getsockname()[1]
+
+        return (free_port_received_from_os, placeholder_sock)
 
     def __init__(self):
         '''
@@ -20,8 +29,8 @@ class Streamer(object):
         self.rtp_streamer = None
 
         # Server ports
-        self.server_video_rtcp_port = 20001  # FIXME: HIGH Magic numbers
-        self.server_audio_rtcp_port = 30001  # FIXME: HIGH Magic numbers
+        self.server_video_rtcp_port, self.video_placeholder_sock = self._get_free_port_from_os()
+        self.server_audio_rtcp_port, self.audio_placeholder_sock = self._get_free_port_from_os()
 
 
     def play(self, media_file, client_video_rtp_port, client_video_rtcp_port,
@@ -54,6 +63,12 @@ class Streamer(object):
                                                       ip=self.client_ip_address)
 
         print ("Play command sent to GStreamer: " + self.play_command)
+
+        # Closes the sockets which held the port occupied,
+        # right before we grant the ports to the streamer
+        self.audio_placeholder_sock.close()
+        self.video_placeholder_sock.close()
+
         self.rtp_streamer = subprocess.Popen(self.play_command.split())
 
     def stop(self):

@@ -181,8 +181,7 @@ class TestSetup(TestMessage):
                          'CSeq: 4',
                          'Content-Length: 0',
                          'Transport: RTP/AVP/UDP;unicast;client_port=52656-52657;server_port=30000-30001',
-                         # FIXME: HIGH Generate a session for the message..not hardcode it
-                         'Session: 12345',
+                         'Session: 123456',
                          '\r\n'])
 
         actual_response = str(SetupResponseMessage(sequence=4,
@@ -190,11 +189,11 @@ class TestSetup(TestMessage):
                                                       client_rtp_port=52656,
                                                       client_rtcp_port=52657,
                                                       server_rtp_port=30000,
-                                                      server_rtcp_port=30001))
+                                                      server_rtcp_port=30001,
+                                                      session=123456))
 
         self.assertMessagesEqual(expected_response, actual_response)
 
-# FIXME: LOW Test PLAY message
 
 class TestGetParameter(TestMessage):
 

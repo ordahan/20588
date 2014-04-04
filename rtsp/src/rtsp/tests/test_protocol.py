@@ -68,12 +68,12 @@ class TestProtocol(unittest.TestCase):
                                                  result=result_codes.OK,
                                                  client_rtp_port=request.client_rtp_port,
                                                  client_rtcp_port=request.client_rtcp_port,
-                                                 # FIXME: Randomize the ports selected, we can't really know these upfront :)
                                                  server_rtp_port=20000,
-                                                 server_rtcp_port=20001)
+                                                 server_rtcp_port=20001,
+                                                 session=12345)
 
-        self.assertEqual(str(expected_response),
-                         str(self.protocol_handler.process_message(request)))
+        self.assertResponsesEquals(expected_response,
+                                   self.protocol_handler.process_message(request))
 
         # Audio
         self.protocol_handler.audio_control_uri = self.uri + '/aud'
@@ -88,12 +88,12 @@ class TestProtocol(unittest.TestCase):
                                                  result=result_codes.OK,
                                                  client_rtp_port=request.client_rtp_port,
                                                  client_rtcp_port=request.client_rtcp_port,
-                                                 # FIXME: Randomize the ports selected, we can't really know these upfront :)
                                                  server_rtp_port=30000,
-                                                 server_rtcp_port=30001)
+                                                 server_rtcp_port=30001,
+                                                 session=123456)
 
-        self.assertEqual(str(expected_response),
-                         str(self.protocol_handler.process_message(request)))
+        self.assertResponsesEquals(expected_response,
+                                   self.protocol_handler.process_message(request))
 
     def assertResponsesEquals(self, expected_response, actual_response):
         try:

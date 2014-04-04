@@ -8,12 +8,15 @@ import subprocess
 import multiprocessing
 from server.server import RTSPServer
 import time
+import socket
 
 class Test(unittest.TestCase):
 
 
     def setUp(self):
-        self.rtsp_server_process = multiprocessing.Process(target=RTSPServer(bind_address="192.168.0.195").run)
+        self.my_ip = socket.gethostbyname(socket.gethostname())
+        self.rtsp_server = RTSPServer(bind_address=str(self.my_ip))
+        self.rtsp_server_process = multiprocessing.Process(target=self.rtsp_server.run)
         self.rtsp_server_process.start()
 
 
@@ -30,8 +33,8 @@ class Test(unittest.TestCase):
 #         time.sleep(1)
 
     def testMultipleClients(self):
-        self.vlc_client_process = subprocess.Popen('vlc -vvv rtsp://192.168.0.195:8554/30rock.avi'.split())
-        self.vlc_client_process1 = subprocess.Popen('vlc -vvv rtsp://192.168.0.195:8554/30rock2.avi'.split())
+        self.vlc_client_process = subprocess.Popen('vlc -vvv rtsp://{}:8554/30rock.avi'.format(self.my_ip).split())
+        self.vlc_client_process1 = subprocess.Popen('vlc -vvv rtsp://{}:8554/30rock2.avi'.format(self.my_ip).split())
         time.sleep(20)
         self.vlc_client_process.terminate()
         self.vlc_client_process1.terminate()

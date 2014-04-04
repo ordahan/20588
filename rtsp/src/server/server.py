@@ -1,8 +1,3 @@
-'''
-Created on Dec 13, 2013
-
-@author: ord
-'''
 import SocketServer
 import connection_handler
 

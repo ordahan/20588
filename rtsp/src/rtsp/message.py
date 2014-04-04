@@ -1,8 +1,3 @@
-'''
-Created on Dec 14, 2013
-
-@author: ord
-'''
 import re
 from rtsp import directives
 from rtsp import result_codes
@@ -42,7 +37,9 @@ class RequestMessage(Message):
 
 
     def parse_header(self, message):
-    # Extract the directive
+        '''
+        Extract the directive
+        '''
         try:
             parameters = re.match('([A-Z_]+)\s+(.+)\s+(RTSP/1.0)', message)
 
@@ -54,7 +51,9 @@ class RequestMessage(Message):
 
 
     def parse_sequence_number(self, message):
-    # Extract the sequence number
+        '''
+        Extract the sequence number
+        '''
         try:
             return int(re.search(self.SEQUENCE_FIELD + '(\d+)', message).group(1))
         except AttributeError as e:
@@ -62,6 +61,9 @@ class RequestMessage(Message):
             raise e
 
     def parse_client_ports(self, message):
+        '''
+        Parse the client ports from the message
+        '''
         try:
             parsed_transport_field = re.search(self.TRANSPORT + '.*client_port=(\d+)-(\d+)', message)
             return int(parsed_transport_field.group(1)), int(parsed_transport_field.group(2))
@@ -93,12 +95,18 @@ class RequestMessage(Message):
 
 
     def _generate_header(self):
+        '''
+        Generate the RTSP message header
+        '''
         if (self.uri is not None):
             return '{} {}'.format(self.directive, self.uri)
         else:
             return self.directive
 
     def __str__(self):
+        '''
+        Overriding the __str__ - converts all message fields to a string
+        '''
         fields = [self._generate_header(),
                   self.SEQUENCE_FIELD + str(self.sequence)]
 
@@ -121,7 +129,6 @@ class ResponseMessage(Message):
         Message.__init__(self, sequence)
 
     def __str__(self):
-
         # Create the response by joining the basic structure together
         # with the additional_fields and the content issued by the inheriting class
 
@@ -153,6 +160,10 @@ class ResponseMessage(Message):
         return (self.NEWLINE).join(message)
 
     def get_deterministic_payload(self):
+        '''
+        Used for unittesting - return only the fields which are a part of the comparison criteria.
+        For example, fields such as date are generated at runtime and cannot be predicted.
+        '''
         pass
 
     def compare_deterministics(self, other_message):
@@ -178,7 +189,9 @@ class ResponseMessage(Message):
         return True
 
 class OptionsResponseMessage(ResponseMessage):
-
+    '''
+    An RTSP OPTIONS response
+    '''
     def __init__(self, sequence, result):
         payload = ["Public: %s,%s,%s,%s,%s,%s" %
                             (directives.DESCRIBE,
@@ -193,7 +206,9 @@ class OptionsResponseMessage(ResponseMessage):
                                  additional_fields=payload)
 
 class DescribeResponseMessage(ResponseMessage):
-
+    '''
+    An RTSP DESCRIBE response
+    '''
     def __init__(self,
                  sequence,
                  result,
@@ -247,7 +262,9 @@ class DescribeResponseMessage(ResponseMessage):
         return deter_payload
 
 class SetupResponseMessage(ResponseMessage):
-
+    '''
+    An RTSP SETUP response
+    '''
     def __init__(self,
                  sequence,
                  result,
@@ -276,14 +293,3 @@ class SetupResponseMessage(ResponseMessage):
                              not payload_line.startswith(self.SESSION))]
 
         return deter_payload
-class PlayResponseMessage(ResponseMessage):
-    def __init__(self,
-                 sequence,
-                 result):
-
-        payload = []
-
-        ResponseMessage.__init__(self,
-                         sequence=sequence,
-                         result=result,
-                         additional_fields=payload)

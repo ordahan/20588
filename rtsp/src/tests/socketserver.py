@@ -1,8 +1,3 @@
-# '''
-# Created on Apr 4, 2014
-#
-# @author: ord
-# '''
 # import unittest
 # import SocketServer
 # import socket

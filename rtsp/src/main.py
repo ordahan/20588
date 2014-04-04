@@ -1,8 +1,3 @@
-'''
-Created on Dec 13, 2013
-
-@author: ord
-'''
 from server.server import RTSPServer
 from netifaces import interfaces, ifaddresses, AF_INET
 

@@ -1,8 +1,3 @@
-'''
-Created on Dec 14, 2013
-
-@author: ord
-'''
 import unittest
 from rtsp.protocol import Protocol
 from rtsp import directives
@@ -14,6 +9,9 @@ from rtsp.message import OptionsResponseMessage, RequestMessage, \
 class TestProtocol(unittest.TestCase):
 
     def setUp(self):
+        '''
+        Setup of the test
+        '''
         self.protocol_handler = Protocol("192.168.0.8")
         self.sequence = 0
         self.uri = 'rtsp://abcd.com/30rock.avi'

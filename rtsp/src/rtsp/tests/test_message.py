@@ -1,8 +1,3 @@
-'''
-Created on Dec 14, 2013
-
-@author: ord
-'''
 import unittest
 from rtsp.message import RequestMessage, OptionsResponseMessage, \
     DescribeResponseMessage, SetupResponseMessage
@@ -15,10 +10,11 @@ import rtsp
 class TestMessage(unittest.TestCase):
 
     def setUp(self):
+        # Test setup - creates a new RequestMessage
         self.request = RequestMessage()
 
     def assertMessagesEqual(self, expected_message, actual_message):
-
+        # Asserts if there is a difference between the expected and the actual message
         expected_message_lines = expected_message.split(rtsp.message.Message.NEWLINE)
         actual_message_lines = actual_message.split(rtsp.message.Message.NEWLINE)
 
@@ -35,7 +31,7 @@ class TestMessage(unittest.TestCase):
             pass
 
     def testInit(self):
-
+        # Initate the test
         request_generated = RequestMessage(directives.OPTIONS, 13)
 
         self.assertEqual(directives.OPTIONS, request_generated.directive)
@@ -68,6 +64,9 @@ class TestOptions(TestMessage):
         self.assertEqual(directives.OPTIONS, self.request.directive)
 
     def testResponse(self):
+        '''
+        Tests validation of the response to the options message
+        '''
         expected_response = \
             '\r\n'.join(["RTSP/1.0 200 OK",
                          "CSeq: 2",
@@ -101,7 +100,9 @@ class TestDescribe(TestMessage):
         self.assertEqual(directives.DESCRIBE, self.request.directive)
 
     def testResponse(self):
-
+        '''
+        Tests validation of the response to the describe message
+        '''
         date = 'Sun, 12 Jan 2014 13:04:23 GMT'
         server_ip = '127.0.0.1:18554'
         uri = 'rtsp://' + server_ip + '/homeland.avi'
@@ -175,7 +176,9 @@ class TestSetup(TestMessage):
         self.assertEqual(52657, self.request.client_rtcp_port)
 
     def testResponse(self):
-
+        '''
+        Tests validation of the response to the setup message
+        '''
         expected_response = \
             '\r\n'.join(['RTSP/1.0 200 OK',
                          'CSeq: 4',

@@ -1,8 +1,3 @@
-'''
-Created on Mar 8, 2014
-
-@author: ord
-'''
 import unittest
 import subprocess
 import multiprocessing

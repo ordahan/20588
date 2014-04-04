@@ -1,8 +1,3 @@
-'''
-Created on Apr 4, 2014
-
-@author: ord
-'''
 import subprocess
 import socket
 
@@ -14,6 +9,9 @@ class Streamer(object):
 
 
     def _get_free_port_from_os(self):
+        '''
+        Gets a free port from the OS and binds a socket to it
+        '''
         placeholder_sock = socket.socket()
         placeholder_sock.bind(('', 0))
         free_port_received_from_os = placeholder_sock.getsockname()[1]
@@ -35,6 +33,9 @@ class Streamer(object):
 
     def play(self, media_file, client_video_rtp_port, client_video_rtcp_port,
              client_audio_rtp_port, client_audio_rtcp_port, client_ip_address):
+        '''
+        Sends a play command to the GStreamer with the given parameters
+        '''
 
         # Play command parameters
         self.file = media_file
@@ -72,6 +73,9 @@ class Streamer(object):
         self.rtp_streamer = subprocess.Popen(self.play_command.split())
 
     def stop(self):
+        '''
+        Terminates the RTP streamer process
+        '''
         if (self.rtp_streamer is not None):
             print "Killing rtp_streamer (%d)" % self.rtp_streamer.pid
             self.rtp_streamer.kill()

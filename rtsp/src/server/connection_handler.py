@@ -1,8 +1,3 @@
-'''
-Created on Dec 14, 2013
-
-@author: ord
-'''
 import SocketServer
 import rtsp.protocol
 import time
@@ -28,14 +23,23 @@ class ConnectionHandler(SocketServer.StreamRequestHandler):
         SocketServer.StreamRequestHandler.setup(self)
 
     def finish(self):
+        '''
+        Terminate the connection and cleanup
+        '''
         self.rtsp_protocol_handler.kill_streamer()
         SocketServer.StreamRequestHandler.finish(self)
 
     def respond_to_client(self, response):
+        '''
+        Write the response to the wfile
+        '''
         return self.wfile.write(response)
 
 
     def read_client_request(self):
+        '''
+        Read message from receive buffer
+        '''
         request = self.request.recv(4096)
 
         if (request == ''):

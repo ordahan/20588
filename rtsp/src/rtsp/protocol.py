@@ -1,11 +1,5 @@
-'''
-Created on Dec 14, 2013
-
-@author: ord
-'''
 from rtsp.message import RequestMessage, OptionsResponseMessage, \
-    DescribeResponseMessage, ResponseMessage, SetupResponseMessage, \
-    PlayResponseMessage
+    DescribeResponseMessage, ResponseMessage, SetupResponseMessage
 from rtsp import directives
 from rtsp import result_codes
 import datetime
@@ -32,6 +26,9 @@ class Protocol(object):
 
 
     def process_message(self, request_message):
+        '''
+        Processes the request message and generates a response
+        '''
         response = None
 
         # Options request - returns the options on the given file
@@ -95,8 +92,8 @@ class Protocol(object):
                                                 session=self.session)
         # Play request
         elif (request_message.directive == directives.PLAY):
-            response = PlayResponseMessage(sequence=request_message.sequence,
-                                           result=result_codes.OK)
+            response = ResponseMessage(sequence=request_message.sequence,
+                                       result=result_codes.OK)
 
             self.rtp_streamer.play(self.file,
                                      self.client_video_rtp_port,

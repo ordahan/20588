@@ -1,9 +1,3 @@
-'''
-Created on Dec 14, 2013
-
-@author: ord
-'''
-
 OK = 200
 INTERNAL_SERVER_ERROR = 500
 ERROR_NOT_IMPLEMENTED = 501

@@ -1,0 +1,387 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rtsp.message &mdash; src  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="src  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">src  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for rtsp.message</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">re</span>
+<span class="kn">from</span> <span class="nn">rtsp</span> <span class="kn">import</span> <span class="n">directives</span>
+<span class="kn">from</span> <span class="nn">rtsp</span> <span class="kn">import</span> <span class="n">result_codes</span>
+
+<div class="viewcode-block" id="Message"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.Message">[docs]</a><span class="k">class</span> <span class="nc">Message</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    An RTSP message parser / container</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="n">PROTOCOL</span> <span class="o">=</span> <span class="s">&#39;RTSP/1.0&#39;</span>
+    <span class="n">SEQUENCE_FIELD</span> <span class="o">=</span> <span class="s">&#39;CSeq: &#39;</span>
+    <span class="n">CONTENT_LENGTH</span> <span class="o">=</span> <span class="s">&#39;Content-Length: &#39;</span>
+    <span class="n">TRANSPORT</span> <span class="o">=</span> <span class="s">&quot;Transport: &quot;</span>
+    <span class="n">SESSION</span> <span class="o">=</span> <span class="s">&quot;Session: &quot;</span>
+    <span class="n">NEWLINE</span> <span class="o">=</span> <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Creates a new message with the given sequence number</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sequence</span> <span class="o">=</span> <span class="n">sequence</span>
+
+</div>
+<div class="viewcode-block" id="RequestMessage"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.RequestMessage">[docs]</a><span class="k">class</span> <span class="nc">RequestMessage</span><span class="p">(</span><span class="n">Message</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    An RTSP Request message</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">directive</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="mi">0</span><span class="p">,</span> <span class="n">uri</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span> <span class="n">transport</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">directive</span> <span class="o">=</span> <span class="n">directive</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">sequence</span> <span class="o">=</span> <span class="n">sequence</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">uri</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">transport</span> <span class="o">=</span> <span class="n">transport</span>
+
+        <span class="n">Message</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">sequence</span><span class="p">)</span>
+
+
+<div class="viewcode-block" id="RequestMessage.parse_header"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.RequestMessage.parse_header">[docs]</a>    <span class="k">def</span> <span class="nf">parse_header</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Extract the directive</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">parameters</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="s">&#39;([A-Z_]+)\s+(.+)\s+(RTSP/1.0)&#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="n">parameters</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">,</span> <span class="mi">2</span><span class="p">,</span> <span class="mi">3</span><span class="p">)</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Failed to parse request header line&quot;</span>
+            <span class="k">raise</span> <span class="n">e</span>
+        <span class="k">return</span> <span class="n">e</span>
+
+</div>
+<div class="viewcode-block" id="RequestMessage.parse_sequence_number"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.RequestMessage.parse_sequence_number">[docs]</a>    <span class="k">def</span> <span class="nf">parse_sequence_number</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Extract the sequence number</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SEQUENCE_FIELD</span> <span class="o">+</span> <span class="s">&#39;(\d+)&#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Failed to parse sequence&quot;</span>
+            <span class="k">raise</span> <span class="n">e</span>
+</div>
+<div class="viewcode-block" id="RequestMessage.parse_client_ports"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.RequestMessage.parse_client_ports">[docs]</a>    <span class="k">def</span> <span class="nf">parse_client_ports</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Parse the client ports from the message</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">parsed_transport_field</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">search</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TRANSPORT</span> <span class="o">+</span> <span class="s">&#39;.*client_port=(\d+)-(\d+)&#39;</span><span class="p">,</span> <span class="n">message</span><span class="p">)</span>
+            <span class="k">return</span> <span class="nb">int</span><span class="p">(</span><span class="n">parsed_transport_field</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)),</span> <span class="nb">int</span><span class="p">(</span><span class="n">parsed_transport_field</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">2</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">AttributeError</span> <span class="k">as</span> <span class="n">e</span><span class="p">:</span>
+            <span class="k">return</span> <span class="p">(</span><span class="bp">None</span><span class="p">,</span> <span class="bp">None</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="RequestMessage.parse"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.RequestMessage.parse">[docs]</a>    <span class="k">def</span> <span class="nf">parse</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">message</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Parses the given request into its different fields</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">message_fields</span> <span class="o">=</span> <span class="n">message</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NEWLINE</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">message_fields</span><span class="p">)</span> <span class="o">==</span> <span class="mi">0</span><span class="p">):</span>
+                <span class="k">return</span> <span class="bp">False</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">directive</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">version</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_header</span><span class="p">(</span><span class="n">message_fields</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">sequence</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_sequence_number</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">client_rtp_port</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">client_rtcp_port</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">parse_client_ports</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+            <span class="k">return</span> <span class="bp">True</span>
+
+        <span class="k">except</span> <span class="ne">BaseException</span> <span class="k">as</span> <span class="n">parse_error</span><span class="p">:</span>
+            <span class="k">print</span> <span class="s">&quot;Parse error: &quot;</span><span class="p">,</span> <span class="n">parse_error</span>
+            <span class="k">print</span> <span class="s">&quot;Originated from: &#39;</span><span class="si">%s</span><span class="s">&#39;&quot;</span> <span class="o">%</span> <span class="n">message</span>
+            <span class="k">return</span> <span class="bp">False</span>
+
+</div>
+    <span class="k">def</span> <span class="nf">_generate_header</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Generate the RTSP message header</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="k">return</span> <span class="s">&#39;{} {}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">directive</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">directive</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Overriding the __str__ - converts all message fields to a string</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">fields</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">_generate_header</span><span class="p">(),</span>
+                  <span class="bp">self</span><span class="o">.</span><span class="n">SEQUENCE_FIELD</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sequence</span><span class="p">)]</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">transport</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="n">fields</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TRANSPORT</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">transport</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="s">&#39;</span><span class="se">\n\r</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">fields</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="ResponseMessage"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.ResponseMessage">[docs]</a><span class="k">class</span> <span class="nc">ResponseMessage</span><span class="p">(</span><span class="n">Message</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    An RTSP Response message</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">result</span><span class="p">,</span> <span class="n">additional_fields</span><span class="o">=</span><span class="p">[],</span> <span class="n">content_lines</span><span class="o">=</span><span class="p">[]):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">result</span> <span class="o">=</span> <span class="n">result</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">additional_fields</span> <span class="o">=</span> <span class="n">additional_fields</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">content_lines</span> <span class="o">=</span> <span class="n">content_lines</span>
+
+        <span class="n">Message</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">)</span>
+
+    <span class="k">def</span> <span class="nf">__str__</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Create the response by joining the basic structure together</span>
+        <span class="c"># with the additional_fields and the content issued by the inheriting class</span>
+
+        <span class="n">response_field</span> <span class="o">=</span> <span class="s">&#39;</span><span class="si">%s</span><span class="s"> </span><span class="si">%d</span><span class="s"> </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">PROTOCOL</span><span class="p">,</span>
+                                       <span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">,</span>
+                                       <span class="n">result_codes</span><span class="o">.</span><span class="n">strings</span><span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">result</span><span class="p">])</span>
+
+        <span class="n">sequence_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">SEQUENCE_FIELD</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">sequence</span><span class="p">)</span>
+
+        <span class="n">content_length</span> <span class="o">=</span> <span class="nb">sum</span><span class="p">([</span><span class="nb">len</span><span class="p">(</span><span class="n">content_line</span><span class="p">)</span> <span class="k">for</span> <span class="n">content_line</span> <span class="ow">in</span> <span class="bp">self</span><span class="o">.</span><span class="n">content_lines</span><span class="p">])</span>
+        <span class="n">content_length_field</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">CONTENT_LENGTH</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">content_length</span><span class="p">)</span>
+
+        <span class="c"># Basic RTSP message structure</span>
+        <span class="n">message</span> <span class="o">=</span> <span class="p">[</span><span class="n">response_field</span><span class="p">,</span>
+                   <span class="n">sequence_field</span><span class="p">,</span>
+                   <span class="n">content_length_field</span><span class="p">]</span>
+
+        <span class="c"># All the fields the specific message needs</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">additional_fields</span><span class="p">)</span>
+
+        <span class="c"># There is content attached to the message</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">content_length</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="s">&#39;&#39;</span><span class="p">)</span>
+            <span class="n">message</span><span class="o">.</span><span class="n">extend</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">content_lines</span><span class="p">)</span>
+
+        <span class="c"># Finalizing newline of the RTSP response</span>
+        <span class="n">message</span><span class="o">.</span><span class="n">append</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NEWLINE</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">NEWLINE</span><span class="p">)</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+<div class="viewcode-block" id="ResponseMessage.get_deterministic_payload"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.ResponseMessage.get_deterministic_payload">[docs]</a>    <span class="k">def</span> <span class="nf">get_deterministic_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Used for unittesting - return only the fields which are a part of the comparison criteria.</span>
+<span class="sd">        For example, fields such as date are generated at runtime and cannot be predicted.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="ResponseMessage.compare_deterministics"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.ResponseMessage.compare_deterministics">[docs]</a>    <span class="k">def</span> <span class="nf">compare_deterministics</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">other_message</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        True - match</span>
+<span class="sd">        False - don&#39;t match</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">my_deter_payload</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_deterministic_payload</span><span class="p">()</span>
+        <span class="n">other_deter_payload</span> <span class="o">=</span> <span class="n">other_message</span><span class="o">.</span><span class="n">get_deterministic_payload</span><span class="p">()</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">my_deter_payload</span><span class="p">)</span> <span class="o">!=</span> <span class="nb">len</span> <span class="p">(</span><span class="n">other_deter_payload</span><span class="p">)):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">my_deter_payload</span><span class="p">)</span> <span class="o">+</span> <span class="s">&#39;!=&#39;</span> <span class="o">+</span> <span class="nb">len</span><span class="p">(</span><span class="n">other_deter_payload</span><span class="p">))</span>
+
+        <span class="n">line_changes</span> <span class="o">=</span> <span class="p">[]</span>
+        <span class="k">for</span> <span class="n">line_number</span> <span class="ow">in</span> <span class="nb">range</span><span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">my_deter_payload</span><span class="p">)):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">my_deter_payload</span><span class="p">[</span><span class="n">line_number</span><span class="p">]</span> <span class="o">!=</span>
+                <span class="n">other_deter_payload</span><span class="p">[</span><span class="n">line_number</span><span class="p">]):</span>
+                <span class="n">line_changes</span><span class="o">.</span><span class="n">append</span><span class="p">((</span><span class="n">my_deter_payload</span><span class="p">[</span><span class="n">line_number</span><span class="p">],</span> <span class="n">other_deter_payload</span><span class="p">[</span><span class="n">line_number</span><span class="p">]))</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="nb">len</span><span class="p">(</span><span class="n">line_changes</span><span class="p">)</span> <span class="o">&gt;</span> <span class="mi">0</span><span class="p">):</span>
+            <span class="k">raise</span> <span class="ne">ValueError</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="nb">str</span><span class="p">(</span><span class="n">change</span><span class="p">)</span> <span class="k">for</span> <span class="n">change</span> <span class="ow">in</span> <span class="n">line_changes</span><span class="p">]))</span>
+
+        <span class="k">return</span> <span class="bp">True</span>
+</div></div>
+<div class="viewcode-block" id="OptionsResponseMessage"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.OptionsResponseMessage">[docs]</a><span class="k">class</span> <span class="nc">OptionsResponseMessage</span><span class="p">(</span><span class="n">ResponseMessage</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    An RTSP OPTIONS response</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="p">,</span> <span class="n">result</span><span class="p">):</span>
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">[</span><span class="s">&quot;Public: </span><span class="si">%s</span><span class="s">,</span><span class="si">%s</span><span class="s">,</span><span class="si">%s</span><span class="s">,</span><span class="si">%s</span><span class="s">,</span><span class="si">%s</span><span class="s">,</span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span>
+                            <span class="p">(</span><span class="n">directives</span><span class="o">.</span><span class="n">DESCRIBE</span><span class="p">,</span>
+                             <span class="n">directives</span><span class="o">.</span><span class="n">SETUP</span><span class="p">,</span>
+                             <span class="n">directives</span><span class="o">.</span><span class="n">TEARDOWN</span><span class="p">,</span>
+                             <span class="n">directives</span><span class="o">.</span><span class="n">PLAY</span><span class="p">,</span>
+                             <span class="n">directives</span><span class="o">.</span><span class="n">PAUSE</span><span class="p">,</span>
+                             <span class="n">directives</span><span class="o">.</span><span class="n">GET_PARAMETER</span><span class="p">)]</span>
+
+        <span class="n">ResponseMessage</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="n">sequence</span><span class="p">,</span>
+                                 <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
+                                 <span class="n">additional_fields</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="DescribeResponseMessage"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.DescribeResponseMessage">[docs]</a><span class="k">class</span> <span class="nc">DescribeResponseMessage</span><span class="p">(</span><span class="n">ResponseMessage</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    An RTSP DESCRIBE response</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">sequence</span><span class="p">,</span>
+                 <span class="n">result</span><span class="p">,</span>
+                 <span class="n">date</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">server_uri</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">sdp_o_param</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">video_control_uri</span><span class="o">=</span><span class="bp">None</span><span class="p">,</span>
+                 <span class="n">audio_control_uri</span><span class="o">=</span><span class="bp">None</span><span class="p">):</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">video_control_uri</span> <span class="o">=</span> <span class="n">video_control_uri</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio_control_uri</span> <span class="o">=</span> <span class="n">audio_control_uri</span>
+
+        <span class="n">server_ip</span> <span class="o">=</span> <span class="n">re</span><span class="o">.</span><span class="n">match</span><span class="p">(</span><span class="n">re</span><span class="o">.</span><span class="n">escape</span><span class="p">(</span><span class="s">&#39;rtsp://&#39;</span><span class="p">)</span> <span class="o">+</span> <span class="s">r&#39;(.*)/&#39;</span><span class="p">,</span> <span class="n">server_uri</span><span class="p">)</span><span class="o">.</span><span class="n">group</span><span class="p">(</span><span class="mi">1</span><span class="p">)</span>
+
+        <span class="n">sdp_fields</span> <span class="o">=</span> <span class="p">[</span> <span class="s">&#39;v=0&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;o=- {time} {time} IN IP4 {ip}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">sdp_o_param</span><span class="p">,</span> <span class="n">ip</span><span class="o">=</span><span class="n">server_ip</span><span class="p">),</span>
+                       <span class="s">&#39;s=Unnamed&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;i=N/A&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;c=IN IP4 0.0.0.0&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;t=0 0&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=tool:vlc 2.0.8&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=recvonly&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=type:broadcast&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=charset:UTF-8&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=control:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">server_uri</span><span class="p">,</span>
+                       <span class="s">&#39;m=video 0 RTP/AVP 96&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;b=RR:0&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=rtpmap:96 H264/90000&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=control:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">video_control_uri</span><span class="p">,</span>
+                       <span class="s">&#39;m=audio 0 RTP/AVP 8&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;b=RR:0&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=control:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio_control_uri</span> <span class="p">]</span>
+
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">[</span><span class="s">&#39;Server: VLC/2.0.8&#39;</span><span class="p">,</span>
+                   <span class="s">&#39;Date: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">date</span><span class="p">,</span>
+                   <span class="s">&#39;Content-Type: application/sdp&#39;</span><span class="p">,</span>
+                   <span class="s">&#39;Content-Base: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">server_uri</span><span class="p">,</span>
+                   <span class="s">&#39;Cache-Control: no-cache&#39;</span><span class="p">]</span>
+
+        <span class="n">ResponseMessage</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">sequence</span><span class="o">=</span><span class="n">sequence</span><span class="p">,</span>
+                                 <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
+                                 <span class="n">additional_fields</span><span class="o">=</span><span class="n">payload</span><span class="p">,</span>
+                                 <span class="n">content_lines</span><span class="o">=</span><span class="n">sdp_fields</span><span class="p">)</span>
+
+<div class="viewcode-block" id="DescribeResponseMessage.get_deterministic_payload"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.DescribeResponseMessage.get_deterministic_payload">[docs]</a>    <span class="k">def</span> <span class="nf">get_deterministic_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">deter_payload</span> <span class="o">=</span> <span class="p">[</span><span class="n">payload_line</span>
+                         <span class="k">for</span> <span class="n">payload_line</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">additional_fields</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">content_lines</span><span class="p">)</span>
+                         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">payload_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;Date&#39;</span><span class="p">)</span> <span class="ow">and</span>
+                             <span class="ow">not</span> <span class="n">payload_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="s">&#39;o=-&#39;</span><span class="p">))]</span>
+        <span class="k">return</span> <span class="n">deter_payload</span>
+</div></div>
+<div class="viewcode-block" id="SetupResponseMessage"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.SetupResponseMessage">[docs]</a><span class="k">class</span> <span class="nc">SetupResponseMessage</span><span class="p">(</span><span class="n">ResponseMessage</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    An RTSP SETUP response</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                 <span class="n">sequence</span><span class="p">,</span>
+                 <span class="n">result</span><span class="p">,</span>
+                 <span class="n">client_rtp_port</span><span class="p">,</span>
+                 <span class="n">client_rtcp_port</span><span class="p">,</span>
+                 <span class="n">server_rtp_port</span><span class="p">,</span>
+                 <span class="n">server_rtcp_port</span><span class="p">,</span>
+                 <span class="n">session</span><span class="p">):</span>
+
+        <span class="n">payload</span> <span class="o">=</span> <span class="p">[</span><span class="bp">self</span><span class="o">.</span><span class="n">TRANSPORT</span> <span class="o">+</span>
+                    <span class="s">&quot;RTP/AVP/UDP;unicast;client_port={}-{};server_port={}-{}&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">client_rtp_port</span><span class="p">,</span>
+                                                                                     <span class="n">client_rtcp_port</span><span class="p">,</span>
+                                                                                     <span class="n">server_rtp_port</span><span class="p">,</span>
+                                                                                     <span class="n">server_rtcp_port</span><span class="p">),</span>
+                   <span class="bp">self</span><span class="o">.</span><span class="n">SESSION</span> <span class="o">+</span> <span class="nb">str</span><span class="p">(</span><span class="n">session</span><span class="p">)]</span>
+
+        <span class="n">ResponseMessage</span><span class="o">.</span><span class="n">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span>
+                                 <span class="n">sequence</span><span class="o">=</span><span class="n">sequence</span><span class="p">,</span>
+                                 <span class="n">result</span><span class="o">=</span><span class="n">result</span><span class="p">,</span>
+                                 <span class="n">additional_fields</span><span class="o">=</span><span class="n">payload</span><span class="p">)</span>
+
+<div class="viewcode-block" id="SetupResponseMessage.get_deterministic_payload"><a class="viewcode-back" href="../../rtsp.html#rtsp.message.SetupResponseMessage.get_deterministic_payload">[docs]</a>    <span class="k">def</span> <span class="nf">get_deterministic_payload</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="n">deter_payload</span> <span class="o">=</span> <span class="p">[</span><span class="n">payload_line</span>
+                         <span class="k">for</span> <span class="n">payload_line</span> <span class="ow">in</span> <span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">additional_fields</span> <span class="o">+</span> <span class="bp">self</span><span class="o">.</span><span class="n">content_lines</span><span class="p">)</span>
+                         <span class="k">if</span> <span class="p">(</span><span class="ow">not</span> <span class="n">payload_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">TRANSPORT</span><span class="p">)</span> <span class="ow">and</span>
+                             <span class="ow">not</span> <span class="n">payload_line</span><span class="o">.</span><span class="n">startswith</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">SESSION</span><span class="p">))]</span>
+
+        <span class="k">return</span> <span class="n">deter_payload</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">src  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

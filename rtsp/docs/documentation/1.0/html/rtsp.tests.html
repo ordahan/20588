@@ -1,0 +1,308 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rtsp.tests package &mdash; src  documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="src  documentation" href="index.html" />
+    <link rel="up" title="rtsp package" href="rtsp.html" />
+    <link rel="next" title="server package" href="server.html" />
+    <link rel="prev" title="rtsp package" href="rtsp.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="server.html" title="server package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rtsp.html" title="rtsp package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">src  documentation</a> &raquo;</li>
+          <li><a href="rtsp.html" accesskey="U">rtsp package</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rtsp-tests-package">
+<h1>rtsp.tests package<a class="headerlink" href="#rtsp-tests-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-rtsp.tests.test_message">
+<span id="rtsp-tests-test-message-module"></span><h2>rtsp.tests.test_message module<a class="headerlink" href="#module-rtsp.tests.test_message" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rtsp.tests.test_message.TestDescribe">
+<em class="property">class </em><tt class="descclassname">rtsp.tests.test_message.</tt><tt class="descname">TestDescribe</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestDescribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestDescribe" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rtsp.tests.test_message.TestMessage" title="rtsp.tests.test_message.TestMessage"><tt class="xref py py-class docutils literal"><span class="pre">rtsp.tests.test_message.TestMessage</span></tt></a></p>
+<dl class="method">
+<dt id="rtsp.tests.test_message.TestDescribe.testParse">
+<tt class="descname">testParse</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestDescribe.testParse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestDescribe.testParse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the parsing of the describe message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_message.TestDescribe.testResponse">
+<tt class="descname">testResponse</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestDescribe.testResponse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestDescribe.testResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests validation of the response to the describe message</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rtsp.tests.test_message.TestGetParameter">
+<em class="property">class </em><tt class="descclassname">rtsp.tests.test_message.</tt><tt class="descname">TestGetParameter</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestGetParameter"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestGetParameter" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rtsp.tests.test_message.TestMessage" title="rtsp.tests.test_message.TestMessage"><tt class="xref py py-class docutils literal"><span class="pre">rtsp.tests.test_message.TestMessage</span></tt></a></p>
+<dl class="method">
+<dt id="rtsp.tests.test_message.TestGetParameter.testParse">
+<tt class="descname">testParse</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestGetParameter.testParse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestGetParameter.testParse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the parsing of the GET_PARAMETER message</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rtsp.tests.test_message.TestMessage">
+<em class="property">class </em><tt class="descclassname">rtsp.tests.test_message.</tt><tt class="descname">TestMessage</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></tt></p>
+<dl class="method">
+<dt id="rtsp.tests.test_message.TestMessage.assertMessagesEqual">
+<tt class="descname">assertMessagesEqual</tt><big>(</big><em>expected_message</em>, <em>actual_message</em><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestMessage.assertMessagesEqual"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestMessage.assertMessagesEqual" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_message.TestMessage.setUp">
+<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestMessage.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestMessage.setUp" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_message.TestMessage.testInit">
+<tt class="descname">testInit</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestMessage.testInit"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestMessage.testInit" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rtsp.tests.test_message.TestOptions">
+<em class="property">class </em><tt class="descclassname">rtsp.tests.test_message.</tt><tt class="descname">TestOptions</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestOptions" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rtsp.tests.test_message.TestMessage" title="rtsp.tests.test_message.TestMessage"><tt class="xref py py-class docutils literal"><span class="pre">rtsp.tests.test_message.TestMessage</span></tt></a></p>
+<dl class="method">
+<dt id="rtsp.tests.test_message.TestOptions.testParse">
+<tt class="descname">testParse</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestOptions.testParse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestOptions.testParse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the parsing of the options message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_message.TestOptions.testResponse">
+<tt class="descname">testResponse</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestOptions.testResponse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestOptions.testResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests validation of the response to the options message</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rtsp.tests.test_message.TestSetup">
+<em class="property">class </em><tt class="descclassname">rtsp.tests.test_message.</tt><tt class="descname">TestSetup</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestSetup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestSetup" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rtsp.tests.test_message.TestMessage" title="rtsp.tests.test_message.TestMessage"><tt class="xref py py-class docutils literal"><span class="pre">rtsp.tests.test_message.TestMessage</span></tt></a></p>
+<dl class="method">
+<dt id="rtsp.tests.test_message.TestSetup.testParse">
+<tt class="descname">testParse</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestSetup.testParse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestSetup.testParse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests the parsing of the setup message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_message.TestSetup.testResponse">
+<tt class="descname">testResponse</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_message.html#TestSetup.testResponse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_message.TestSetup.testResponse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Tests validation of the response to the setup message</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rtsp.tests.test_protocol">
+<span id="rtsp-tests-test-protocol-module"></span><h2>rtsp.tests.test_protocol module<a class="headerlink" href="#module-rtsp.tests.test_protocol" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rtsp.tests.test_protocol.TestNominalScenario">
+<em class="property">class </em><tt class="descclassname">rtsp.tests.test_protocol.</tt><tt class="descname">TestNominalScenario</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestNominalScenario"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestNominalScenario" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rtsp.tests.test_protocol.TestProtocol" title="rtsp.tests.test_protocol.TestProtocol"><tt class="xref py py-class docutils literal"><span class="pre">rtsp.tests.test_protocol.TestProtocol</span></tt></a></p>
+<p>This class tests the basic bare-bone protocol to initiate an RTSP connection</p>
+<dl class="method">
+<dt id="rtsp.tests.test_protocol.TestNominalScenario.testHappyFlow">
+<tt class="descname">testHappyFlow</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestNominalScenario.testHappyFlow"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestNominalScenario.testHappyFlow" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rtsp.tests.test_protocol.TestProtocol">
+<em class="property">class </em><tt class="descclassname">rtsp.tests.test_protocol.</tt><tt class="descname">TestProtocol</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestProtocol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestProtocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">unittest.case.TestCase</span></tt></p>
+<dl class="method">
+<dt id="rtsp.tests.test_protocol.TestProtocol.assertResponsesEquals">
+<tt class="descname">assertResponsesEquals</tt><big>(</big><em>expected_response</em>, <em>actual_response</em><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestProtocol.assertResponsesEquals"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestProtocol.assertResponsesEquals" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_protocol.TestProtocol.describe">
+<tt class="descname">describe</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestProtocol.describe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestProtocol.describe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_protocol.TestProtocol.exec_protocol_stage">
+<tt class="descname">exec_protocol_stage</tt><big>(</big><em>phase_function_return_val</em><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestProtocol.exec_protocol_stage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestProtocol.exec_protocol_stage" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_protocol.TestProtocol.options">
+<tt class="descname">options</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestProtocol.options"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestProtocol.options" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_protocol.TestProtocol.setUp">
+<tt class="descname">setUp</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestProtocol.setUp"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestProtocol.setUp" title="Permalink to this definition">¶</a></dt>
+<dd><p>Setup of the test</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_protocol.TestProtocol.setup">
+<tt class="descname">setup</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestProtocol.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestProtocol.setup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_protocol.TestProtocol.tearDown">
+<tt class="descname">tearDown</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestProtocol.tearDown"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestProtocol.tearDown" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rtsp.tests.test_protocol.TestProtocolBuildingBlocks">
+<em class="property">class </em><tt class="descclassname">rtsp.tests.test_protocol.</tt><tt class="descname">TestProtocolBuildingBlocks</tt><big>(</big><em>methodName='runTest'</em><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestProtocolBuildingBlocks"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestProtocolBuildingBlocks" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rtsp.tests.test_protocol.TestProtocol" title="rtsp.tests.test_protocol.TestProtocol"><tt class="xref py py-class docutils literal"><span class="pre">rtsp.tests.test_protocol.TestProtocol</span></tt></a></p>
+<p>This class tests the most basic building blocks of the protocol.
+Unlike the TestMessage class, this class doesn&#8217;t have any concern regarding
+the actualy syntax, it DOES NOT create / expect any raw messages - it
+solely relies on the rtsp.Message layer to handle its job.</p>
+<dl class="method">
+<dt id="rtsp.tests.test_protocol.TestProtocolBuildingBlocks.testDescribe">
+<tt class="descname">testDescribe</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestProtocolBuildingBlocks.testDescribe"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestProtocolBuildingBlocks.testDescribe" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_protocol.TestProtocolBuildingBlocks.testOptions">
+<tt class="descname">testOptions</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestProtocolBuildingBlocks.testOptions"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestProtocolBuildingBlocks.testOptions" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rtsp.tests.test_protocol.TestProtocolBuildingBlocks.testSetup">
+<tt class="descname">testSetup</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/tests/test_protocol.html#TestProtocolBuildingBlocks.testSetup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.tests.test_protocol.TestProtocolBuildingBlocks.testSetup" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rtsp.tests">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-rtsp.tests" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">rtsp.tests package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-rtsp.tests.test_message">rtsp.tests.test_message module</a></li>
+<li><a class="reference internal" href="#module-rtsp.tests.test_protocol">rtsp.tests.test_protocol module</a></li>
+<li><a class="reference internal" href="#module-rtsp.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rtsp.html"
+                        title="previous chapter">rtsp package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="server.html"
+                        title="next chapter">server package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/rtsp.tests.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="server.html" title="server package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rtsp.html" title="rtsp package"
+             >previous</a> |</li>
+        <li><a href="index.html">src  documentation</a> &raquo;</li>
+          <li><a href="rtsp.html" >rtsp package</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

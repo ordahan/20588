@@ -1,0 +1,195 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>server package &mdash; src  documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="src  documentation" href="index.html" />
+    <link rel="next" title="tests package" href="tests.html" />
+    <link rel="prev" title="rtsp.tests package" href="rtsp.tests.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tests.html" title="tests package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rtsp.tests.html" title="rtsp.tests package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">src  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="server-package">
+<h1>server package<a class="headerlink" href="#server-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-server.connection_handler">
+<span id="server-connection-handler-module"></span><h2>server.connection_handler module<a class="headerlink" href="#module-server.connection_handler" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="server.connection_handler.ConnectionHandler">
+<em class="property">class </em><tt class="descclassname">server.connection_handler.</tt><tt class="descname">ConnectionHandler</tt><big>(</big><em>request</em>, <em>client_address</em>, <em>server</em><big>)</big><a class="reference internal" href="_modules/server/connection_handler.html#ConnectionHandler"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#server.connection_handler.ConnectionHandler" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">SocketServer.StreamRequestHandler</span></tt></p>
+<p>Implements a hook between the SocketServer object we use for the server
+and the underlying RTSP session handler that takes care of the given
+session</p>
+<dl class="method">
+<dt id="server.connection_handler.ConnectionHandler.finish">
+<tt class="descname">finish</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/server/connection_handler.html#ConnectionHandler.finish"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#server.connection_handler.ConnectionHandler.finish" title="Permalink to this definition">¶</a></dt>
+<dd><p>Terminate the connection and cleanup</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="server.connection_handler.ConnectionHandler.handle">
+<tt class="descname">handle</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/server/connection_handler.html#ConnectionHandler.handle"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#server.connection_handler.ConnectionHandler.handle" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the server &#8216;behind-the-scenes&#8217;
+For each new connection.</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="server.connection_handler.ConnectionHandler.read_client_request">
+<tt class="descname">read_client_request</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/server/connection_handler.html#ConnectionHandler.read_client_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#server.connection_handler.ConnectionHandler.read_client_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Read message from receive buffer</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="server.connection_handler.ConnectionHandler.respond_to_client">
+<tt class="descname">respond_to_client</tt><big>(</big><em>response</em><big>)</big><a class="reference internal" href="_modules/server/connection_handler.html#ConnectionHandler.respond_to_client"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#server.connection_handler.ConnectionHandler.respond_to_client" title="Permalink to this definition">¶</a></dt>
+<dd><p>Write the response to the wfile</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="server.connection_handler.ConnectionHandler.setup">
+<tt class="descname">setup</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/server/connection_handler.html#ConnectionHandler.setup"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#server.connection_handler.ConnectionHandler.setup" title="Permalink to this definition">¶</a></dt>
+<dd><p>This method is called by the server &#8216;behind-the-scenes&#8217;
+when a new connection is established.</p>
+<p>Initializes the objects we need in order to handle the
+connection.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-server.server">
+<span id="server-server-module"></span><h2>server.server module<a class="headerlink" href="#module-server.server" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="server.server.RTSPServer">
+<em class="property">class </em><tt class="descclassname">server.server.</tt><tt class="descname">RTSPServer</tt><big>(</big><em>bind_address='localhost'</em>, <em>tcp_port=8554</em><big>)</big><a class="reference internal" href="_modules/server/server.html#RTSPServer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#server.server.RTSPServer" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">SocketServer.ThreadingMixIn</span></tt>, <tt class="xref py py-class docutils literal"><span class="pre">SocketServer.TCPServer</span></tt></p>
+<p>Implements an RTSP based video server</p>
+<dl class="method">
+<dt id="server.server.RTSPServer.run">
+<tt class="descname">run</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/server/server.html#RTSPServer.run"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#server.server.RTSPServer.run" title="Permalink to this definition">¶</a></dt>
+<dd><p>Runs the server.</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-server">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-server" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">server package</a><ul>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-server.connection_handler">server.connection_handler module</a></li>
+<li><a class="reference internal" href="#module-server.server">server.server module</a></li>
+<li><a class="reference internal" href="#module-server">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rtsp.tests.html"
+                        title="previous chapter">rtsp.tests package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="tests.html"
+                        title="next chapter">tests package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/server.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="tests.html" title="tests package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rtsp.tests.html" title="rtsp.tests package"
+             >previous</a> |</li>
+        <li><a href="index.html">src  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

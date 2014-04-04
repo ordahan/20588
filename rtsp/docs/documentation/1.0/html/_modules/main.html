@@ -1,0 +1,146 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>main &mdash; src  documentation</title>
+    
+    <link rel="stylesheet" href="../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../_static/jquery.js"></script>
+    <script type="text/javascript" src="../_static/underscore.js"></script>
+    <script type="text/javascript" src="../_static/doctools.js"></script>
+    <link rel="top" title="src  documentation" href="../index.html" />
+    <link rel="up" title="Module code" href="index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">src  documentation</a> &raquo;</li>
+          <li><a href="index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for main</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">server.server</span> <span class="kn">import</span> <span class="n">RTSPServer</span>
+<span class="kn">from</span> <span class="nn">netifaces</span> <span class="kn">import</span> <span class="n">interfaces</span><span class="p">,</span> <span class="n">ifaddresses</span><span class="p">,</span> <span class="n">AF_INET</span>
+
+<span class="k">class</span> <span class="nc">Main</span> <span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+<div class="viewcode-block" id="Main"><a class="viewcode-back" href="../main.html#main.Main">[docs]</a>    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    RTSP Server startup.</span>
+
+<span class="sd">    Displays the user a list of valid IP&#39;s on this machine.</span>
+
+<span class="sd">    The server is initialized with the chosen IP, and port 8554.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">get_valid_ips</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+<div class="viewcode-block" id="Main.get_valid_ips"><a class="viewcode-back" href="../main.html#main.Main.get_valid_ips">[docs]</a>        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Get all valid IP&#39;s that we can listen to</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">choose_ip_dict</span> <span class="o">=</span> <span class="p">{}</span>
+        <span class="k">print</span> <span class="s">&quot;Available IPs:&quot;</span>
+        <span class="n">ip_index</span> <span class="o">=</span> <span class="mi">0</span>
+        <span class="k">for</span> <span class="n">ifaceName</span> <span class="ow">in</span> <span class="n">interfaces</span><span class="p">():</span>
+            <span class="k">for</span> <span class="n">address_list</span> <span class="ow">in</span> <span class="p">[</span><span class="n">address</span> <span class="k">for</span> <span class="n">type_</span><span class="p">,</span> <span class="n">address</span> <span class="ow">in</span> <span class="n">ifaddresses</span><span class="p">(</span><span class="n">ifaceName</span><span class="p">)</span><span class="o">.</span><span class="n">items</span><span class="p">()</span> <span class="k">if</span>
+                <span class="n">type_</span> <span class="o">==</span> <span class="n">AF_INET</span><span class="p">]:</span>
+                <span class="k">for</span> <span class="n">ip_address</span> <span class="ow">in</span> <span class="n">address_list</span><span class="p">:</span>
+                    <span class="n">choose_ip_dict</span><span class="p">[</span><span class="n">ip_index</span><span class="p">]</span> <span class="o">=</span> <span class="n">ip_address</span><span class="p">[</span><span class="s">&#39;addr&#39;</span><span class="p">]</span>
+                    <span class="k">print</span> <span class="nb">str</span><span class="p">(</span><span class="n">ip_index</span><span class="p">)</span> <span class="o">+</span> <span class="s">&quot;: &quot;</span> <span class="o">+</span> <span class="n">choose_ip_dict</span><span class="p">[</span><span class="n">ip_index</span><span class="p">]</span>
+                    <span class="n">ip_index</span> <span class="o">+=</span> <span class="mi">1</span>
+
+        <span class="k">return</span> <span class="n">choose_ip_dict</span>
+
+    <span class="k">def</span> <span class="nf">user_selects_ip</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+<div class="viewcode-block" id="Main.user_selects_ip"><a class="viewcode-back" href="../main.html#main.Main.user_selects_ip">[docs]</a>        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        User selects a valid IP</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">choose_ip_dict</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">get_valid_ips</span><span class="p">()</span>
+
+        <span class="k">while</span> <span class="bp">True</span><span class="p">:</span>
+            <span class="n">user_chosen_ip_index</span> <span class="o">=</span> <span class="nb">int</span><span class="p">(</span><span class="nb">raw_input</span><span class="p">(</span><span class="s">&quot;Choose an IP index from the list above: &quot;</span><span class="p">))</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">user_chosen_ip_index</span> <span class="ow">not</span> <span class="ow">in</span> <span class="n">choose_ip_dict</span><span class="o">.</span><span class="n">keys</span><span class="p">()):</span>
+                <span class="k">print</span> <span class="s">&quot;Chosen an invalid index, try again.&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="n">selected_ip</span> <span class="o">=</span> <span class="n">choose_ip_dict</span><span class="p">[</span><span class="n">user_chosen_ip_index</span><span class="p">]</span>
+                <span class="k">break</span>
+
+        <span class="k">return</span> <span class="n">selected_ip</span>
+
+    <span class="k">def</span> <span class="nf">run</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span></div>
+<div class="viewcode-block" id="Main.run"><a class="viewcode-back" href="../main.html#main.Main.run">[docs]</a>        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Let&#39;s get this show on the road!</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">selected_ip</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">user_selects_ip</span><span class="p">()</span>
+
+        <span class="n">RTSPServer</span><span class="p">(</span><span class="n">selected_ip</span><span class="p">)</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&#39;__main__&#39;</span><span class="p">:</span></div></div>
+    <span class="n">Main</span><span class="p">()</span><span class="o">.</span><span class="n">run</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../index.html">src  documentation</a> &raquo;</li>
+          <li><a href="index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,186 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>server.connection_handler &mdash; src  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="src  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">src  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for server.connection_handler</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">SocketServer</span>
+<span class="kn">import</span> <span class="nn">rtsp.protocol</span>
+<span class="kn">import</span> <span class="nn">time</span>
+
+<div class="viewcode-block" id="ConnectionHandler"><a class="viewcode-back" href="../../server.html#server.connection_handler.ConnectionHandler">[docs]</a><span class="k">class</span> <span class="nc">ConnectionHandler</span><span class="p">(</span><span class="n">SocketServer</span><span class="o">.</span><span class="n">StreamRequestHandler</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Implements a hook between the SocketServer object we use for the server</span>
+<span class="sd">    and the underlying RTSP session handler that takes care of the given</span>
+<span class="sd">    session</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+<div class="viewcode-block" id="ConnectionHandler.setup"><a class="viewcode-back" href="../../server.html#server.connection_handler.ConnectionHandler.setup">[docs]</a>    <span class="k">def</span> <span class="nf">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This method is called by the server &#39;behind-the-scenes&#39;</span>
+<span class="sd">        when a new connection is established.</span>
+
+<span class="sd">        Initializes the objects we need in order to handle the</span>
+<span class="sd">        connection.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;*****************************************&quot;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;        Creating a new connection&quot;</span><span class="p">)</span>
+        <span class="k">print</span><span class="p">(</span><span class="s">&quot;*****************************************&quot;</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rtsp_protocol_handler</span> <span class="o">=</span> <span class="n">rtsp</span><span class="o">.</span><span class="n">protocol</span><span class="o">.</span><span class="n">Protocol</span><span class="p">(</span><span class="n">client_ip_address</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">client_address</span><span class="p">[</span><span class="mi">0</span><span class="p">])</span>
+        <span class="n">SocketServer</span><span class="o">.</span><span class="n">StreamRequestHandler</span><span class="o">.</span><span class="n">setup</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ConnectionHandler.finish"><a class="viewcode-back" href="../../server.html#server.connection_handler.ConnectionHandler.finish">[docs]</a>    <span class="k">def</span> <span class="nf">finish</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Terminate the connection and cleanup</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rtsp_protocol_handler</span><span class="o">.</span><span class="n">kill_streamer</span><span class="p">()</span>
+        <span class="n">SocketServer</span><span class="o">.</span><span class="n">StreamRequestHandler</span><span class="o">.</span><span class="n">finish</span><span class="p">(</span><span class="bp">self</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="ConnectionHandler.respond_to_client"><a class="viewcode-back" href="../../server.html#server.connection_handler.ConnectionHandler.respond_to_client">[docs]</a>    <span class="k">def</span> <span class="nf">respond_to_client</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">response</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Write the response to the wfile</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="k">return</span> <span class="bp">self</span><span class="o">.</span><span class="n">wfile</span><span class="o">.</span><span class="n">write</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+</div>
+<div class="viewcode-block" id="ConnectionHandler.read_client_request"><a class="viewcode-back" href="../../server.html#server.connection_handler.ConnectionHandler.read_client_request">[docs]</a>    <span class="k">def</span> <span class="nf">read_client_request</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Read message from receive buffer</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">recv</span><span class="p">(</span><span class="mi">4096</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">request</span> <span class="o">==</span> <span class="s">&#39;&#39;</span><span class="p">):</span>
+            <span class="k">return</span> <span class="bp">None</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">return</span> <span class="n">request</span>
+</div>
+<div class="viewcode-block" id="ConnectionHandler.handle"><a class="viewcode-back" href="../../server.html#server.connection_handler.ConnectionHandler.handle">[docs]</a>    <span class="k">def</span> <span class="nf">handle</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        This method is called by the server &#39;behind-the-scenes&#39;</span>
+<span class="sd">        For each new connection.</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">__profile__</span> <span class="o">=</span> <span class="bp">False</span>
+        <span class="n">connection_alive</span> <span class="o">=</span> <span class="bp">True</span>
+
+        <span class="k">while</span> <span class="p">(</span><span class="n">connection_alive</span><span class="p">):</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">__profile__</span><span class="p">):</span>
+                <span class="kn">import</span> <span class="nn">cProfile</span>
+
+                <span class="n">pr</span> <span class="o">=</span> <span class="n">cProfile</span><span class="o">.</span><span class="n">Profile</span><span class="p">()</span>
+                <span class="n">pr</span><span class="o">.</span><span class="n">enable</span><span class="p">()</span>
+
+            <span class="n">request</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">read_client_request</span><span class="p">()</span>
+
+            <span class="c"># If no data was read, sleep and try again.</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">request</span> <span class="o">==</span> <span class="bp">None</span><span class="p">):</span>
+                <span class="n">time</span><span class="o">.</span><span class="n">sleep</span><span class="p">(</span><span class="mf">0.1</span><span class="p">)</span>
+                <span class="k">continue</span>
+
+            <span class="k">print</span> <span class="s">&quot;Got:&quot;</span>
+            <span class="k">print</span> <span class="s">&quot;--------------------------------------------&quot;</span>
+            <span class="k">print</span> <span class="n">request</span>
+            <span class="k">print</span> <span class="s">&quot;--------------------------------------------&quot;</span>
+
+            <span class="n">response</span><span class="p">,</span> <span class="n">connection_alive</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">rtsp_protocol_handler</span><span class="o">.</span><span class="n">handle_request</span><span class="p">(</span><span class="n">request</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">response</span> <span class="ow">is</span> <span class="bp">None</span><span class="p">):</span>
+                <span class="k">print</span> <span class="s">&quot;No response sent to client&quot;</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;Sent:&quot;</span>
+                <span class="k">print</span> <span class="s">&quot;--------------------------------------------&quot;</span>
+                <span class="k">print</span> <span class="n">response</span>
+                <span class="k">print</span> <span class="s">&quot;--------------------------------------------&quot;</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">respond_to_client</span><span class="p">(</span><span class="n">response</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">__profile__</span><span class="p">):</span>
+                <span class="n">pr</span><span class="o">.</span><span class="n">disable</span><span class="p">()</span>
+                <span class="n">pr</span><span class="o">.</span><span class="n">print_stats</span><span class="p">()</span>
+
+        <span class="k">print</span> <span class="s">&quot;Connection is terminated.&quot;</span></div></div>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">src  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,246 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rtsp.protocol &mdash; src  documentation</title>
+    
+    <link rel="stylesheet" href="../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../_static/doctools.js"></script>
+    <link rel="top" title="src  documentation" href="../../index.html" />
+    <link rel="up" title="Module code" href="../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">src  documentation</a> &raquo;</li>
+          <li><a href="../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for rtsp.protocol</h1><div class="highlight"><pre>
+<span class="kn">from</span> <span class="nn">rtsp.message</span> <span class="kn">import</span> <span class="n">RequestMessage</span><span class="p">,</span> <span class="n">OptionsResponseMessage</span><span class="p">,</span> \
+    <span class="n">DescribeResponseMessage</span><span class="p">,</span> <span class="n">ResponseMessage</span><span class="p">,</span> <span class="n">SetupResponseMessage</span>
+<span class="kn">from</span> <span class="nn">rtsp</span> <span class="kn">import</span> <span class="n">directives</span>
+<span class="kn">from</span> <span class="nn">rtsp</span> <span class="kn">import</span> <span class="n">result_codes</span>
+<span class="kn">import</span> <span class="nn">datetime</span>
+<span class="kn">import</span> <span class="nn">os</span>
+<span class="kn">from</span> <span class="nn">rtp.streamer</span> <span class="kn">import</span> <span class="n">Streamer</span>
+
+
+<div class="viewcode-block" id="Protocol"><a class="viewcode-back" href="../../rtsp.html#rtsp.protocol.Protocol">[docs]</a><span class="k">class</span> <span class="nc">Protocol</span><span class="p">(</span><span class="nb">object</span><span class="p">):</span>
+    <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">    Handles the RTSP protocol for a single connection.</span>
+<span class="sd">    &#39;&#39;&#39;</span>
+
+    <span class="k">def</span> <span class="nf">__init__</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">client_ip_address</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Constructor</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">video_control_uri</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">audio_control_uri</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rtp_streamer</span> <span class="o">=</span> <span class="n">Streamer</span><span class="p">()</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">client_ip_address</span> <span class="o">=</span> <span class="n">client_ip_address</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="s">&#39;&#39;</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">session</span> <span class="o">=</span> <span class="mi">12345</span>
+
+
+<div class="viewcode-block" id="Protocol.process_message"><a class="viewcode-back" href="../../rtsp.html#rtsp.protocol.Protocol.process_message">[docs]</a>    <span class="k">def</span> <span class="nf">process_message</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_message</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Processes the request message and generates a response</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c"># Options request - returns the options on the given file</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">request_message</span><span class="o">.</span><span class="n">directive</span> <span class="o">==</span> <span class="n">directives</span><span class="o">.</span><span class="n">OPTIONS</span><span class="p">):</span>
+
+            <span class="n">response</span> <span class="o">=</span> <span class="n">OptionsResponseMessage</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">request_message</span><span class="o">.</span><span class="n">sequence</span><span class="p">,</span>
+                                              <span class="n">result</span><span class="o">=</span><span class="n">result_codes</span><span class="o">.</span><span class="n">OK</span><span class="p">)</span>
+
+        <span class="c"># Describe request - returns the file&#39;s details (including the file&#39;s streams)</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">request_message</span><span class="o">.</span><span class="n">directive</span> <span class="o">==</span> <span class="n">directives</span><span class="o">.</span><span class="n">DESCRIBE</span><span class="p">):</span>
+
+            <span class="n">current_time</span> <span class="o">=</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="o">.</span><span class="n">utcnow</span><span class="p">()</span>
+            <span class="n">time_diff_from_ntp_epoch</span> <span class="o">=</span> <span class="n">current_time</span> <span class="o">-</span> <span class="n">datetime</span><span class="o">.</span><span class="n">datetime</span><span class="p">(</span><span class="mi">1900</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">1</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">,</span> <span class="mi">0</span><span class="p">)</span>
+            <span class="n">ntp_timestamp</span> <span class="o">=</span> <span class="n">time_diff_from_ntp_epoch</span><span class="o">.</span><span class="n">days</span> <span class="o">*</span> <span class="mi">24</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">*</span> <span class="mi">60</span> <span class="o">+</span> <span class="n">time_diff_from_ntp_epoch</span><span class="o">.</span><span class="n">seconds</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">uri</span> <span class="o">=</span> <span class="n">request_message</span><span class="o">.</span><span class="n">uri</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">file</span> <span class="o">=</span> <span class="n">os</span><span class="o">.</span><span class="n">environ</span><span class="p">[</span><span class="s">&quot;HOME&quot;</span><span class="p">]</span> <span class="o">+</span> <span class="s">&quot;/Videos/&quot;</span> <span class="o">+</span> <span class="n">request_message</span><span class="o">.</span><span class="n">uri</span><span class="o">.</span><span class="n">rsplit</span><span class="p">(</span><span class="s">&#39;/&#39;</span><span class="p">,</span> <span class="mi">1</span><span class="p">)[</span><span class="mi">1</span><span class="p">]</span>
+
+            <span class="c"># If the file exists</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">os</span><span class="o">.</span><span class="n">access</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="n">os</span><span class="o">.</span><span class="n">R_OK</span><span class="p">)):</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">video_control_uri</span> <span class="o">=</span> <span class="n">request_message</span><span class="o">.</span><span class="n">uri</span> <span class="o">+</span> <span class="s">&#39;/trackID=0&#39;</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">audio_control_uri</span> <span class="o">=</span> <span class="n">request_message</span><span class="o">.</span><span class="n">uri</span> <span class="o">+</span> <span class="s">&#39;/trackID=1&#39;</span>
+                <span class="n">response</span> <span class="o">=</span> <span class="n">DescribeResponseMessage</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">request_message</span><span class="o">.</span><span class="n">sequence</span><span class="p">,</span>
+                                                   <span class="n">result</span><span class="o">=</span><span class="n">result_codes</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span>
+                                                   <span class="n">date</span><span class="o">=</span><span class="n">current_time</span><span class="o">.</span><span class="n">strftime</span><span class="p">(</span><span class="s">&quot;%a, </span><span class="si">%d</span><span class="s"> %b %Y </span><span class="si">%X</span><span class="s"> GMT&quot;</span><span class="p">),</span>
+                                                   <span class="n">server_uri</span><span class="o">=</span><span class="n">request_message</span><span class="o">.</span><span class="n">uri</span><span class="p">,</span>
+                                                   <span class="n">sdp_o_param</span><span class="o">=</span><span class="n">ntp_timestamp</span><span class="p">,</span>
+                                                   <span class="n">video_control_uri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">video_control_uri</span><span class="p">,</span>
+                                                   <span class="n">audio_control_uri</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">audio_control_uri</span><span class="p">)</span>
+            <span class="k">else</span><span class="p">:</span>
+                <span class="k">print</span> <span class="s">&quot;File &#39;{}&#39; doesn&#39;t exist ({})&quot;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">uri</span><span class="p">)</span>
+
+        <span class="c"># Setup request - client&#39;s setup configurations for each stream</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">request_message</span><span class="o">.</span><span class="n">directive</span> <span class="o">==</span> <span class="n">directives</span><span class="o">.</span><span class="n">SETUP</span><span class="p">):</span>
+
+            <span class="c"># Setup for video channel</span>
+            <span class="k">if</span> <span class="p">(</span><span class="n">request_message</span><span class="o">.</span><span class="n">uri</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">video_control_uri</span><span class="p">):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">client_video_rtp_port</span> <span class="o">=</span> <span class="n">request_message</span><span class="o">.</span><span class="n">client_rtp_port</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">client_video_rtcp_port</span> <span class="o">=</span> <span class="n">request_message</span><span class="o">.</span><span class="n">client_rtcp_port</span>
+
+                <span class="n">response</span> <span class="o">=</span> <span class="n">SetupResponseMessage</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">request_message</span><span class="o">.</span><span class="n">sequence</span><span class="p">,</span>
+                                                <span class="n">result</span><span class="o">=</span><span class="n">result_codes</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span>
+                                                <span class="n">client_rtp_port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">client_video_rtp_port</span><span class="p">,</span>
+                                                <span class="n">client_rtcp_port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">client_video_rtcp_port</span><span class="p">,</span>
+                                                <span class="n">server_rtp_port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rtp_streamer</span><span class="o">.</span><span class="n">server_video_rtcp_port</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                                                <span class="n">server_rtcp_port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rtp_streamer</span><span class="o">.</span><span class="n">server_video_rtcp_port</span><span class="p">,</span>
+                                                <span class="n">session</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">)</span>
+            <span class="c"># Setup for audio channel</span>
+            <span class="k">elif</span> <span class="p">(</span><span class="n">request_message</span><span class="o">.</span><span class="n">uri</span> <span class="o">==</span> <span class="bp">self</span><span class="o">.</span><span class="n">audio_control_uri</span><span class="p">):</span>
+
+                <span class="bp">self</span><span class="o">.</span><span class="n">client_audio_rtp_port</span> <span class="o">=</span> <span class="n">request_message</span><span class="o">.</span><span class="n">client_rtp_port</span>
+                <span class="bp">self</span><span class="o">.</span><span class="n">client_audio_rtcp_port</span> <span class="o">=</span> <span class="n">request_message</span><span class="o">.</span><span class="n">client_rtcp_port</span>
+
+                <span class="n">response</span> <span class="o">=</span> <span class="n">SetupResponseMessage</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">request_message</span><span class="o">.</span><span class="n">sequence</span><span class="p">,</span>
+                                                <span class="n">result</span><span class="o">=</span><span class="n">result_codes</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span>
+                                                <span class="n">client_rtp_port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">client_audio_rtp_port</span><span class="p">,</span>
+                                                <span class="n">client_rtcp_port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">client_audio_rtcp_port</span><span class="p">,</span>
+                                                <span class="n">server_rtp_port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rtp_streamer</span><span class="o">.</span><span class="n">server_audio_rtcp_port</span> <span class="o">-</span> <span class="mi">1</span><span class="p">,</span>
+                                                <span class="n">server_rtcp_port</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">rtp_streamer</span><span class="o">.</span><span class="n">server_audio_rtcp_port</span><span class="p">,</span>
+                                                <span class="n">session</span><span class="o">=</span><span class="bp">self</span><span class="o">.</span><span class="n">session</span><span class="p">)</span>
+        <span class="c"># Play request</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">request_message</span><span class="o">.</span><span class="n">directive</span> <span class="o">==</span> <span class="n">directives</span><span class="o">.</span><span class="n">PLAY</span><span class="p">):</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">ResponseMessage</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">request_message</span><span class="o">.</span><span class="n">sequence</span><span class="p">,</span>
+                                       <span class="n">result</span><span class="o">=</span><span class="n">result_codes</span><span class="o">.</span><span class="n">OK</span><span class="p">)</span>
+
+            <span class="bp">self</span><span class="o">.</span><span class="n">rtp_streamer</span><span class="o">.</span><span class="n">play</span><span class="p">(</span><span class="bp">self</span><span class="o">.</span><span class="n">file</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">client_video_rtp_port</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">client_video_rtcp_port</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">client_audio_rtp_port</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">client_audio_rtcp_port</span><span class="p">,</span>
+                                     <span class="bp">self</span><span class="o">.</span><span class="n">client_ip_address</span><span class="p">)</span>
+
+        <span class="c"># Get parameter request</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">request_message</span><span class="o">.</span><span class="n">directive</span> <span class="o">==</span> <span class="n">directives</span><span class="o">.</span><span class="n">GET_PARAMETER</span><span class="p">):</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">ResponseMessage</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="n">request_message</span><span class="o">.</span><span class="n">sequence</span><span class="p">,</span>
+                                       <span class="n">result</span><span class="o">=</span><span class="n">result_codes</span><span class="o">.</span><span class="n">OK</span><span class="p">)</span>
+        <span class="c"># Teardown request - tear down the session</span>
+        <span class="k">elif</span> <span class="p">(</span><span class="n">request_message</span><span class="o">.</span><span class="n">directive</span> <span class="o">==</span> <span class="n">directives</span><span class="o">.</span><span class="n">TEARDOWN</span><span class="p">):</span>
+            <span class="bp">self</span><span class="o">.</span><span class="n">kill_streamer</span><span class="p">()</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="bp">None</span>
+        <span class="c"># Unknown request - responding none</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="n">response</span> <span class="o">=</span> <span class="n">ResponseMessage</span><span class="p">(</span><span class="n">request_message</span><span class="o">.</span><span class="n">sequence</span><span class="p">,</span>
+                                       <span class="n">result_codes</span><span class="o">.</span><span class="n">OPTION_NOT_SUPPORTED</span><span class="p">)</span>
+
+        <span class="k">return</span> <span class="n">response</span>
+</div>
+<div class="viewcode-block" id="Protocol.handle_request"><a class="viewcode-back" href="../../rtsp.html#rtsp.protocol.Protocol.handle_request">[docs]</a>    <span class="k">def</span> <span class="nf">handle_request</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">request_text</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Handles the given message.</span>
+<span class="sd">        Returns the response_text to send back to the client (in</span>
+<span class="sd">        the same format as the request_text was given)</span>
+<span class="sd">        This method is in charge of translating from string to request_message/response_message</span>
+<span class="sd">        objects and back to string</span>
+
+<span class="sd">        request_text - String representing the request_text to handle</span>
+
+<span class="sd">        returns - A response_text to send, and whether or not the protocol is alive</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+
+        <span class="n">protocol_is_alive</span> <span class="o">=</span> <span class="bp">True</span>
+        <span class="n">response_text</span> <span class="o">=</span> <span class="bp">None</span>
+
+        <span class="c"># Create a request_message from the given string</span>
+        <span class="n">request_message</span> <span class="o">=</span> <span class="n">RequestMessage</span><span class="p">()</span>
+        <span class="k">if</span> <span class="p">(</span><span class="n">request_message</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">request_text</span><span class="p">)</span> <span class="o">==</span> <span class="bp">True</span><span class="p">):</span>
+            <span class="n">response_message</span> <span class="o">=</span> <span class="bp">self</span><span class="o">.</span><span class="n">process_message</span><span class="p">(</span><span class="n">request_message</span><span class="p">)</span>
+        <span class="k">else</span><span class="p">:</span>
+            <span class="k">print</span><span class="p">(</span><span class="s">&quot;Error parsing message: </span><span class="si">%s</span><span class="s">&quot;</span> <span class="o">%</span> <span class="n">request_text</span><span class="p">)</span>
+            <span class="n">response_message</span> <span class="o">=</span> <span class="n">ResponseMessage</span><span class="p">(</span><span class="mi">0</span><span class="p">,</span>
+                                       <span class="n">result_codes</span><span class="o">.</span><span class="n">INTERNAL_SERVER_ERROR</span><span class="p">)</span>
+
+        <span class="k">if</span> <span class="p">(</span><span class="n">response_message</span> <span class="ow">is</span> <span class="ow">not</span> <span class="bp">None</span><span class="p">):</span>
+            <span class="n">response_text</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">response_message</span><span class="p">)</span>
+
+            <span class="k">if</span> <span class="p">(</span><span class="n">response_message</span><span class="o">.</span><span class="n">result</span> <span class="o">!=</span> <span class="n">result_codes</span><span class="o">.</span><span class="n">OK</span><span class="p">):</span>
+                <span class="n">protocol_is_alive</span> <span class="o">=</span> <span class="bp">False</span>
+
+        <span class="k">return</span> <span class="p">(</span><span class="n">response_text</span><span class="p">,</span> <span class="n">protocol_is_alive</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="Protocol.kill_streamer"><a class="viewcode-back" href="../../rtsp.html#rtsp.protocol.Protocol.kill_streamer">[docs]</a>    <span class="k">def</span> <span class="nf">kill_streamer</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">rtp_streamer</span><span class="o">.</span><span class="n">stop</span><span class="p">()</span>
+</pre></div></div></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../index.html">src  documentation</a> &raquo;</li>
+          <li><a href="../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

@@ -1,0 +1,312 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rtsp package &mdash; src  documentation</title>
+    
+    <link rel="stylesheet" href="_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    './',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="_static/jquery.js"></script>
+    <script type="text/javascript" src="_static/underscore.js"></script>
+    <script type="text/javascript" src="_static/doctools.js"></script>
+    <link rel="top" title="src  documentation" href="index.html" />
+    <link rel="next" title="rtsp.tests package" href="rtsp.tests.html" />
+    <link rel="prev" title="rtp package" href="rtp.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rtsp.tests.html" title="rtsp.tests package"
+             accesskey="N">next</a> |</li>
+        <li class="right" >
+          <a href="rtp.html" title="rtp package"
+             accesskey="P">previous</a> |</li>
+        <li><a href="index.html">src  documentation</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <div class="section" id="rtsp-package">
+<h1>rtsp package<a class="headerlink" href="#rtsp-package" title="Permalink to this headline">¶</a></h1>
+<div class="section" id="subpackages">
+<h2>Subpackages<a class="headerlink" href="#subpackages" title="Permalink to this headline">¶</a></h2>
+<div class="toctree-wrapper compound">
+<ul>
+<li class="toctree-l1"><a class="reference internal" href="rtsp.tests.html">rtsp.tests package</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="rtsp.tests.html#submodules">Submodules</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rtsp.tests.html#module-rtsp.tests.test_message">rtsp.tests.test_message module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rtsp.tests.html#module-rtsp.tests.test_protocol">rtsp.tests.test_protocol module</a></li>
+<li class="toctree-l2"><a class="reference internal" href="rtsp.tests.html#module-rtsp.tests">Module contents</a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+<div class="section" id="submodules">
+<h2>Submodules<a class="headerlink" href="#submodules" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-rtsp.directives">
+<span id="rtsp-directives-module"></span><h2>rtsp.directives module<a class="headerlink" href="#module-rtsp.directives" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-rtsp.message">
+<span id="rtsp-message-module"></span><h2>rtsp.message module<a class="headerlink" href="#module-rtsp.message" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rtsp.message.DescribeResponseMessage">
+<em class="property">class </em><tt class="descclassname">rtsp.message.</tt><tt class="descname">DescribeResponseMessage</tt><big>(</big><em>sequence</em>, <em>result</em>, <em>date=None</em>, <em>server_uri=None</em>, <em>sdp_o_param=None</em>, <em>video_control_uri=None</em>, <em>audio_control_uri=None</em><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#DescribeResponseMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.DescribeResponseMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rtsp.message.ResponseMessage" title="rtsp.message.ResponseMessage"><tt class="xref py py-class docutils literal"><span class="pre">rtsp.message.ResponseMessage</span></tt></a></p>
+<p>An RTSP DESCRIBE response</p>
+<dl class="method">
+<dt id="rtsp.message.DescribeResponseMessage.get_deterministic_payload">
+<tt class="descname">get_deterministic_payload</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#DescribeResponseMessage.get_deterministic_payload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.DescribeResponseMessage.get_deterministic_payload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rtsp.message.Message">
+<em class="property">class </em><tt class="descclassname">rtsp.message.</tt><tt class="descname">Message</tt><big>(</big><em>sequence</em><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#Message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.Message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>An RTSP message parser / container</p>
+<dl class="attribute">
+<dt id="rtsp.message.Message.CONTENT_LENGTH">
+<tt class="descname">CONTENT_LENGTH</tt><em class="property"> = 'Content-Length: '</em><a class="headerlink" href="#rtsp.message.Message.CONTENT_LENGTH" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rtsp.message.Message.NEWLINE">
+<tt class="descname">NEWLINE</tt><em class="property"> = '\r\n'</em><a class="headerlink" href="#rtsp.message.Message.NEWLINE" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rtsp.message.Message.PROTOCOL">
+<tt class="descname">PROTOCOL</tt><em class="property"> = 'RTSP/1.0'</em><a class="headerlink" href="#rtsp.message.Message.PROTOCOL" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rtsp.message.Message.SEQUENCE_FIELD">
+<tt class="descname">SEQUENCE_FIELD</tt><em class="property"> = 'CSeq: '</em><a class="headerlink" href="#rtsp.message.Message.SEQUENCE_FIELD" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rtsp.message.Message.SESSION">
+<tt class="descname">SESSION</tt><em class="property"> = 'Session: '</em><a class="headerlink" href="#rtsp.message.Message.SESSION" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="attribute">
+<dt id="rtsp.message.Message.TRANSPORT">
+<tt class="descname">TRANSPORT</tt><em class="property"> = 'Transport: '</em><a class="headerlink" href="#rtsp.message.Message.TRANSPORT" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rtsp.message.OptionsResponseMessage">
+<em class="property">class </em><tt class="descclassname">rtsp.message.</tt><tt class="descname">OptionsResponseMessage</tt><big>(</big><em>sequence</em>, <em>result</em><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#OptionsResponseMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.OptionsResponseMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rtsp.message.ResponseMessage" title="rtsp.message.ResponseMessage"><tt class="xref py py-class docutils literal"><span class="pre">rtsp.message.ResponseMessage</span></tt></a></p>
+<p>An RTSP OPTIONS response</p>
+</dd></dl>
+
+<dl class="class">
+<dt id="rtsp.message.RequestMessage">
+<em class="property">class </em><tt class="descclassname">rtsp.message.</tt><tt class="descname">RequestMessage</tt><big>(</big><em>directive=None</em>, <em>sequence=0</em>, <em>uri=None</em>, <em>transport=None</em><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#RequestMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.RequestMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rtsp.message.Message" title="rtsp.message.Message"><tt class="xref py py-class docutils literal"><span class="pre">rtsp.message.Message</span></tt></a></p>
+<p>An RTSP Request message</p>
+<dl class="method">
+<dt id="rtsp.message.RequestMessage.parse">
+<tt class="descname">parse</tt><big>(</big><em>message</em><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#RequestMessage.parse"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.RequestMessage.parse" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parses the given request into its different fields</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rtsp.message.RequestMessage.parse_client_ports">
+<tt class="descname">parse_client_ports</tt><big>(</big><em>message</em><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#RequestMessage.parse_client_ports"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.RequestMessage.parse_client_ports" title="Permalink to this definition">¶</a></dt>
+<dd><p>Parse the client ports from the message</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rtsp.message.RequestMessage.parse_header">
+<tt class="descname">parse_header</tt><big>(</big><em>message</em><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#RequestMessage.parse_header"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.RequestMessage.parse_header" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the directive</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rtsp.message.RequestMessage.parse_sequence_number">
+<tt class="descname">parse_sequence_number</tt><big>(</big><em>message</em><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#RequestMessage.parse_sequence_number"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.RequestMessage.parse_sequence_number" title="Permalink to this definition">¶</a></dt>
+<dd><p>Extract the sequence number</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rtsp.message.ResponseMessage">
+<em class="property">class </em><tt class="descclassname">rtsp.message.</tt><tt class="descname">ResponseMessage</tt><big>(</big><em>sequence</em>, <em>result</em>, <em>additional_fields=</em>, <span class="optional">[</span><span class="optional">]</span><em>content_lines=</em><span class="optional">[</span><span class="optional">]</span><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#ResponseMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.ResponseMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rtsp.message.Message" title="rtsp.message.Message"><tt class="xref py py-class docutils literal"><span class="pre">rtsp.message.Message</span></tt></a></p>
+<p>An RTSP Response message</p>
+<dl class="method">
+<dt id="rtsp.message.ResponseMessage.compare_deterministics">
+<tt class="descname">compare_deterministics</tt><big>(</big><em>other_message</em><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#ResponseMessage.compare_deterministics"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.ResponseMessage.compare_deterministics" title="Permalink to this definition">¶</a></dt>
+<dd><p>True - match
+False - don&#8217;t match</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rtsp.message.ResponseMessage.get_deterministic_payload">
+<tt class="descname">get_deterministic_payload</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#ResponseMessage.get_deterministic_payload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.ResponseMessage.get_deterministic_payload" title="Permalink to this definition">¶</a></dt>
+<dd><p>Used for unittesting - return only the fields which are a part of the comparison criteria.
+For example, fields such as date are generated at runtime and cannot be predicted.</p>
+</dd></dl>
+
+</dd></dl>
+
+<dl class="class">
+<dt id="rtsp.message.SetupResponseMessage">
+<em class="property">class </em><tt class="descclassname">rtsp.message.</tt><tt class="descname">SetupResponseMessage</tt><big>(</big><em>sequence</em>, <em>result</em>, <em>client_rtp_port</em>, <em>client_rtcp_port</em>, <em>server_rtp_port</em>, <em>server_rtcp_port</em>, <em>session</em><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#SetupResponseMessage"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.SetupResponseMessage" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <a class="reference internal" href="#rtsp.message.ResponseMessage" title="rtsp.message.ResponseMessage"><tt class="xref py py-class docutils literal"><span class="pre">rtsp.message.ResponseMessage</span></tt></a></p>
+<p>An RTSP SETUP response</p>
+<dl class="method">
+<dt id="rtsp.message.SetupResponseMessage.get_deterministic_payload">
+<tt class="descname">get_deterministic_payload</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/message.html#SetupResponseMessage.get_deterministic_payload"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.message.SetupResponseMessage.get_deterministic_payload" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rtsp.protocol">
+<span id="rtsp-protocol-module"></span><h2>rtsp.protocol module<a class="headerlink" href="#module-rtsp.protocol" title="Permalink to this headline">¶</a></h2>
+<dl class="class">
+<dt id="rtsp.protocol.Protocol">
+<em class="property">class </em><tt class="descclassname">rtsp.protocol.</tt><tt class="descname">Protocol</tt><big>(</big><em>client_ip_address</em><big>)</big><a class="reference internal" href="_modules/rtsp/protocol.html#Protocol"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.protocol.Protocol" title="Permalink to this definition">¶</a></dt>
+<dd><p>Bases: <tt class="xref py py-class docutils literal"><span class="pre">object</span></tt></p>
+<p>Handles the RTSP protocol for a single connection.</p>
+<dl class="method">
+<dt id="rtsp.protocol.Protocol.handle_request">
+<tt class="descname">handle_request</tt><big>(</big><em>request_text</em><big>)</big><a class="reference internal" href="_modules/rtsp/protocol.html#Protocol.handle_request"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.protocol.Protocol.handle_request" title="Permalink to this definition">¶</a></dt>
+<dd><p>Handles the given message.
+Returns the response_text to send back to the client (in
+the same format as the request_text was given)
+This method is in charge of translating from string to request_message/response_message
+objects and back to string</p>
+<p>request_text - String representing the request_text to handle</p>
+<p>returns - A response_text to send, and whether or not the protocol is alive</p>
+</dd></dl>
+
+<dl class="method">
+<dt id="rtsp.protocol.Protocol.kill_streamer">
+<tt class="descname">kill_streamer</tt><big>(</big><big>)</big><a class="reference internal" href="_modules/rtsp/protocol.html#Protocol.kill_streamer"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.protocol.Protocol.kill_streamer" title="Permalink to this definition">¶</a></dt>
+<dd></dd></dl>
+
+<dl class="method">
+<dt id="rtsp.protocol.Protocol.process_message">
+<tt class="descname">process_message</tt><big>(</big><em>request_message</em><big>)</big><a class="reference internal" href="_modules/rtsp/protocol.html#Protocol.process_message"><span class="viewcode-link">[source]</span></a><a class="headerlink" href="#rtsp.protocol.Protocol.process_message" title="Permalink to this definition">¶</a></dt>
+<dd><p>Processes the request message and generates a response</p>
+</dd></dl>
+
+</dd></dl>
+
+</div>
+<div class="section" id="module-rtsp.result_codes">
+<span id="rtsp-result-codes-module"></span><h2>rtsp.result_codes module<a class="headerlink" href="#module-rtsp.result_codes" title="Permalink to this headline">¶</a></h2>
+</div>
+<div class="section" id="module-rtsp">
+<span id="module-contents"></span><h2>Module contents<a class="headerlink" href="#module-rtsp" title="Permalink to this headline">¶</a></h2>
+</div>
+</div>
+
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+  <h3><a href="index.html">Table Of Contents</a></h3>
+  <ul>
+<li><a class="reference internal" href="#">rtsp package</a><ul>
+<li><a class="reference internal" href="#subpackages">Subpackages</a></li>
+<li><a class="reference internal" href="#submodules">Submodules</a></li>
+<li><a class="reference internal" href="#module-rtsp.directives">rtsp.directives module</a></li>
+<li><a class="reference internal" href="#module-rtsp.message">rtsp.message module</a></li>
+<li><a class="reference internal" href="#module-rtsp.protocol">rtsp.protocol module</a></li>
+<li><a class="reference internal" href="#module-rtsp.result_codes">rtsp.result_codes module</a></li>
+<li><a class="reference internal" href="#module-rtsp">Module contents</a></li>
+</ul>
+</li>
+</ul>
+
+  <h4>Previous topic</h4>
+  <p class="topless"><a href="rtp.html"
+                        title="previous chapter">rtp package</a></p>
+  <h4>Next topic</h4>
+  <p class="topless"><a href="rtsp.tests.html"
+                        title="next chapter">rtsp.tests package</a></p>
+  <h3>This Page</h3>
+  <ul class="this-page-menu">
+    <li><a href="_sources/rtsp.txt"
+           rel="nofollow">Show Source</a></li>
+  </ul>
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li class="right" >
+          <a href="rtsp.tests.html" title="rtsp.tests package"
+             >next</a> |</li>
+        <li class="right" >
+          <a href="rtp.html" title="rtp package"
+             >previous</a> |</li>
+        <li><a href="index.html">src  documentation</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

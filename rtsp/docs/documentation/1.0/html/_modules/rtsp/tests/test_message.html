@@ -1,0 +1,314 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN"
+  "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+    
+    <title>rtsp.tests.test_message &mdash; src  documentation</title>
+    
+    <link rel="stylesheet" href="../../../_static/default.css" type="text/css" />
+    <link rel="stylesheet" href="../../../_static/pygments.css" type="text/css" />
+    
+    <script type="text/javascript">
+      var DOCUMENTATION_OPTIONS = {
+        URL_ROOT:    '../../../',
+        VERSION:     '',
+        COLLAPSE_INDEX: false,
+        FILE_SUFFIX: '.html',
+        HAS_SOURCE:  true
+      };
+    </script>
+    <script type="text/javascript" src="../../../_static/jquery.js"></script>
+    <script type="text/javascript" src="../../../_static/underscore.js"></script>
+    <script type="text/javascript" src="../../../_static/doctools.js"></script>
+    <link rel="top" title="src  documentation" href="../../../index.html" />
+    <link rel="up" title="Module code" href="../../index.html" /> 
+  </head>
+  <body>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             accesskey="I">index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">src  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" accesskey="U">Module code</a> &raquo;</li> 
+      </ul>
+    </div>  
+
+    <div class="document">
+      <div class="documentwrapper">
+        <div class="bodywrapper">
+          <div class="body">
+            
+  <h1>Source code for rtsp.tests.test_message</h1><div class="highlight"><pre>
+<span class="kn">import</span> <span class="nn">unittest</span>
+<span class="kn">from</span> <span class="nn">rtsp.message</span> <span class="kn">import</span> <span class="n">RequestMessage</span><span class="p">,</span> <span class="n">OptionsResponseMessage</span><span class="p">,</span> \
+    <span class="n">DescribeResponseMessage</span><span class="p">,</span> <span class="n">SetupResponseMessage</span>
+<span class="kn">from</span> <span class="nn">rtsp</span> <span class="kn">import</span> <span class="n">directives</span>
+<span class="kn">from</span> <span class="nn">rtsp</span> <span class="kn">import</span> <span class="n">result_codes</span>
+<span class="kn">from</span> <span class="nn">difflib</span> <span class="kn">import</span> <span class="n">context_diff</span>
+<span class="kn">import</span> <span class="nn">rtsp</span>
+
+
+<div class="viewcode-block" id="TestMessage"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestMessage">[docs]</a><span class="k">class</span> <span class="nc">TestMessage</span><span class="p">(</span><span class="n">unittest</span><span class="o">.</span><span class="n">TestCase</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestMessage.setUp"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestMessage.setUp">[docs]</a>    <span class="k">def</span> <span class="nf">setUp</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Test setup - creates a new RequestMessage</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span> <span class="o">=</span> <span class="n">RequestMessage</span><span class="p">()</span>
+</div>
+<div class="viewcode-block" id="TestMessage.assertMessagesEqual"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestMessage.assertMessagesEqual">[docs]</a>    <span class="k">def</span> <span class="nf">assertMessagesEqual</span><span class="p">(</span><span class="bp">self</span><span class="p">,</span> <span class="n">expected_message</span><span class="p">,</span> <span class="n">actual_message</span><span class="p">):</span>
+        <span class="c"># Asserts if there is a difference between the expected and the actual message</span>
+        <span class="n">expected_message_lines</span> <span class="o">=</span> <span class="n">expected_message</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">rtsp</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">NEWLINE</span><span class="p">)</span>
+        <span class="n">actual_message_lines</span> <span class="o">=</span> <span class="n">actual_message</span><span class="o">.</span><span class="n">split</span><span class="p">(</span><span class="n">rtsp</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">NEWLINE</span><span class="p">)</span>
+
+        <span class="n">delta</span> <span class="o">=</span> <span class="n">context_diff</span><span class="p">(</span><span class="n">expected_message_lines</span><span class="p">,</span>
+                             <span class="n">actual_message_lines</span><span class="p">,</span>
+                             <span class="n">fromfile</span><span class="o">=</span><span class="s">&#39;expected&#39;</span><span class="p">,</span>
+                             <span class="n">tofile</span><span class="o">=</span><span class="s">&#39;actual&#39;</span><span class="p">,</span>
+                             <span class="n">lineterm</span><span class="o">=</span><span class="n">rtsp</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">NEWLINE</span><span class="p">)</span>
+
+        <span class="k">try</span><span class="p">:</span>
+            <span class="n">starting_line</span> <span class="o">=</span> <span class="n">delta</span><span class="o">.</span><span class="n">next</span><span class="p">()</span>
+            <span class="k">raise</span> <span class="ne">AssertionError</span><span class="p">(</span><span class="s">&#39;</span><span class="se">\n</span><span class="s">&#39;</span> <span class="o">+</span> <span class="n">starting_line</span> <span class="o">+</span> <span class="n">rtsp</span><span class="o">.</span><span class="n">message</span><span class="o">.</span><span class="n">Message</span><span class="o">.</span><span class="n">NEWLINE</span><span class="o">.</span><span class="n">join</span><span class="p">(</span><span class="n">delta</span><span class="p">))</span>
+        <span class="k">except</span> <span class="ne">StopIteration</span><span class="p">:</span>
+            <span class="k">pass</span>
+</div>
+<div class="viewcode-block" id="TestMessage.testInit"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestMessage.testInit">[docs]</a>    <span class="k">def</span> <span class="nf">testInit</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="c"># Initate the test</span>
+        <span class="n">request_generated</span> <span class="o">=</span> <span class="n">RequestMessage</span><span class="p">(</span><span class="n">directives</span><span class="o">.</span><span class="n">OPTIONS</span><span class="p">,</span> <span class="mi">13</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">directives</span><span class="o">.</span><span class="n">OPTIONS</span><span class="p">,</span> <span class="n">request_generated</span><span class="o">.</span><span class="n">directive</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">13</span><span class="p">,</span> <span class="n">request_generated</span><span class="o">.</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="s">&#39;OPTIONS</span><span class="se">\n\r</span><span class="s">CSeq: 13&#39;</span><span class="p">,</span>
+                         <span class="nb">str</span><span class="p">(</span><span class="n">request_generated</span><span class="p">))</span>
+</div></div>
+<div class="viewcode-block" id="TestOptions"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestOptions">[docs]</a><span class="k">class</span> <span class="nc">TestOptions</span><span class="p">(</span><span class="n">TestMessage</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestOptions.testParse"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestOptions.testParse">[docs]</a>    <span class="k">def</span> <span class="nf">testParse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests the parsing of the options message</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c"># Basic valid message</span>
+        <span class="n">message</span> <span class="o">=</span> \
+            <span class="s">&#39;&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">(</span>
+                    <span class="p">[</span><span class="s">&#39;OPTIONS &#39;</span> <span class="o">+</span> \
+                     <span class="s">&#39;rtsp://localhost:10554/hello_world.avi RTSP/1.0</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">,</span>
+
+                     <span class="s">&#39;CSeq: 2</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">,</span>
+
+                     <span class="s">&#39;User-Agent: LibVLC/2.0.8 &#39;</span> <span class="o">+</span> \
+                        <span class="s">&#39;(LIVE555 Streaming Media v2011.12.23)</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">,</span>
+
+                     <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">2</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">directives</span><span class="o">.</span><span class="n">OPTIONS</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">directive</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestOptions.testResponse"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestOptions.testResponse">[docs]</a>    <span class="k">def</span> <span class="nf">testResponse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests validation of the response to the options message</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">expected_response</span> <span class="o">=</span> \
+            <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&quot;RTSP/1.0 200 OK&quot;</span><span class="p">,</span>
+                         <span class="s">&quot;CSeq: 2&quot;</span><span class="p">,</span>
+                         <span class="s">&quot;Content-Length: 0&quot;</span><span class="p">,</span>
+                         <span class="s">&quot;Public: DESCRIBE,SETUP,TEARDOWN&quot;</span> <span class="o">+</span>
+                            <span class="s">&quot;,PLAY,PAUSE,GET_PARAMETER&quot;</span><span class="p">,</span>
+                         <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">])</span>
+
+        <span class="n">actual_response</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">OptionsResponseMessage</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="mi">2</span><span class="p">,</span>
+                <span class="n">result</span><span class="o">=</span><span class="n">result_codes</span><span class="o">.</span><span class="n">OK</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertMessagesEqual</span><span class="p">(</span><span class="n">expected_response</span><span class="p">,</span> <span class="n">actual_response</span><span class="p">)</span>
+</div></div>
+<div class="viewcode-block" id="TestDescribe"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestDescribe">[docs]</a><span class="k">class</span> <span class="nc">TestDescribe</span><span class="p">(</span><span class="n">TestMessage</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestDescribe.testParse"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestDescribe.testParse">[docs]</a>    <span class="k">def</span> <span class="nf">testParse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests the parsing of the describe message</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c"># Basic valid message</span>
+        <span class="n">message</span> <span class="o">=</span> \
+            <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;DESCRIBE rtsp://localhost:8554/homeland.avi RTSP/1.0&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;CSeq: 3&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;Accept: application/sdp&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">3</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">directives</span><span class="o">.</span><span class="n">DESCRIBE</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">directive</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestDescribe.testResponse"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestDescribe.testResponse">[docs]</a>    <span class="k">def</span> <span class="nf">testResponse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests validation of the response to the describe message</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">date</span> <span class="o">=</span> <span class="s">&#39;Sun, 12 Jan 2014 13:04:23 GMT&#39;</span>
+        <span class="n">server_ip</span> <span class="o">=</span> <span class="s">&#39;127.0.0.1:18554&#39;</span>
+        <span class="n">uri</span> <span class="o">=</span> <span class="s">&#39;rtsp://&#39;</span> <span class="o">+</span> <span class="n">server_ip</span> <span class="o">+</span> <span class="s">&#39;/homeland.avi&#39;</span>
+        <span class="n">video_control</span> <span class="o">=</span> <span class="n">uri</span> <span class="o">+</span> <span class="s">&#39;/trackID=0&#39;</span>
+        <span class="n">audio_control</span> <span class="o">=</span> <span class="n">uri</span> <span class="o">+</span> <span class="s">&#39;/trackID=1&#39;</span>
+        <span class="n">length</span> <span class="o">=</span> <span class="mi">517</span>
+        <span class="n">sdp_o_param</span> <span class="o">=</span> <span class="mi">15455528565056244265</span>
+
+        <span class="n">expected_response</span> <span class="o">=</span> \
+            <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span>
+                       <span class="s">&#39;RTSP/1.0 200 OK&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;CSeq: 3&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;Content-Length: </span><span class="si">%d</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">length</span><span class="p">,</span>
+                       <span class="s">&#39;Server: VLC/2.0.8&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;Date: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">date</span><span class="p">,</span>
+                       <span class="s">&#39;Content-Type: application/sdp&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;Content-Base: </span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">uri</span><span class="p">,</span>
+                       <span class="s">&#39;Cache-Control: no-cache&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;v=0&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;o=- {time} {time} IN IP4 {ip}&#39;</span><span class="o">.</span><span class="n">format</span><span class="p">(</span><span class="n">time</span><span class="o">=</span><span class="n">sdp_o_param</span><span class="p">,</span> <span class="n">ip</span><span class="o">=</span><span class="n">server_ip</span><span class="p">),</span>
+                       <span class="s">&#39;s=Unnamed&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;i=N/A&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;c=IN IP4 0.0.0.0&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;t=0 0&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=tool:vlc 2.0.8&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=recvonly&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=type:broadcast&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=charset:UTF-8&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=control:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">uri</span><span class="p">,</span>
+                       <span class="s">&#39;m=video 0 RTP/AVP 96&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;b=RR:0&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=rtpmap:96 H264/90000&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=fmtp:96 packetization-mode=1;profile-level-id=64001f;sprop-parameter-sets=Z2QAH6zZgLQz+sBagQEAoAAAfSAAF3AR4wYzQA==,aOl4fLIs;&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=control:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">video_control</span><span class="p">,</span>
+                       <span class="s">&#39;m=audio 0 RTP/AVP 8&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;b=RR:0&#39;</span><span class="p">,</span>
+                       <span class="s">&#39;a=control:</span><span class="si">%s</span><span class="s">&#39;</span> <span class="o">%</span> <span class="n">audio_control</span><span class="p">,</span>
+                        <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">])</span>
+
+        <span class="n">actual_response</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">DescribeResponseMessage</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="mi">3</span><span class="p">,</span>
+                                                      <span class="n">result</span><span class="o">=</span><span class="n">result_codes</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span>
+                                                      <span class="n">date</span><span class="o">=</span><span class="n">date</span><span class="p">,</span>
+                                                      <span class="n">server_uri</span><span class="o">=</span><span class="n">uri</span><span class="p">,</span>
+                                                      <span class="n">sdp_o_param</span><span class="o">=</span><span class="n">sdp_o_param</span><span class="p">,</span>
+                                                      <span class="n">video_control_uri</span><span class="o">=</span><span class="n">video_control</span><span class="p">,</span>
+                                                      <span class="n">audio_control_uri</span><span class="o">=</span><span class="n">audio_control</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertMessagesEqual</span><span class="p">(</span><span class="n">expected_response</span><span class="p">,</span> <span class="n">actual_response</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="TestSetup"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestSetup">[docs]</a><span class="k">class</span> <span class="nc">TestSetup</span><span class="p">(</span><span class="n">TestMessage</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestSetup.testParse"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestSetup.testParse">[docs]</a>    <span class="k">def</span> <span class="nf">testParse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests the parsing of the setup message</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c"># Basic valid message</span>
+        <span class="n">message</span> <span class="o">=</span> \
+            <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;SETUP rtsp://127.0.0.1:18554/homeland.avi/trackID=0 RTSP/1.0&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;CSeq: 4&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;Transport: RTP/AVP;unicast;client_port=52656-52657&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">4</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">directives</span><span class="o">.</span><span class="n">SETUP</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">directive</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">52656</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">client_rtp_port</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">52657</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">client_rtcp_port</span><span class="p">)</span>
+</div>
+<div class="viewcode-block" id="TestSetup.testResponse"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestSetup.testResponse">[docs]</a>    <span class="k">def</span> <span class="nf">testResponse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests validation of the response to the setup message</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="n">expected_response</span> <span class="o">=</span> \
+            <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;RTSP/1.0 200 OK&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;CSeq: 4&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;Content-Length: 0&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;Transport: RTP/AVP/UDP;unicast;client_port=52656-52657;server_port=30000-30001&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;Session: 123456&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">])</span>
+
+        <span class="n">actual_response</span> <span class="o">=</span> <span class="nb">str</span><span class="p">(</span><span class="n">SetupResponseMessage</span><span class="p">(</span><span class="n">sequence</span><span class="o">=</span><span class="mi">4</span><span class="p">,</span>
+                                                      <span class="n">result</span><span class="o">=</span><span class="n">result_codes</span><span class="o">.</span><span class="n">OK</span><span class="p">,</span>
+                                                      <span class="n">client_rtp_port</span><span class="o">=</span><span class="mi">52656</span><span class="p">,</span>
+                                                      <span class="n">client_rtcp_port</span><span class="o">=</span><span class="mi">52657</span><span class="p">,</span>
+                                                      <span class="n">server_rtp_port</span><span class="o">=</span><span class="mi">30000</span><span class="p">,</span>
+                                                      <span class="n">server_rtcp_port</span><span class="o">=</span><span class="mi">30001</span><span class="p">,</span>
+                                                      <span class="n">session</span><span class="o">=</span><span class="mi">123456</span><span class="p">))</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertMessagesEqual</span><span class="p">(</span><span class="n">expected_response</span><span class="p">,</span> <span class="n">actual_response</span><span class="p">)</span>
+
+</div></div>
+<div class="viewcode-block" id="TestGetParameter"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestGetParameter">[docs]</a><span class="k">class</span> <span class="nc">TestGetParameter</span><span class="p">(</span><span class="n">TestMessage</span><span class="p">):</span>
+
+<div class="viewcode-block" id="TestGetParameter.testParse"><a class="viewcode-back" href="../../../rtsp.tests.html#rtsp.tests.test_message.TestGetParameter.testParse">[docs]</a>    <span class="k">def</span> <span class="nf">testParse</span><span class="p">(</span><span class="bp">self</span><span class="p">):</span>
+        <span class="sd">&#39;&#39;&#39;</span>
+<span class="sd">        Tests the parsing of the GET_PARAMETER message</span>
+<span class="sd">        &#39;&#39;&#39;</span>
+        <span class="c"># Basic valid message</span>
+        <span class="n">message</span> <span class="o">=</span> \
+            <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="o">.</span><span class="n">join</span><span class="p">([</span><span class="s">&#39;GET_PARAMETER rtsp://127.0.0.1:18554/homeland.avi RTSP/1.0&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;CSeq: 7&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;User-Agent: LibVLC/2.0.8 (LIVE555 Streaming Media v2011.12.23)&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;Session: 18d000fccc6ddd5a&#39;</span><span class="p">,</span>
+                         <span class="s">&#39;</span><span class="se">\r\n</span><span class="s">&#39;</span><span class="p">])</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">parse</span><span class="p">(</span><span class="n">message</span><span class="p">)</span>
+
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="mi">7</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">sequence</span><span class="p">)</span>
+        <span class="bp">self</span><span class="o">.</span><span class="n">assertEqual</span><span class="p">(</span><span class="n">directives</span><span class="o">.</span><span class="n">GET_PARAMETER</span><span class="p">,</span> <span class="bp">self</span><span class="o">.</span><span class="n">request</span><span class="o">.</span><span class="n">directive</span><span class="p">)</span>
+</div></div>
+<span class="k">if</span> <span class="n">__name__</span> <span class="o">==</span> <span class="s">&quot;__main__&quot;</span><span class="p">:</span>
+    <span class="c"># import sys;sys.argv = [&#39;&#39;, &#39;TestMessage.testOptions&#39;]</span>
+    <span class="n">unittest</span><span class="o">.</span><span class="n">main</span><span class="p">()</span>
+</pre></div>
+
+          </div>
+        </div>
+      </div>
+      <div class="sphinxsidebar">
+        <div class="sphinxsidebarwrapper">
+<div id="searchbox" style="display: none">
+  <h3>Quick search</h3>
+    <form class="search" action="../../../search.html" method="get">
+      <input type="text" name="q" />
+      <input type="submit" value="Go" />
+      <input type="hidden" name="check_keywords" value="yes" />
+      <input type="hidden" name="area" value="default" />
+    </form>
+    <p class="searchtip" style="font-size: 90%">
+    Enter search terms or a module, class or function name.
+    </p>
+</div>
+<script type="text/javascript">$('#searchbox').show(0);</script>
+        </div>
+      </div>
+      <div class="clearer"></div>
+    </div>
+    <div class="related">
+      <h3>Navigation</h3>
+      <ul>
+        <li class="right" style="margin-right: 10px">
+          <a href="../../../genindex.html" title="General Index"
+             >index</a></li>
+        <li class="right" >
+          <a href="../../../py-modindex.html" title="Python Module Index"
+             >modules</a> |</li>
+        <li><a href="../../../index.html">src  documentation</a> &raquo;</li>
+          <li><a href="../../index.html" >Module code</a> &raquo;</li> 
+      </ul>
+    </div>
+    <div class="footer">
+        &copy; Copyright 2014, Author.
+      Created using <a href="http://sphinx-doc.org/">Sphinx</a> 1.2.2.
+    </div>
+  </body>
+</html>

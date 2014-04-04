@@ -24,8 +24,8 @@ class Test(unittest.TestCase):
 
 
 #     def testNormalPlayScenario(self):
-#         self.vlc_client_process = subprocess.Popen('vlc -vvv rtsp://192.168.0.195:8554/30rock.avi'.split())
-#         time.sleep(10)
+#         self.vlc_client_process = subprocess.Popen('vlc -vvv rtsp://192.168.0.195:8554/30rock2.avi'.split())
+#         time.sleep(20)
 #         self.vlc_client_process.terminate()
 #         time.sleep(1)
 

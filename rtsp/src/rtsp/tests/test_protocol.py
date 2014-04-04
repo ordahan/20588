@@ -14,9 +14,9 @@ from rtsp.message import OptionsResponseMessage, RequestMessage, \
 class TestProtocol(unittest.TestCase):
 
     def setUp(self):
-        self.protocol_handler = Protocol()
+        self.protocol_handler = Protocol("192.168.0.8")
         self.sequence = 0
-        self.uri = 'rtsp://abcd.com/helloworld.avi'
+        self.uri = 'rtsp://abcd.com/30rock.avi'
 
     def tearDown(self):
         pass

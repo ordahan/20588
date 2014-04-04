@@ -35,7 +35,6 @@ class Protocol(object):
 
         # Options request - returns the options on the given file
         if (request_message.directive == directives.OPTIONS):
-            self.uri = request_message.uri
 
             response = OptionsResponseMessage(sequence=request_message.sequence,
                                               result=result_codes.OK)
@@ -46,8 +45,9 @@ class Protocol(object):
             current_time = datetime.datetime.utcnow()
             time_diff_from_ntp_epoch = current_time - datetime.datetime(1900, 1, 1, 0, 0, 0)
             ntp_timestamp = time_diff_from_ntp_epoch.days * 24 * 60 * 60 + time_diff_from_ntp_epoch.seconds
+            self.uri = request_message.uri
 
-            self.file = os.environ["HOME"] + "/Videos/" + self.uri.rsplit('/', 1)[1]
+            self.file = os.environ["HOME"] + "/Videos/" + request_message.uri.rsplit('/', 1)[1]
 
             # If the file exists
             if (os.access(self.file, os.R_OK)):
